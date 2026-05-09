@@ -5,7 +5,7 @@ export default function Login() {
   return (
     <div
       class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5"
-      tabindex="-1"
+      tabIndex="-1"
       role="dialog"
       id="modalSignin"
     >

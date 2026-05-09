@@ -1,16 +1,7 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import BootstrapClient from './components/bootstrap';
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import "./globals.css";
+import { AuthProvider } from "./auth.js"
+import BootstrapClient from "./components/bootstrap"
 
 export const metadata = {
   title: "Create Next App",
@@ -18,11 +9,17 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  if (typeof window !== "undefined") {
+    require("bootstrap/dist/js/bootstrap.bundle.min.js");
+  }
+  
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <BootstrapClient />
-        {children}
+      <body>
+        <AuthProvider>
+          <BootstrapClient />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
