@@ -1,0 +1,36 @@
+/* header.module.css */
+
+.navbar {
+    width: 100%;
+}
+
+.titulo {
+    color: #003366;
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.filtroButton {
+    border-radius: 10px;
+    color: #003366;
+    font-weight: 500;
+    background-color: transparent;
+}
+
+.searchGroup {
+    width: 300px;
+}
+
+.searchIcon {
+    background-color: white;
+    border-right: 0;
+    border-radius: 12px 0 0 12px;
+}
+
+.searchInput {
+    border-left: 0;
+    border-radius: 0 10px 10px 0;
+    box-shadow: none;
+    padding: 8px 10px;
+}
