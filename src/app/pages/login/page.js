@@ -1,6 +1,8 @@
 import Link from "next/link";
 import styles from "./page.module.css";
-import { Button } from "../../components/Button/button";
+import  Button  from "../../components/Button/button";
+import  Input  from "../../components/Input/Input";
+
 import Image from "next/image";
 
 export default function Login() {
@@ -8,10 +10,10 @@ export default function Login() {
     <div className={styles.body}>
       <div className={styles.form}>
           < div className={styles.login}>
-            <div className="modal-content rounded-4 shadow" style={{
+            <div className="modal-content rounded-4 " style={{
               display:"flex",
               justifyContent:"center",
-              alignItems:"center "
+              alignItems:"center ",
             }}>
               <Image
                   src="/img/Projeto HermesLogo.png"
@@ -37,24 +39,22 @@ export default function Login() {
               <div className="modal-body p-5 pt-0">
                 <form className="">
                   <div>
-                    <div className="form-floating mb-3">
-                      <input
+                   
+                    <Input
                         type="email"
                         className="form-control rounded-3"
                         id="floatingInput"
                         placeholder="name@example.com"
+                        Label="Endereço de email"
                       />
-                      <label htmlFor="floatingInput">Email address</label>
-                    </div>
-                    <div className="form-floating mb-3">
-                      <input
+                    <Input
                         type="password"
                         className="form-control rounded-3"
                         id="floatingPassword"
                         placeholder="Password"
+                        Label="Senha"
                       />
-                      <label htmlFor="floatingPassword">Password</label>
-                    </div>
+             
                     <div
                       className="pt-1 mb-4"
                       style={{
@@ -72,16 +72,12 @@ export default function Login() {
                       </a>
                     </div>
                   </div>
-                  <button
+                  <Button
                     className="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
-                    type="submit"
-                    style={{
-                      backgroundColor: "var(--primaryColor)",
-                      borderColor: "none",
-                    }}
-                  >
-                    Entrar
-                  </button>
+                    children={"Entrar"}                   
+                  />
+                    
+                  
                   <small className="text-body-secondary">
                     By clicking Sign up, you agree to the terms of use.
                   </small>

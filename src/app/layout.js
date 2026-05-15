@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./globals.css";
+import "./typografi.global.css";
 import { AuthProvider } from "./auth.js"
 import BootstrapClient from "./components/bootstrap"
 

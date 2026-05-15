@@ -14,7 +14,6 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-
     padding: 5% 10%;
     box-sizing: border-box;
 }
@@ -37,6 +36,8 @@
     padding: 120px;
 }   
 .art {
-    width: 100%;
+    position: absolute  ;
+    width: 776px;
+    height: 776px;
     height: auto;
 }
