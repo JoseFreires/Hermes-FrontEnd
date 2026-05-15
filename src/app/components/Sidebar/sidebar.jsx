@@ -9,7 +9,7 @@ export default function Sidebar({ itens }) {
     return (
         <div className={styles.sidebar}>
             <div className={styles.logo}>
-                <Image src="/logo.svg" alt="Logo" width={90} height={90} />
+                <Image src="/img/Projeto HermesLogo.png" alt="Logo" width={80} height={80} />
                 <h1>Hermes</h1>
             </div>
 {/*

@@ -1,9 +1,22 @@
+// components/Button/index.jsx
 
+"use client";
 
-export const Button = ({value, onClick, disabled, type, classe}) => {
-  return (
-    <button className={[classe]+ " " + [type]} onClick={onClick} disabled={disabled}>
-      {value}
-    </button>
-  );
+import styles from "./button.module.css";
+import { Button as BootstrapButton } from "react-bootstrap";
+
+export default function Button({ children, variant = "primary", type = "button", disabled = false, onClick, className = "", ...props }) {
+
+    const variants = {
+        primary: styles.primary,
+        highlight: styles.highlight,
+        secondary: styles.secondary,
+        baixaPrioridade: styles.baixaPrioridade
+    };
+
+    return (
+        <BootstrapButton type={type} disabled={disabled} onClick={onClick} className={`${styles.buttonBody} ${variants[variant]} ${className}`} {...props}>
+            {children}
+        </BootstrapButton>
+    );
 }
