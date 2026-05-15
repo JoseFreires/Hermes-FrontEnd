@@ -6,7 +6,7 @@ import Image from "next/image";
 export default function Login() {
   return (
     <div className={styles.body}>
-      <div className={styles.Form}>
+      <div className={styles.form}>
           < div className={styles.login}>
             <div className="modal-content rounded-4 shadow" style={{
               display:"flex",

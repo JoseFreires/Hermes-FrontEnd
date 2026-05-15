@@ -9,13 +9,14 @@
 }
 .form {
     width: 50vw;
-    height: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
 
-    padding: 142px 69px;
+    padding: 5% 10%;
+    box-sizing: border-box;
 }
 
 .login {
@@ -28,13 +29,13 @@
 
 .loginImg{
     width: 50%;
+    height: 100vh;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     padding: 120px;
-}
-
+}   
 .art {
     width: 100%;
     height: auto;
