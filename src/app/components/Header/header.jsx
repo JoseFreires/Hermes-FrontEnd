@@ -16,7 +16,7 @@ export default function Header({ titulo, navItens }) {
     }, [navItens]);
     
     const { user } = useAuth();
-    const permissaoAdicionar = 
+    const permissoes = 
     user?.permissions?.includes("add_encomendas"); // Checar nome das permissões que vem no payload do token
     
     return (
@@ -46,14 +46,10 @@ export default function Header({ titulo, navItens }) {
                             </Nav.Link>
                         ))}
 
-                        <Button
-                            variant="light"
-                            className={`d-flex align-items-center gap-2 border ${styles.filtroButton}`}
-                        >
-                            <FunnelFill />
+                        <Button variant="light" className={`d-flex align-items-center gap-2 border ${styles.filtroButton}`} >
+                        <FunnelFill />
                             Filtro
                         </Button>
-
                     </Nav>
 
                 </div>
@@ -73,7 +69,7 @@ export default function Header({ titulo, navItens }) {
 
                     </InputGroup>
 
-                    {permissaoAdicionar && (
+                    {permissoes && (
                         <Button variant="primary">
                             Adicionar
                         </Button>
