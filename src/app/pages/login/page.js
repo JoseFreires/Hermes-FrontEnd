@@ -73,9 +73,12 @@ export default function Login() {
                     </div>
                   </div>
                   <Button
-                    className="w-100 mb-2 btn btn-lg rounded-3 btn-primary"
-                    children={"Entrar"}                   
-                  />
+                    className="w-100 mb-2 btn btn-lg rounded-3 btn-primary"                   
+                  >
+                    <a href="./encomendas" className="text-decoration-none text-white">
+                      Entrar
+                    </a>
+                  </Button>
                     
                   
                   <small className="text-body-secondary">

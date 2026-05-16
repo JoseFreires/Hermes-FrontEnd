@@ -1,24 +1,39 @@
 // components/Input/Input.jsx
+"use client";
 
 import styles from "./input.module.css";
+import { useState } from "react";
 
+export default function Input({
+  type,
+  onFocus,
+  variant = "Default",
+  placeholder,
+  inputClassName,
+  Label,
+}) {
+  const variants = {
+    Default: styles.default,
+    Active: styles.active,
+    Error: styles.error,
+    Disabled: styles.disabled,
+  };
 
-export default function Input({type,onChange, placeholder, inputClassName, Label,}) {
-    const variants = {
-        Default: styles.default,
-        Active: styles.active,
-        Error: styles.secondary,
-        Disabled: styles.baixaPrioridade
-    };
-    return (
-        <div className="form-floating mb-3">
-            <input
-                type={type}
-                className={`form-control rounded-3 ${inputClassName}`}
-                id="floatingInput"
-                placeholder={placeholder}
-            />
-            <label htmlFor="floatingInput">{Label}</label>
-        </div>
-    );
+  const [currentVariant, setCurrentVariant] = useState(variant);
+
+  return (
+    <div className="form-floating mb-4">
+      <input
+        type={type}
+        className={`form-control rounded-3 ${inputClassName} ${variants[currentVariant]}`}
+        id="floatingInput"
+        placeholder={placeholder}
+        onFocus={() => setCurrentVariant("Active")}
+        onBlur={() => setCurrentVariant("Default")}
+      />
+        <label htmlFor="floatingInput" className={styles.texto}>
+                {Label}
+        </label>
+    </div>
+  );
 }
