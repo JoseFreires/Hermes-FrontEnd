@@ -1,14 +1,10 @@
 :root {
   --secundaryColor: #f1f1f1;
-  --foreground: #171717;
   --primaryColor: #003366;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #f1f1f1;
-    --foreground: #171717;
-  }
+  --auxiliarColor: #757575;
+  --darkColor: #1A1A1A;
+  --alertColor: 183, 28, 28;
+  --sucessColor: #1B5E20;
 }
 
 html,
@@ -18,8 +14,6 @@ body {
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
   font-family: Montserrat, -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
