@@ -1,11 +1,15 @@
-import Link from "next/link";
+"use client";
+
 import styles from "./page.module.css";
 import  Button  from "../../components/Button/button";
 import  Input  from "../../components/Input/Input";
+import { useRouter } from "next/navigation";
+
 
 import Image from "next/image";
 
 export default function Login() {
+const router = useRouter();
   return (
     <div className={styles.body}>
       <div className={styles.form}>
@@ -14,6 +18,7 @@ export default function Login() {
               display:"flex",
               justifyContent:"center",
               alignItems:"center ",
+              padding:"0rem",
             }}>
               <Image
                   src="/img/Projeto HermesLogo.png"
@@ -21,7 +26,7 @@ export default function Login() {
                   width={97}
                   height={100}
                 />
-              <div className="modal-header p-5 pb-4 border-bottom-0">
+              <div className="modal-header p-3 p-md-5 pb-3 pb-md-4 border-bottom-0">
                 
                 <div className="d-flex justify-content-center align-items-center gap-2">
                   <p className="mb-0 text-center fs-4 text-dark">
@@ -36,7 +41,9 @@ export default function Login() {
                   </span>
                 </div>
               </div>
-              <div className="modal-body p-5 pt-0">
+              <div className="modal-body p-3 p-md-5 pt-0" style={{
+                display:"flex",
+              }}>
                 <form className="">
                   <div>
                    
@@ -73,11 +80,11 @@ export default function Login() {
                     </div>
                   </div>
                   <Button
-                    className="w-100 mb-2 btn btn-lg rounded-3 btn-primary"                   
+                    className="w-100 mb-2 btn btn-lg rounded-3 btn-primary"     
+                    onClick={() => router.push("../pages/encomendas")}
+                    children={"Entrar"}              
                   >
-                    <a href="./encomendas" className="text-decoration-none text-white">
-                      Entrar
-                    </a>
+                    
                   </Button>
                     
                   

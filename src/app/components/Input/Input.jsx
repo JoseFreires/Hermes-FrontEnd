@@ -6,11 +6,11 @@ import { useState } from "react";
 
 export default function Input({
   type,
-  onFocus,
   variant = "Default",
   placeholder,
   inputClassName,
   Label,
+  icon
 }) {
   const variants = {
     Default: styles.default,
