@@ -1,12 +1,11 @@
 .sidebar {
   position: relative;
-  width: 272px;
+  min-width: 272px;
   height: 100vh;
   background: #f1f1f1;
   padding: 20px;
   border-right: 3px solid #1b2443;
   transition: all 0.3s ease;
-  overflow: hidden;
 }
 
 .logo {

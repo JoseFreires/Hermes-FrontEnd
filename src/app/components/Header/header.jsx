@@ -6,14 +6,7 @@ import Button from "../Button/button"
 import { useAuth } from "../../auth.js";
 import styles from "./header.module.css";
 
-export default function Header({ titulo, navItens }) {
-    const [activeTab, setActiveTab] = React.useState("");
-
-    React.useEffect(() => {
-        if (navItens?.length > 0) {
-            setActiveTab(navItens[0].texto);
-        }
-    }, [navItens]);
+export default function Header({ titulo, navItens = [], activeTab, setActiveTab }) {
     
     const { user } = useAuth();
     const permissoes = 
@@ -34,7 +27,10 @@ export default function Header({ titulo, navItens }) {
                         {navItens?.map((item, i) => (
                             <Nav.Link
                                 key={i}
-                                onClick={() => setActiveTab(item.texto)}
+                                onClick={() => {
+                                    setActiveTab(item.texto);
+
+                                }}
                                 className={styles.navLink}
                                 style={{
                                     color: activeTab === item.texto ? "#003366" : "#6c757d",
