@@ -1,15 +1,15 @@
 "use client";
 
 import styles from './page.module.css';
-import typography from '@/app/typografi.global.css';
 import Sidebar from '@/app/components/Sidebar/sidebar';
 import Header from '@/app/components/Header/header';
 import CustomTable from '@/app/components/Table/table';
 import { useState } from 'react';
 
+
 export default function Encomendas() {
     const itens = [
-        { texto: "Encomendas", href: "#" }
+        { texto: "Encomendas", href: "#", Icon: null }, 
     ];
 
     const navItens = [

@@ -1,5 +1,3 @@
-/* header.module.css */
-
 .navbar {
     width: 100%;
 }
@@ -33,4 +31,27 @@
     border-radius: 0 10px 10px 0;
     box-shadow: none;
     padding: 8px 10px;
+}
+
+@media (max-width: 1199px) {
+    .searchGroup {
+        width: 100%;
+        min-width: 90px;
+    }
+}
+
+.header, .user {
+    display: flex;
+    align-items: center;
+}
+
+.header {
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    padding-bottom: 10px;
+}
+
+.user {
+    gap: 10px;
 }

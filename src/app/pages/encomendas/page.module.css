@@ -4,8 +4,11 @@
 }
 
 .main {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     padding: 20px 30px;
+    gap: 5px;
 }
 
 .user {

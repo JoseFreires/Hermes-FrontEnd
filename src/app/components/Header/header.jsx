@@ -1,79 +1,116 @@
-"use client"
-import { Navbar, Container, Nav, Form, InputGroup} from "react-bootstrap";
+"use client";
+
+import { Navbar, Container, Nav, Form, InputGroup } from "react-bootstrap";
 import { FunnelFill, Search } from "react-bootstrap-icons";
 import React from "react";
 import Button from "../Button/button"
 import { useAuth } from "../../auth.js";
 import styles from "./header.module.css";
+import Image from "next/image";
+import useDebounce from "../../debounce.js";
+import { useState } from "react";
 
-export default function Header({ titulo, navItens = [], activeTab, setActiveTab }) {
-    
-    const { user } = useAuth();
-    const permissoes = 
-    user?.permissions?.includes("add_encomendas"); // Checar nome das permissões que vem no payload do token
-    
+export default function Header({ titulo, navItens = [], activeTab, setActiveTab, nome, imagem }) {
+
+    const user =  { // Simulação de dados do usuário, substituir pelo hook useAuth()
+    nome: "Dev",
+    permissions: ["add_encomendas", "del_encomendas"],
+    imagem: null,
+    papel: ["Admin", "Sindico", "Porteiro", "Morador"],
+};
+    const permissoes =
+        user?.permissions?.includes("add_encomendas"); // Checar nome das permissões que vem no payload do token
+
+    // pesquisa com debounce para reduzir numero de requisições (em desenvolvimento)
+    const [search, setSearch] = useState("");
+    const debounceSearch = useDebounce(search, 500);
+
     return (
-       <Navbar className={styles.navbar}>
-            <Container fluid className="d-flex align-items-center justify-content-between">
+        <div className={styles.componentWrapper}>
 
-                <div className="d-flex flex-column">
+            <header className={styles.header}>
+                
+                <h1>
+                    <span style={{ color: "#757575" }}>Olá,</span> {user.papel?.[0] || "Usuário"}!
+                </h1>
 
-                    <h2 className={styles.titulo}>
-                        {titulo}
-                    </h2>
-
-                    <Nav className="mt-3 gap-4 align-items-center">
-
-                        {navItens?.map((item, i) => (
-                            <Nav.Link
-                                key={i}
-                                onClick={() => {
-                                    setActiveTab(item.texto);
-
-                                }}
-                                className={styles.navLink}
-                                style={{
-                                    color: activeTab === item.texto ? "#003366" : "#6c757d",
-                                    borderBottom: activeTab === item.texto ? "3px solid #003366" : "none",
-                                    fontWeight: activeTab === item.texto ? "600" : "400",
-                                }}
-                            >
-                                {item.texto}
-                            </Nav.Link>
-                        ))}
-
-                        <Button variant="light" className={`d-flex align-items-center gap-2 border ${styles.filtroButton}`} >
-                        <FunnelFill />
-                            Filtro
-                        </Button>
-                    </Nav>
+                <div className={styles.user}>
+                    <h3>{user.nome}</h3>
+                    <Image
+                        src={user.imagem || "/img/defaultAvatar.svg"}
+                        alt="avatar"
+                        width={44}
+                        height={44}
+                        className={styles.avatar}
+                    />
 
                 </div>
+            </header>
 
-                <div className="d-flex align-items-center gap-3">
+            <Navbar className={styles.navbar}>
+                <Container fluid className="d-flex align-items-center justify-content-between">
 
-                    <InputGroup className={styles.searchGroup}>
+                    <div className="d-flex flex-column">
 
-                        <InputGroup.Text className={styles.searchIcon}>
-                            <Search />
-                        </InputGroup.Text>
+                        <h2 className={styles.titulo}>
+                            {titulo}
+                        </h2>
 
-                        <Form.Control
-                            placeholder="Pesquisar..."
-                            className={styles.searchInput}
-                        />
+                        <Nav className="mt-3 gap-4 align-items-center">
 
-                    </InputGroup>
+                            {navItens?.map((item, i) => (
+                                <Nav.Link
+                                    key={i}
+                                    onClick={() => {
+                                        setActiveTab(item.texto);
 
-                    {permissoes && (
-                        <Button variant="primary">
-                            Adicionar
-                        </Button>
-                    )}
+                                    }}
+                                    className={styles.navLink}
+                                    style={{
+                                        color: activeTab === item.texto ? "#003366" : "#6c757d",
+                                        borderBottom: activeTab === item.texto ? "3px solid #003366" : "none",
+                                        fontWeight: activeTab === item.texto ? "600" : "400",
+                                    }}
+                                >
+                                    {item.texto}
+                                </Nav.Link>
+                            ))}
 
-                </div>
+                            <Button variant="light" className={`d-flex align-items-center gap-2 border ${styles.filtroButton}`} >
+                                <FunnelFill />
+                                Filtro
+                            </Button>
+                        </Nav>
 
-            </Container>
-        </Navbar>
+                    </div>
+
+                    <div className="d-flex align-items-center gap-3">
+
+                        <InputGroup className={styles.searchGroup}>
+
+                            <InputGroup.Text className={styles.searchIcon}>
+                                <Search />
+                            </InputGroup.Text>
+
+                            <Form.Control
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                placeholder="Pesquisar..."
+                                className={styles.searchInput}
+                            />
+
+                        </InputGroup>
+
+                        {permissoes && (
+                            <Button variant="primary">
+                                Adicionar
+                            </Button>
+                        )}
+
+                    </div>
+
+                </Container>
+            </Navbar>
+        </div>
     );
 }

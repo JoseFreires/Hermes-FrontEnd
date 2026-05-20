@@ -11,7 +11,8 @@ export default function Button({ children, variant = "primary", type = "button",
         primary: styles.primary,
         highlight: styles.highlight,
         secondary: styles.secondary,
-        baixaPrioridade: styles.lowPriority
+        critical: styles.critical,
+        lowPriority: styles.lowPriority,
     };
 
     return (
