@@ -16,8 +16,13 @@
     background-color: transparent;
 }
 
+.filtroButton:hover {
+    background-color: #003366;
+    color: #F1F1F1;
+}
+
 .searchGroup {
-    width: 300px;
+    max-width: 800px;
 }
 
 .searchIcon {
@@ -49,7 +54,11 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    padding-bottom: 10px;
+}
+
+.header h1, 
+.user h3 {
+    margin: 0;
 }
 
 .user {

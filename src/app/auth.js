@@ -11,6 +11,7 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         const token = localStorage.getItem("token");
         window.setUser = setUser;
+        window.user = user;
 
         if (token) {
             const decoded = jwtDecode(token);
