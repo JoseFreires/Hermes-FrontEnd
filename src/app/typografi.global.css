@@ -33,21 +33,18 @@ h1 {
   font-size: var(--h1-size);
   font-weight: 700;
   color: var(--color-dark);
-  margin-bottom: 0.5rem;
 }
 
 h2 {
   font-size: var(--h2-size);
   font-weight: 600;
   color: var(--color-dark);
-  margin-bottom: 0.5rem;
 }
 
 
 p {
   font-size: var(--body-size);
   font-weight: 400;
-  margin-bottom: 0.5rem;
 }
 
 

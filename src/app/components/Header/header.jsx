@@ -17,7 +17,9 @@ export default function Header({
     search, 
     setSearch, 
     setDebouncedSearch,
-    canAdd = false,    
+    canAdd = false,
+    funcionalitie,
+    onAddbuttonClick
 }) {
 
     // pesquisa com debounce (delay) para reduzir numero de requisições
@@ -101,7 +103,7 @@ export default function Header({
                         </InputGroup>
 
                         {canAdd && (
-                            <Button variant="primary">
+                            <Button variant="primary" onClick={() => onAddbuttonClick(funcionalitie)}>
                                 Adicionar
                             </Button>
                         )}
