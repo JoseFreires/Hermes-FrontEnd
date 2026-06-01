@@ -4,26 +4,30 @@ import { Navbar, Container, Nav, Form, InputGroup } from "react-bootstrap";
 import { FunnelFill, Search } from "react-bootstrap-icons";
 import React from "react";
 import Button from "../Button/button"
-import { useAuth } from "../../auth.js";
 import styles from "./header.module.css";
 import Image from "next/image";
 import useDebounce from "../../debounce.js";
-import { useState } from "react";
+import { useAuth } from "@/app/auth.js";
 
-export default function Header({ titulo, navItens = [], activeTab, setActiveTab, nome, imagem }) {
+export default function Header({ 
+    titulo, 
+    navItens = [], 
+    activeTab, 
+    setActiveTab, 
+    search, 
+    setSearch, 
+    setDebouncedSearch,
+    canAdd = false,    
+}) {
 
-    const user =  { // Simulação de dados do usuário, substituir pelo hook useAuth()
-    nome: "Dev",
-    permissions: ["add_encomendas", "del_encomendas"],
-    imagem: null,
-    papel: ["Admin", "Sindico", "Porteiro", "Morador"],
-};
-    const permissoes =
-        user?.permissions?.includes("add_encomendas"); // Checar nome das permissões que vem no payload do token
+    // pesquisa com debounce (delay) para reduzir numero de requisições
+    const debounceSearch = useDebounce(search, 500)
 
-    // pesquisa com debounce para reduzir numero de requisições (em desenvolvimento)
-    const [search, setSearch] = useState("");
-    const debounceSearch = useDebounce(search, 500);
+    React.useEffect(() => {
+        setDebouncedSearch(debounceSearch);
+    }, [debounceSearch]);
+
+    const { user } = useAuth();
 
     return (
         <div className={styles.componentWrapper}>
@@ -31,19 +35,18 @@ export default function Header({ titulo, navItens = [], activeTab, setActiveTab,
             <header className={styles.header}>
                 
                 <h1>
-                    <span style={{ color: "#757575" }}>Olá,</span> {user.papel?.[0] || "Usuário"}!
+                    <span style={{ color: "#757575" }}>Olá,</span> {user?.papel?.[0] || "Usuário"}!
                 </h1>
 
                 <div className={styles.user}>
-                    <h3>{user.nome}</h3>
+                    <h3>{user?.nome}</h3>
                     <Image
-                        src={user.imagem || "/img/defaultAvatar.svg"}
+                        src={user?.imagem || "/img/defaultAvatar.svg"}
                         alt="avatar"
                         width={44}
                         height={44}
                         className={styles.avatar}
                     />
-
                 </div>
             </header>
 
@@ -57,13 +60,11 @@ export default function Header({ titulo, navItens = [], activeTab, setActiveTab,
                         </h2>
 
                         <Nav className="mt-3 gap-4 align-items-center">
-
                             {navItens?.map((item, i) => (
                                 <Nav.Link
                                     key={i}
                                     onClick={() => {
-                                        setActiveTab(item.texto);
-
+                                        setActiveTab?.(item.texto);
                                     }}
                                     className={styles.navLink}
                                     style={{
@@ -75,13 +76,11 @@ export default function Header({ titulo, navItens = [], activeTab, setActiveTab,
                                     {item.texto}
                                 </Nav.Link>
                             ))}
-
                             <Button variant="light" className={`d-flex align-items-center gap-2 border ${styles.filtroButton}`} >
                                 <FunnelFill />
                                 Filtro
                             </Button>
                         </Nav>
-
                     </div>
 
                     <div className="d-flex align-items-center gap-3">
@@ -101,12 +100,11 @@ export default function Header({ titulo, navItens = [], activeTab, setActiveTab,
 
                         </InputGroup>
 
-                        {permissoes && (
+                        {canAdd && (
                             <Button variant="primary">
                                 Adicionar
                             </Button>
                         )}
-
                     </div>
 
                 </Container>

@@ -5,12 +5,14 @@ import Sidebar from '@/app/components/Sidebar/sidebar';
 import Header from '@/app/components/Header/header';
 import CustomTable from '@/app/components/Table/table';
 import { useState } from 'react';
+import { useAuth } from '@/app/auth.js';
 
 
 export default function Encomendas() {
-    const itens = [
-        { texto: "Encomendas", href: "#", Icon: null }, 
-    ];
+
+    const {user} = useAuth();
+    const canRemove = user?.permissions?.includes("del_encomendas");
+    const canAdd = user?.permissions?.includes("add_encomendas");
 
     const navItens = [
         { texto: "Todas" },
@@ -168,20 +170,33 @@ export default function Encomendas() {
     };
 
     const filteredData = data.filter(filtros[activeTab]);
+    const [search, setSearch] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
 
 
     return (
         <div className={styles.body}>
-            <Sidebar itens={itens} />
+            <Sidebar />
 
             <div className={styles.main}>
-                <Header titulo="Encomendas registradas" navItens={navItens} activeTab={activeTab} setActiveTab={setActiveTab} />
+                <Header 
+                titulo="Encomendas registradas" 
+                navItens={navItens} 
+                activeTab={activeTab} 
+                setActiveTab={setActiveTab}
+                search={search}
+                setSearch={setSearch}
+                setDebouncedSearch={setDebouncedSearch}
+                canAdd={canAdd}
+                />
 
                 <CustomTable
+                    canRemove={canRemove}
                     headerAs="span"
                     rowsPerPage={10}
                     columns={columns}
-                    data={filteredData}
+                    data={filteredData} // SEMPRE passar filteredData pro componente da tabela, para garantir que os filtros e a busca funcionem corretamente
+                    searchValue={debouncedSearch}
                 />
             </div>
         </div>
