@@ -9,15 +9,15 @@ import Image from "next/image";
 import useDebounce from "../../debounce.js";
 import { useAuth } from "@/app/auth.js";
 
-export default function Header({ 
-    titulo, 
-    navItens = [], 
-    activeTab, 
-    setActiveTab, 
-    search, 
-    setSearch, 
+export default function Header({
+    titulo,
+    navItens = [],
+    activeTab,
+    setActiveTab,
+    search,
+    setSearch,
     setDebouncedSearch,
-    canAdd = false,    
+    canAdd = false,
 }) {
 
     // pesquisa com debounce (delay) para reduzir numero de requisições
@@ -29,13 +29,22 @@ export default function Header({
 
     const { user } = useAuth();
 
+    const roleLabels = {
+        ROLE_ADMIN: "Admin",
+        ROLE_PORTEIRO: "Porteiro",
+        ROLE_MORADOR: "Morador",
+        ROLE_SINDICO: "Síndico"
+    };
+
+    const role = user?.roles?.[0];
+
     return (
         <div className={styles.componentWrapper}>
 
             <header className={styles.header}>
-                
+
                 <h1>
-                    <span style={{ color: "#757575" }}>Olá,</span> {user?.papel?.[0] || "Usuário"}!
+                    <span style={{ color: "#757575" }}>Olá,</span> {roleLabels[role] || "Usuário"}!
                 </h1>
 
                 <div className={styles.user}>

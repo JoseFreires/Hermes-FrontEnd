@@ -10,8 +10,8 @@ import { useAuth } from '@/app/auth.js';
 export default function Funcionarios() {
 
     const {user} = useAuth();
-    const canRemove = user?.permissions?.includes("del_funcionarios");
-    const canAdd = user?.permissions?.includes("add_funcionarios");
+    const canRemove = user?.roles?.includes("ROLE_SINDICO") || user?.roles?.includes("ROLE_ADMIN");
+    const canAdd = user?.roles?.includes("ROLE_SINDICO") || user?.roles?.includes("ROLE_ADMIN");
 
     const navItens = [
         { texto: "Sindicos"},

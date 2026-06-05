@@ -11,8 +11,8 @@ import { useAuth } from '@/app/auth.js';
 export default function Moradores() {
 
     const { user } = useAuth();
-    const canAdd = user?.permissions?.includes("add_moradores");
-    const canRemove = user?.permissions?.includes("del_moradores");
+    const canRemove = user?.roles?.includes("ROLE_") || user?.roles?.includes("ROLE_ADMIN");
+    const canAdd = user?.roles?.includes("ROLE_") || user?.roles?.includes("ROLE_ADMIN");
 
     const columns = [
         {

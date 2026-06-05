@@ -28,3 +28,9 @@
     font-weight: 600;
     margin: 0;
 }
+
+.cardWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}

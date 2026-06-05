@@ -9,10 +9,10 @@ export default function Sidebar() {
 
     const { user } = useAuth();
 
-    const adminOnly = user?.papel?.includes("Admin");
-    const sindicoView = user?.papel?.includes("Admin") || user?.papel?.includes("Sindico");
-    const porteiroView = user?.papel?.includes("Porteiro") || user?.papel?.includes("Admin") || user?.papel?.includes("Sindico");
-    const moradorView = user?.papel?.includes("Morador");
+    const adminOnly = user?.roles?.includes("ROLE_ADMIN");
+    const sindicoView = user?.roles?.includes("ROLE_ADMIN") || user?.roles?.includes("ROLE_SINDICO");
+    const porteiroView = user?.roles?.includes("ROLE_PORTEIRO") || user?.roles?.includes("ROLE_ADMIN") || user?.roles?.includes("ROLE_SINDICO");
+    const moradorView = user?.roles?.includes("ROLE_MORADOR");
 
     return (
         <div className={styles.sidebar}>
