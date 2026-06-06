@@ -10,7 +10,8 @@ export default function Input({
   placeholder,
   inputClassName,
   Label,
-  icon
+  icon,
+  defaultValue
 }) {
   const variants = {
     Default: styles.default,
@@ -25,11 +26,12 @@ export default function Input({
     <div className="form-floating mb-4">
       <input
         type={type}
-        className={`form-control rounded-3 ${inputClassName} ${variants[currentVariant]}`}
+        className={`form-control rounded-3 w-100 ${inputClassName} ${variants[currentVariant]}`}
         id="floatingInput"
         placeholder={placeholder}
         onFocus={() => setCurrentVariant("Active")}
         onBlur={() => setCurrentVariant("Default")}
+        defaultValue={defaultValue}
       />
         <label htmlFor="floatingInput" className={styles.texto}>
                 {Label}

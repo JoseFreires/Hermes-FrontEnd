@@ -1,0 +1,13 @@
+.CheckboxInput input:focus {
+    box-shadow: none;
+    border-color: rgb(var(--alertColor));
+}
+.CheckboxInput input {
+    background-color: var(--secundaryColor); 
+    border-color:rgb(var(--alertColor)); ;
+}
+
+.CheckboxInput input:checked {
+    background-color: rgb(var(--alertColor)); 
+    border-color: rgb(var(--alertColor));
+}

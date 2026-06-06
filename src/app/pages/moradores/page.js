@@ -11,8 +11,8 @@ import { useAuth } from '@/app/auth.js';
 export default function Moradores() {
 
     const { user } = useAuth();
-    const canRemove = user?.roles?.includes("ROLE_") || user?.roles?.includes("ROLE_ADMIN");
-    const canAdd = user?.roles?.includes("ROLE_") || user?.roles?.includes("ROLE_ADMIN");
+    const canAdd = user?.permissions?.includes("add_moradores");
+    const canRemove = user?.permissions?.includes("del_moradores");
 
     const columns = [
         {
@@ -38,7 +38,7 @@ export default function Moradores() {
                     {value}
                 </p>
             )
-        }, 
+        },
         {
             label: "BLOCO",
             key: "bloco",
@@ -56,6 +56,21 @@ export default function Moradores() {
         { id: 3, nome: "Pedro Santos", telefone: "(11) 99999-9999", email: "pedro@email.com", apartamento: "303", bloco: "C" },
     ];
 
+    const users = Array.from(new Set(data.map((item) => item.nome))).sort();
+    const [filters, setFilters] = useState({
+        selectedUsers: [],
+        startDate: "",
+        endDate: "",
+    });
+
+    const filteredData = data.filter((item) => {
+        if (filters.selectedUsers.length && !filters.selectedUsers.includes(item.nome)) {
+            return false;
+        }
+
+        return true;
+    });
+
     const [search, setSearch] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
 
@@ -64,21 +79,24 @@ export default function Moradores() {
             <Sidebar />
             <div className={styles.main}>
 
-                <Header 
-                titulo="Moradores registrados" 
-                search={search}
-                setSearch={setSearch}
-                setDebouncedSearch={setDebouncedSearch}
-                canAdd={canAdd}
+                <Header
+                    titulo="Moradores registrados"
+                    search={search}
+                    setSearch={setSearch}
+                    setDebouncedSearch={setDebouncedSearch}
+                    canAdd={canAdd}
+                    users={users}
+                    filters={filters}
+                    onFiltersChange={setFilters}
                 />
 
-                <CustomTable 
-                headerAs = "span"
-                rowsPerPage={10}
-                columns={columns} 
-                data={data}
-                searchValue={debouncedSearch}
-                canRemove={canRemove} 
+                <CustomTable
+                    headerAs="span"
+                    rowsPerPage={10}
+                    columns={columns}
+                    data={filteredData}
+                    searchValue={debouncedSearch}
+                    canRemove={canRemove}
                 />
             </div>
         </div>

@@ -80,11 +80,10 @@ const router = useRouter();
                     </div>
                   </div>
                   <Button
-                    className="w-100 mb-2 btn btn-lg rounded-3 btn-primary"     
-                    onClick={() => router.push("../pages/encomendas")}
-                    children={"Entrar"}              
+                    className="w-100 mb-4"     
+                    onClick={() => router.push("../pages/encomendas")}           
                   >
-                    
+                    <span>Entrar</span>
                   </Button>
                     
                   

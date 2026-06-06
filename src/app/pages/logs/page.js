@@ -49,6 +49,47 @@ export default function Logs() {
         { id: 2, login: "Maria Santos", email: "maria.santos@example.com", acao: "Exclusao", data_alteracao: "2023-01-02", tabela_alterada: "Usuários", data_acao: "5 horas atrás" },
     ];
 
+    const users = Array.from(new Set(data.map((item) => item.login))).sort();
+    const [filters, setFilters] = useState({
+        selectedUsers: [],
+        startDate: "",
+        endDate: "",
+    });
+
+    const parseData = (dataString) => {
+      if (!dataString) return null;
+      const [day, month, year] = dataString.split("/");
+      if (!day || !month || !year) return null;
+      return new Date(`${year}-${month}-${day}`);
+    };
+
+    const filteredData = data
+      .filter((item) => {
+        if (filters.selectedUsers.length && !filters.selectedUsers.includes(item.login)) {
+          return false;
+        }
+
+        if (!filters.startDate && !filters.endDate) {
+          return true;
+        }
+
+        const itemDate = parseData(item.data_alteracao);
+        if (!itemDate) return false;
+
+        if (filters.startDate) {
+          const start = new Date(filters.startDate);
+          if (itemDate < start) return false;
+        }
+
+        if (filters.endDate) {
+          const end = new Date(filters.endDate);
+          end.setHours(23, 59, 59, 999);
+          if (itemDate > end) return false;
+        }
+
+        return true;
+      });
+
     const [search, setSearch] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
 
@@ -61,14 +102,17 @@ export default function Logs() {
                     titulo="Logs do Sistema"
                     search={search}
                     setSearch={setSearch}
-                    setDebouncedSearch={setDebouncedSearch} 
+                    setDebouncedSearch={setDebouncedSearch}
+                    users={users}
+                    filters={filters}
+                    onFiltersChange={setFilters}
                 />
                 
                 <CustomTable 
                     columns={columns}
                     headerAs = "span"
                     rowsPerPage={10}
-                    data={data}
+                    data={filteredData}
                     searchValue={debouncedSearch}
                 />
             </div>

@@ -9,11 +9,15 @@
 
 html,
 body {
+  min-height: 100%;
+  width: 100%;
   max-width: 100vw;
   overflow-x: hidden;
+  background-color: var(--secundaryColor);
 }
 
 body {
+  min-height: 100vh;
   font-family: Montserrat, -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -33,5 +37,12 @@ a {
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
+  }
+}
+
+@media (max-width: 998px) {
+  .main {
+    width: 100%;
+    height: auto;
   }
 }

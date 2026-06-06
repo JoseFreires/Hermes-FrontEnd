@@ -4,6 +4,7 @@ import { Navbar, Container, Nav, Form, InputGroup } from "react-bootstrap";
 import { FunnelFill, Search } from "react-bootstrap-icons";
 import React from "react";
 import Button from "../Button/button"
+import Filtro from "./Filtro/filtro";
 import styles from "./header.module.css";
 import Image from "next/image";
 import useDebounce from "../../debounce.js";
@@ -18,6 +19,11 @@ export default function Header({
     setSearch,
     setDebouncedSearch,
     canAdd = false,
+    funcionalitie,
+    onAddButtonClick,
+    users = [],
+    filters = {},
+    onFiltersChange,
 }) {
 
     // pesquisa com debounce (delay) para reduzir numero de requisições
@@ -60,9 +66,9 @@ export default function Header({
             </header>
 
             <Navbar className={styles.navbar}>
-                <Container fluid className="d-flex align-items-center justify-content-between">
+                <Container fluid className={styles.navContainer}>
 
-                    <div className="d-flex flex-column">
+                    <div className={styles.navGroup}>
 
                         <h2 className={styles.titulo}>
                             {titulo}
@@ -85,16 +91,17 @@ export default function Header({
                                     {item.texto}
                                 </Nav.Link>
                             ))}
-                            <Button variant="light" className={`d-flex align-items-center gap-2 border ${styles.filtroButton}`} >
-                                <FunnelFill />
-                                Filtro
-                            </Button>
+                            <Filtro 
+                            users={users}
+                            filters={filters}
+                            onFiltersChange={onFiltersChange}
+                            />
                         </Nav>
                     </div>
 
-                    <div className="d-flex align-items-center gap-3">
+                    <div className={styles.searchGroup}>
 
-                        <InputGroup className={styles.searchGroup}>
+                        <InputGroup >
 
                             <InputGroup.Text className={styles.searchIcon}>
                                 <Search />
@@ -110,7 +117,7 @@ export default function Header({
                         </InputGroup>
 
                         {canAdd && (
-                            <Button variant="primary">
+                            <Button variant="primary" onClick={() => onAddButtonClick(funcionalitie)}>
                                 Adicionar
                             </Button>
                         )}

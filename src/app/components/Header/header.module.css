@@ -2,6 +2,18 @@
     width: 100%;
 }
 
+.navGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.navContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
 .titulo {
     color: #003366;
     font-size: 28px;
@@ -23,6 +35,9 @@
 
 .searchGroup {
     max-width: 800px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
 }
 
 .searchIcon {
@@ -38,10 +53,37 @@
     padding: 8px 10px;
 }
 
-@media (max-width: 1199px) {
+@media (max-width: 998px) {
+    .componentWrapper {
+        margin-top: 30px;
+    }
+
+    .header {
+        padding: 20px 0 0 0 !important;
+        align-items: right !important;
+    }
     .searchGroup {
         width: 100%;
-        min-width: 90px;
+        gap: 20px;
+    }
+    
+    .navContainer {
+        flex-direction: column;
+        gap: 15px;
+        padding: 0;
+    }
+
+    .filterPanel {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        left: auto;
+        width: 320px;
+        max-width: 320px;
+    }
+
+    .user h3 {
+        
     }
 }
 
@@ -63,4 +105,55 @@
 
 .user {
     gap: 10px;
+}
+
+.filterWrapper {
+    position: relative;
+}
+
+.filterPanel {
+    position: absolute;
+    top: calc(100% + 8px);
+    width: 320px;
+    padding: 16px;
+    border-radius: 16px;
+    background: #ffffff;
+    border: 1px solid rgba(63, 58, 58, 0.08);
+    box-shadow: 0 18px 32px rgba(0, 0, 0, 0.08);
+    z-index: 20;
+}
+
+.filterPanelHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.filterPanelField {
+    display: flex;
+    flex-direction: column;
+}
+
+.filterPanelActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.selectedUsersList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.selectedUserItem {
+    background: rgba(0, 51, 102, 0.08);
+    color: #003366;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 13px;
 }

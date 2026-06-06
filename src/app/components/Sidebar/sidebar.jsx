@@ -1,12 +1,15 @@
 "use client";
 
+import { useRef, useState } from "react";
 import styles from "./sidebar.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/app/auth.js";
 
 export default function Sidebar() {
-
+    const [isOpen, setIsOpen] = useState(false);
+    const touchStartX = useRef(null);
+    const touchCurrentX = useRef(null);
     const { user } = useAuth();
 
     const adminOnly = user?.roles?.includes("ROLE_ADMIN");
@@ -14,26 +17,60 @@ export default function Sidebar() {
     const porteiroView = user?.roles?.includes("ROLE_PORTEIRO") || user?.roles?.includes("ROLE_ADMIN") || user?.roles?.includes("ROLE_SINDICO");
     const moradorView = user?.roles?.includes("ROLE_MORADOR");
 
+    const handleTouchStart = (event) => {
+        touchStartX.current = event.touches[0].clientX;
+        touchCurrentX.current = touchStartX.current;
+    };
+
+    const handleTouchMove = (event) => {
+        if (touchStartX.current !== null) {
+            touchCurrentX.current = event.touches[0].clientX;
+        }
+    };
+
+    const handleTouchEnd = () => {
+        if (touchStartX.current !== null && touchCurrentX.current - touchStartX.current > 70) {
+            setIsOpen(false);
+        }
+        touchStartX.current = null;
+        touchCurrentX.current = null;
+    };
+
     return (
-        <div className={styles.sidebar}>
+        <>
+            <button
+                className={styles.menuToggle}
+                onClick={() => setIsOpen(true)}
+                type="button"
+                aria-label="Abrir menu"
+            >
+                ☰
+            </button>
 
-            <a href="./../pages/home" className={styles.logoLink}>
-                <div className={styles.logo}>
+            <div
+                className={`${styles.sidebar} ${isOpen ? styles.open : styles.closed}`}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+            >
 
-                    <Image src="/img/Projeto HermesLogo.png" alt="Logo" width={80} height={80} />
-                    <h1>Hermes</h1>
+                <a href="./../pages/home" className={styles.logoLink}>
+                    <div className={styles.logo}>
 
-                </div>
-            </a>
+                        <Image src="/img/Projeto HermesLogo.png" alt="Logo" width={80} height={80} />
+                        <h1>Hermes</h1>
 
-            {moradorView && (
-                <Link href="./../pages/meus-pacotes" className={styles.link}>
-                    <div className={styles.item}>
-                        <Image src="/img/box.svg" alt="Sidebar Icon" width={24} height={24} />
-                        <span>Meus Pacotes</span>
                     </div>
-                </Link>
-            )}
+                </a>
+
+                {moradorView && (
+                    <Link href="./../pages/meus-pacotes" className={styles.link}>
+                        <div className={styles.item}>
+                            <Image src="/img/box.svg" alt="Sidebar Icon" width={24} height={24} />
+                            <span>Meus Pacotes</span>
+                        </div>
+                    </Link>
+                )}
 
             {porteiroView && (
                 <Link href="./../pages/encomendas" className={styles.link}>
@@ -79,5 +116,8 @@ export default function Sidebar() {
                 </Link>
             </div>
         </div>
+
+        {isOpen && <div className={styles.backdrop} onClick={() => setIsOpen(false)} />}
+        </>
     );
 }
