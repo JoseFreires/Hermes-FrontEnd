@@ -78,14 +78,7 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        window.setUser = setUser;
-        window.user = user;
-
-        if (token) {
-            const decoded = jwtDecode(token);
-            setUser(decoded);
-        }
+        loadUser();
     }, []);
 
     async function loadUser() {
