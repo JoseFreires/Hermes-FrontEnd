@@ -5,16 +5,27 @@ import  Button  from "../../components/Button/button";
 import  Input  from "../../components/Input/Input";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
+import {useAuth} from "../../auth";
 import Image from "next/image";
 
 export default function Login() {
 const router = useRouter();
+const { signIn } = useAuth();
 
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
 
-function handleLogin(email, password) {
+
+
+async function handleLogin(e) {
+  e.preventDefault();
+  console.log("Tentando logar com:", email, password);
+  try {
+    await signIn(email, password);
+    router.push("../pages/encomendas");
+  } catch (error) {
+    alert("Erro ao fazer login: " + error.message);
+  }
   
 }
 
@@ -59,7 +70,7 @@ function handleLogin(email, password) {
                         id="floatingInput"
                         placeholder="name@example.com"
                         Label="Endereço de email"
-                        onchange={(e) => setEmail(e.target.value)}
+                        onChange={(e) => setEmail(e.target.value)}
                       />
                     <Input
                         type="password"
@@ -67,7 +78,7 @@ function handleLogin(email, password) {
                         id="floatingPassword"
                         placeholder="Password"
                         Label="Senha"
-                        onchange={(e) => setPassword(e.target.value)}
+                        onChange={(e) => setPassword(e.target.value)}
                       />
              
                     <div
@@ -89,7 +100,7 @@ function handleLogin(email, password) {
                   </div>
                   <Button
                     className="w-100 mb-4"   
-                    onClick={() => router.push("../pages/encomendas")}              
+                    onClick={(e) => handleLogin(e)}           
                   >
                     <span>Entrar</span>
                     

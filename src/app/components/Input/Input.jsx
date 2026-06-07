@@ -12,6 +12,7 @@ export default function Input({
   Label,
   defaultValue,
   icon,
+  onChange,
 }) {
   const variants = {
     Default: styles.default,
@@ -41,6 +42,7 @@ export default function Input({
         }}
         defaultValue={defaultValue}
         onChange={(e) => {
+          onChange?.(e);
           if (currentVariant === "default" || currentVariant === "error") {
             setCurrentVariant("Active");
           }

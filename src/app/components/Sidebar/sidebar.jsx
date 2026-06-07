@@ -5,18 +5,28 @@ import styles from "./sidebar.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/app/auth.js";
-
+import { useRouter } from "next/navigation";
 export default function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
     const touchStartX = useRef(null);
     const touchCurrentX = useRef(null);
     const { user } = useAuth();
-
+    const signOut = useAuth().signOut;
+    const router = useRouter();
     const adminOnly = user?.roles?.includes("ROLE_ADMIN");
     const sindicoView = user?.roles?.includes("ROLE_ADMIN") || user?.roles?.includes("ROLE_SINDICO");
     const porteiroView = user?.roles?.includes("ROLE_PORTEIRO") || user?.roles?.includes("ROLE_ADMIN") || user?.roles?.includes("ROLE_SINDICO");
     const moradorView = user?.roles?.includes("ROLE_MORADOR");
 
+    const handleLogout = async () => {
+        try {
+            await signOut(); // Chama a função que limpa o cookie no backend
+            router.push("./../pages/login"); // Redireciona para a tela de login
+        } catch (error) {
+            console.error("Erro ao sair:", error);
+        }
+    };
+    
     const handleTouchStart = (event) => {
         touchStartX.current = event.touches[0].clientX;
         touchCurrentX.current = touchStartX.current;
@@ -110,10 +120,9 @@ export default function Sidebar() {
             )}
 
             <div className={styles.exitbutton}>
-                <Link href="./../pages/login" className={styles.link}>
+                <button onClick={() => handleLogout()} className={styles.link}>
                     <Image src="/img/exitIcon.png" alt="Sair" width={24} height={24} />
-
-                </Link>
+                </button>
             </div>
         </div>
 

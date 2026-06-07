@@ -40,6 +40,9 @@
 }
 
 .link {
+  background: none;
+  box-shadow: none;
+  border: none;
   text-decoration: none;
   color: inherit;
 }

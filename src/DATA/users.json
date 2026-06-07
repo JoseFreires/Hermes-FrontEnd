@@ -1,0 +1,31 @@
+
+[
+  {
+    "id": 1,
+    "nome": "Kian",
+    "username": "admin@gmail.com",
+    "senha": "escriptas123",
+    "roles": ["ROLE_ADMIN", "ROLE_MORADOR"]
+  },
+  {
+    "id": 2,
+    "nome": "Elizabeth Webber",
+    "username": "lizwebber@gmail.com",
+    "senha": "saberTudoéPerderTudo",
+    "roles": ["ROLE_MORADOR"]
+  },
+  {
+    "id": 3,
+    "nome": "Sidney Souza",
+    "username": "sidney@email.com",
+    "senha": "Edificio_novo_@manhecer",
+    "roles": ["ROLE_SINDICO"]
+  },
+  {
+    "id": 4,
+    "nome": "Thiago Fritz",
+    "username": "fritz@email.com",
+    "senha": "ataqueSempreVemDoLeste",
+    "roles": ["ROLE_PORTEIRO"]
+  }
+]

@@ -85,19 +85,23 @@ export function AuthProvider({ children }) {
         const currentUser = await getCurrentUser();
         setUser(currentUser);
         setLoading(false);
-
+        
+ // substitui o código para um backend falso, sem autenticação real, para testes locais sem backend, dados no DATA/users.json
         // Mock de autenticação para desenvolvimento local sem backend
-        if (process.env.NEXT_PUBLIC_MOCK_AUTH === "true") {
-            setUser({
-                id: 1,
-                nome: "Nome mockado",
-                username: "Admin",
-                roles: ["ROLE_ADMIN", "ROLE_MORADOR"],
-            });
+        // if (process.env.NEXT_PUBLIC_MOCK_AUTH === "true") {
+        //     setUser({
+        //         id: 1,
+        //         nome: "Nome mockado",
+        //         username: "Admin",
+        //         roles: ["ROLE_ADMIN", "ROLE_MORADOR"],
+        //     });
 
-            setLoading(false);
-            return;
-        }
+        //     setLoading(false);
+        //     return;
+        // }
+
+       
+        return;
     }
 
     async function signIn(username, senha) {
