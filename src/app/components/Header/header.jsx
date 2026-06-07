@@ -4,6 +4,7 @@ import { Navbar, Container, Nav, Form, InputGroup } from "react-bootstrap";
 import { FunnelFill, Search } from "react-bootstrap-icons";
 import React from "react";
 import Button from "../Button/button"
+import Filtro from "./Filtro/filtro";
 import styles from "./header.module.css";
 import Image from "next/image";
 import useDebounce from "../../debounce.js";
@@ -19,7 +20,10 @@ export default function Header({
     setDebouncedSearch,
     canAdd = false,
     funcionalitie,
-    onAddbuttonClick
+    onAddbuttonClick,
+    users = [],
+    filters = {},
+    onFiltersChange
 }) {
 
     // pesquisa com debounce (delay) para reduzir numero de requisições
@@ -31,17 +35,25 @@ export default function Header({
 
     const { user } = useAuth();
 
+    const roleLabels = {
+        ROLE_ADMIN: "Admin",
+        ROLE_PORTEIRO: "Porteiro",
+        ROLE_MORADOR: "Morador",
+        ROLE_SINDICO: "Síndico"
+    };
+
+    const role = user?.roles?.[0];
+
     return (
         <div className={styles.componentWrapper}>
 
             <header className={styles.header}>
 
                 <h1>
-                    <span style={{ color: "#757575" }}>Olá,</span> {user?.papel?.[0] || "Usuário"}!
+                    <span style={{ color: "#757575" }}>Olá,</span> {roleLabels[role] || "Usuário"}!
                 </h1>
 
                 <div className={styles.user}>
-                    <h3>{user?.nome}</h3>
                     <h3>{user?.nome}</h3>
                     <Image
                         src={user?.imagem || "/img/defaultAvatar.svg"}
@@ -68,7 +80,6 @@ export default function Header({
                                     key={i}
                                     onClick={() => {
                                         setActiveTab?.(item.texto);
-                                        setActiveTab?.(item.texto);
                                     }}
                                     className={styles.navLink}
                                     style={{
@@ -80,10 +91,11 @@ export default function Header({
                                     {item.texto}
                                 </Nav.Link>
                             ))}
-                            <Button variant="light" className={`d-flex align-items-center gap-2 border ${styles.filtroButton}`} >
-                                <FunnelFill />
-                                Filtro
-                            </Button>
+                            <Filtro 
+                                users={users} 
+                                filters={filters} 
+                                onFiltersChange={onFiltersChange} 
+                            />
                         </Nav>
                     </div>
 

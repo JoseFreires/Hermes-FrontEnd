@@ -1,5 +1,3 @@
-// components/Button/index.jsx
-
 "use client";
 
 import styles from "./button.module.css";
