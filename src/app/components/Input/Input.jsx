@@ -10,10 +10,8 @@ export default function Input({
   placeholder,
   inputClassName,
   Label,
-  icon,
   defaultValue,
   icon,
-  defaultValue
 }) {
   const variants = {
     Default: styles.default,

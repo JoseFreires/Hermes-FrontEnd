@@ -8,7 +8,6 @@ import styles from "./header.module.css";
 import Image from "next/image";
 import useDebounce from "../../debounce.js";
 import { useAuth } from "@/app/auth.js";
-import { useAuth } from "@/app/auth.js";
 
 export default function Header({ 
     titulo, 
