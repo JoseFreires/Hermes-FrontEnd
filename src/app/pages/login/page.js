@@ -4,12 +4,20 @@ import styles from "./page.module.css";
 import  Button  from "../../components/Button/button";
 import  Input  from "../../components/Input/Input";
 import { useRouter } from "next/navigation";
-
+import { useState } from "react";
 
 import Image from "next/image";
 
 export default function Login() {
 const router = useRouter();
+
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+
+function handleLogin(email, password) {
+  
+}
+
   return (
     <div className={styles.body}>
       <div className={styles.form}>
@@ -41,9 +49,7 @@ const router = useRouter();
                   </span>
                 </div>
               </div>
-              <div className="modal-body p-3 p-md-5 pt-0" style={{
-                display:"flex",
-              }}>
+              <div className="modal-body p-3 p-md-5 pt-0">
                 <form className="">
                   <div>
                    
@@ -53,6 +59,7 @@ const router = useRouter();
                         id="floatingInput"
                         placeholder="name@example.com"
                         Label="Endereço de email"
+                        onchange={(e) => setEmail(e.target.value)}
                       />
                     <Input
                         type="password"
@@ -60,6 +67,7 @@ const router = useRouter();
                         id="floatingPassword"
                         placeholder="Password"
                         Label="Senha"
+                        onchange={(e) => setPassword(e.target.value)}
                       />
              
                     <div

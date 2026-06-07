@@ -21,7 +21,7 @@ export default function Input({
   };
 
   const [currentVariant, setCurrentVariant] = useState(variant);
-
+  const [showError, setShowError] = useState(false);
   return (
     <div className="form-floating mb-4">
       <input
@@ -30,12 +30,27 @@ export default function Input({
         id="floatingInput"
         placeholder={placeholder}
         onFocus={() => setCurrentVariant("Active")}
-        onBlur={() => setCurrentVariant("Default")}
+        onBlur={(e) => {
+          if (e.target.value) {
+            setShowError(false);
+            setCurrentVariant("Default");
+          } else {
+            setShowError(true);
+            setCurrentVariant("Error");
+          }
+        }}
         defaultValue={defaultValue}
+        onChange={(e) => {
+          if (currentVariant === "default" || currentVariant === "error") {
+            setCurrentVariant("Active");
+          }
+        }}
       />
         <label htmlFor="floatingInput" className={styles.texto}>
                 {Label}
         </label>
+
+        {showError && (<div className={styles.errorMessage}>Este campo é obrigatório.</div>)}
     </div>
   );
 }
