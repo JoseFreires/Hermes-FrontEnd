@@ -1,0 +1,75 @@
+.card {
+    width: 100%;
+    max-width: 400px;
+    border: 2px solid #003366;
+    border-radius: 16px;
+    padding: 10px;
+}
+
+.cardContent {
+    display: flex;
+    gap: 15px;
+}
+
+.icon {
+    margin-top: 5px;
+}
+
+.titulo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.date {
+    display: block;
+    margin-top: 4px;
+    font-size: 16px;
+}
+
+.apartment {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.statusContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.statusLabel {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.statusBadge {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 50px;
+}
+
+.statusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.statusPending {
+    background-color: #E0B954;
+    color: #6D5200;
+}
+
+.statusDelivered {
+    background-color: #1B5E20;
+    color: #81C784;
+}
+
+.statusDefault {
+    background-color: #666666;
+    color: #D5D5D5;
+}

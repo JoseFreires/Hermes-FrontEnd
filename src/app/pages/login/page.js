@@ -92,6 +92,7 @@ function handleLogin(email, password) {
                     onClick={() => router.push("../pages/encomendas")}              
                   >
                     <span>Entrar</span>
+                    
                   </Button>
                     
                   

@@ -8,6 +8,7 @@ import styles from "./header.module.css";
 import Image from "next/image";
 import useDebounce from "../../debounce.js";
 import { useAuth } from "@/app/auth.js";
+import { useAuth } from "@/app/auth.js";
 
 export default function Header({ 
     titulo, 
@@ -35,14 +36,16 @@ export default function Header({
         <div className={styles.componentWrapper}>
 
             <header className={styles.header}>
-                
+
                 <h1>
                     <span style={{ color: "#757575" }}>Olá,</span> {user?.papel?.[0] || "Usuário"}!
                 </h1>
 
                 <div className={styles.user}>
                     <h3>{user?.nome}</h3>
+                    <h3>{user?.nome}</h3>
                     <Image
+                        src={user?.imagem || "/img/defaultAvatar.svg"}
                         src={user?.imagem || "/img/defaultAvatar.svg"}
                         alt="avatar"
                         width={44}
@@ -53,9 +56,9 @@ export default function Header({
             </header>
 
             <Navbar className={styles.navbar}>
-                <Container fluid className="d-flex align-items-center justify-content-between">
+                <Container fluid className={styles.navContainer}>
 
-                    <div className="d-flex flex-column">
+                    <div className={styles.navGroup}>
 
                         <h2 className={styles.titulo}>
                             {titulo}
@@ -66,6 +69,7 @@ export default function Header({
                                 <Nav.Link
                                     key={i}
                                     onClick={() => {
+                                        setActiveTab?.(item.texto);
                                         setActiveTab?.(item.texto);
                                     }}
                                     className={styles.navLink}
@@ -85,9 +89,9 @@ export default function Header({
                         </Nav>
                     </div>
 
-                    <div className="d-flex align-items-center gap-3">
+                    <div className={styles.searchGroup}>
 
-                        <InputGroup className={styles.searchGroup}>
+                        <InputGroup >
 
                             <InputGroup.Text className={styles.searchIcon}>
                                 <Search />
