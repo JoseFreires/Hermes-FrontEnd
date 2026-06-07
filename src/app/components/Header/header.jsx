@@ -46,7 +46,6 @@ export default function Header({
                     <h3>{user?.nome}</h3>
                     <Image
                         src={user?.imagem || "/img/defaultAvatar.svg"}
-                        src={user?.imagem || "/img/defaultAvatar.svg"}
                         alt="avatar"
                         width={44}
                         height={44}

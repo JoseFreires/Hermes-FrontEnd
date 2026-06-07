@@ -11,7 +11,7 @@ export default function Input({
   inputClassName,
   Label,
   icon,
-  defaultValue
+  defaultValue,
   icon,
   defaultValue
 }) {
@@ -28,7 +28,6 @@ export default function Input({
     <div className="form-floating mb-4">
       <input
         type={type}
-        className={`form-control rounded-3 w-100 ${inputClassName} ${variants[currentVariant]}`}
         className={`form-control rounded-3 w-100 ${inputClassName} ${variants[currentVariant]}`}
         id="floatingInput"
         placeholder={placeholder}
