@@ -82,8 +82,8 @@
         max-width: 320px;
     }
 
-    .user h3 {
-        
+    .header {
+        display: none !important;
     }
 }
 

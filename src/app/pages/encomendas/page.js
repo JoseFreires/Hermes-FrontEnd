@@ -111,6 +111,7 @@ export default function Encomendas() {
     //aqui controla a rederização do modal, e o tipo do modal (se é de adicionar ou editar, por exemplo)
     const [modalAberto, setModalAberto] = useState(false);
     const [modalTipo, setModalTipo] = useState(null);
+    const [modalPackage, setModalPackage] = useState(null);
 
     function handleAddClick(tipo) {
         setModalTipo(tipo);
@@ -120,6 +121,13 @@ export default function Encomendas() {
     function fecharModal() {
         setModalAberto(false);
         setModalTipo(null);
+        setModalPackage(null);
+    }
+
+    function handleRowClick(row) {
+        setModalPackage(row);
+        setModalTipo("edit");
+        setModalAberto(true);
     }
 
     const moradores = (data || []).map(item => item.morador);
@@ -151,6 +159,7 @@ export default function Encomendas() {
                     columns={columns}
                     data={filteredData} // SEMPRE passar filteredData pro componente da tabela, para garantir que os filtros e a busca funcionem corretamente
                     searchValue={debouncedSearch}
+                    onRowClick={handleRowClick}
                     isLoading={data === null}  //prop para mostrar um estado de carregamento enquanto os dados estão sendo buscados, já que data começa como null e só é preenchido depois do fetch completar 
                 />
             </div>
@@ -161,8 +170,17 @@ export default function Encomendas() {
                     <FormEncomenda
                         data={data}
                         title="Registrar Encomenda"
-                        encomendaId={''}
                         modo="add"
+                    />
+                )}
+
+                {modalTipo === "edit" && modalPackage && (
+                    <FormEncomenda
+                        data={data}
+                        title="Alterar Encomenda"
+                        modo="edit"
+                        packageData={modalPackage}
+                        onClose={fecharModal}
                     />
                 )}
             </ModalForm>

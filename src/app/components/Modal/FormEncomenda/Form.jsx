@@ -6,6 +6,7 @@ import Input from "../../Input/Input";
 import Dropdown from "../../Input/Dropdonw/Dropdonw";
 import Button from "../../Button/button";
 import Styles from "./Form.module.css";
+import { useState, useEffect } from "react";
 
 export default function FormEncomenda({
   title,
@@ -13,6 +14,8 @@ export default function FormEncomenda({
   data = [],
   onClose,
   onSubmit,
+  modo,
+  packageData,
 }) {
   const moradores = data.map((item) => ({
     id: item.id,
@@ -20,6 +23,19 @@ export default function FormEncomenda({
     apartamento: item.apartamento,
     email: item.email,
   }));
+
+  const [descricao, setDescricao] = useState(packageData?.descricao || "");
+  const [moradorId, setMoradorId] = useState("");
+  const [andar, setAndar] = useState(packageData?.andar || "");
+  const [apartamento, setApartamento] = useState(packageData?.apartamento || "");
+
+  useEffect(() => {
+    setDescricao(packageData?.descricao || "");
+    setApartamento(packageData?.apartamento || "");
+    setAndar(packageData?.andar || "");
+    const found = data.find((d) => d.morador === packageData?.morador);
+    setMoradorId(found ? found.id : "");
+  }, [packageData, data]);
 
   return (
     <div
@@ -34,11 +50,6 @@ export default function FormEncomenda({
             <div className="title-divider" />
           </div>
 
-          {encomendaId && (
-            <span className="text-secondary-custom fw-medium">
-              (id {encomendaId})
-            </span>
-          )}
         </div>
       </div>
       <Form>
@@ -56,7 +67,7 @@ export default function FormEncomenda({
             <Form.Group>
               <p>Foto da encomenda</p>
 
-              <div className="photo-upload d-flex justify-content-center">
+              <div className={Styles.photo}>
                 <Image
                   src="/img/box.svg"
                   alt="Encomenda"
@@ -67,7 +78,13 @@ export default function FormEncomenda({
             </Form.Group>
 
             <Form.Group>
-              <Input Label="Descrição" type="text" placeholder="Descrição" />
+              <Input
+                Label="Descrição"
+                type="text"
+                placeholder="Descrição"
+                defaultValue={descricao}
+                onChange={(e) => setDescricao(e.target.value)}
+              />
             </Form.Group>
 
             <Form.Group>
@@ -75,24 +92,24 @@ export default function FormEncomenda({
                 options={moradores}
                 label="Morador"
                 placeholder="Selecione um morador"
+                value={moradorId}
+                onChange={(e) => setMoradorId(e.target.value)}
               />
             </Form.Group>
 
             <Input
               Label="Andar"
               type="text"
-              variant="disabled"
               placeholder="Andar"
-              defaultValue="5º"
-              disabled
+              defaultValue={andar}
+              onChange={(e) => setAndar(e.target.value)}
             />
             <Input
               Label="Apartamento"
               type="text"
-              variant="disabled"
               placeholder="Apartamento"
-              defaultValue="508"
-              disabled
+              defaultValue={apartamento}
+              onChange={(e) => setApartamento(e.target.value)}
             />
             
           </div>
@@ -110,14 +127,15 @@ export default function FormEncomenda({
             className={Styles.CheckboxInput}
           />
           <hr className="pb-2" />
-          <Button
-            type="submit"
-            variant="primary"
-            className="w-100 mb-4"
-            onClick={onSubmit}
-          >
-            Registrar
-          </Button>
+          <div className="d-flex flex-column gap-2">
+            <Button type="button" variant="secondary" className="w-100">
+              Entregar encomenda
+            </Button>
+
+            <Button type="submit" variant="primary" className="w-100">
+              Salvar alterações
+            </Button>
+          </div>
         </div>
       </Form>
     </div>

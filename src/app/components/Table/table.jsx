@@ -15,6 +15,7 @@ export default function CustomTable({
     headerAs = "div",
     searchValue = "",
     canRemove = false,
+    onRowClick = null,
 }) {
 
     // estados para controle de paginação, seleção de linhas e quantidade de linhas por página
@@ -124,8 +125,20 @@ const skeletonRows = [1, 2, 3, 4, 5]; //array para renderizar 5 linhas de skelet
                                 ))
                             ) : (
                                 paginatedData.map((row, rowIndex) => {
+                                    const handleRowClick = (e) => {
+                                        if (!onRowClick) return;
+                                        // don't trigger when clicking on checkbox or its children
+                                        if (e.target.closest('input[type="checkbox"]')) return;
+                                        onRowClick(row);
+                                    };
+
                                     return (
-                                        <tr key={row.id} ref={rowIndex === 0 ? rowRef : null}>
+                                        <tr
+                                            key={row.id}
+                                            ref={rowIndex === 0 ? rowRef : null}
+                                            onClick={handleRowClick}
+                                            style={onRowClick ? { cursor: 'pointer' } : {}}
+                                        >
                                             <td className={styles.checkbox}>
                                                 {canRemove ? (
                                                     <Form.Check type="checkbox" checked={selectedRows.includes(row.id)} onChange={() => toggleRow(row.id)} />
