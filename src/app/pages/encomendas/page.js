@@ -6,8 +6,9 @@ import Header from "@/app/components/Header/header";
 import CustomTable from "@/app/components/Table/table";
 import FormEncomenda from "@/app/components/Modal/FormEncomenda/Form";
 import ModalForm from "@/app/components/Modal/ModalForm/ModalForm";
-import { useState , useEffect} from "react";
+import { useState } from "react";
 import { useAuth } from "@/app/auth.js";
+import { usePackages } from "@/app/services/Packages/GET.js";
 
 export default function Encomendas() {
     const { user } = useAuth();
@@ -48,53 +49,10 @@ export default function Encomendas() {
     ];
 
 // função para buscar as encomendas do backend, usando a rota que criamos em /api/packeds/all, que tem autenticação via cookie
-    async function getPackages() {
 
-        const API_URL = process.env.NEXT_PUBLIC_API_URL;
-        
-        try { 
-            const response = await fetch(`${API_URL}/packages/all`, {
-                method: 'GET',
-                credentials: 'include', // autenticação pelo cookie
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-    
-            if (!response.ok) {
-                return null;  // não autenticado ou erro
-            }
-    
-            const packeds = await response.json();
-            return packeds;
-        } catch (error) {
-            console.error("Erro ao buscar as encomendas:", error);
-            return null;
-        }
-    }
-  
-    const [data, setdata] = useState(null);
-
-    useEffect(() => {
-
-        async function fetchPackages() {
-            const registredData = await getPackages();
-            setdata(registredData); 
-        }
-        fetchPackages();
-        const tempoDeRecarregamento = 3000; //relogio pra atualizar a tabela
-        const intervalId = setInterval(() => {
-            fetchPackages();
-        }, tempoDeRecarregamento);
-
-        return () => {
-            clearInterval(intervalId);//aqui limpa o relógio, importante para não ficar comendo memória
-        };
-    }, []);
-
+    const { data, setdata } = usePackages();
 
     const [activeTab, setActiveTab] = useState("Todas");
-
     // definição dos filtros, cada chave é o nome da tab, e o valor é a função de filtro que recebe um item
     // retorna true se ele deve ser mostrado e false se deve ser filtrado
     const filtros = {
