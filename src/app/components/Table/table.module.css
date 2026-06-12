@@ -35,7 +35,7 @@
 
 .tableWrapper {
     flex: 1;
-    min-height: 516px;
+    min-height: 446px;
 }
 
 .table {
@@ -118,4 +118,25 @@
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.skeleton {
+  animation: skeletonPulse 1.2s ease-in-out infinite alternate;
+  border-radius: 4px;
+  width: 100%;
+  height: 24px; 
+  display: inline-block;
+}
+
+.skeletonShort {
+  width: 60%;
+}
+
+@keyframes skeletonPulse {
+  0% {
+    background-color: #e2e8f0; /* Cinza claro */
+  }
+  100% {
+    background-color: #cbd5e1; /* Cinza um pouco mais escuro */
+  }
 }

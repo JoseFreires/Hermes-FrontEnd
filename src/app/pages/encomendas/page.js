@@ -6,7 +6,7 @@ import Header from "@/app/components/Header/header";
 import CustomTable from "@/app/components/Table/table";
 import FormEncomenda from "@/app/components/Modal/FormEncomenda/Form";
 import ModalForm from "@/app/components/Modal/ModalForm/ModalForm";
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import { useAuth } from "@/app/auth.js";
 
 export default function Encomendas() {
@@ -47,27 +47,51 @@ export default function Encomendas() {
         },
     ];
 
-    // Simulação de dados de encomendas
-    const data = [
-        {
-            id: 1,
-            morador: "Thiago Fritz",
-            email: "fritz@email.com",
-            descricao: "Caixa grande de papelão",
-            data: "11/02/2020 - 12:09",
-            apartamento: "202",
-            status: "Pendente",
-        },
-        {
-            id: 2,
-            morador: "Cesar Cohen",
-            email: "cesar@email.com",
-            descricao: "Mercado Preso",
-            data: "15/04/2020 - 22:09",
-            apartamento: "403",
-            status: "Entregue",
+// função para buscar as encomendas do backend, usando a rota que criamos em /api/packeds/all, que tem autenticação via cookie
+    async function getPackages() {
+
+        const API_URL = process.env.NEXT_PUBLIC_API_URL;
+        
+        try { 
+            const response = await fetch(`${API_URL}/packages/all`, {
+                method: 'GET',
+                credentials: 'include', // autenticação pelo cookie
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+    
+            if (!response.ok) {
+                return null;  // não autenticado ou erro
+            }
+    
+            const packeds = await response.json();
+            return packeds;
+        } catch (error) {
+            console.error("Erro ao buscar as encomendas:", error);
+            return null;
         }
-    ];
+    }
+  
+    const [data, setdata] = useState(null);
+
+    useEffect(() => {
+
+        async function fetchPackages() {
+            const registredData = await getPackages();
+            setdata(registredData); 
+        }
+        fetchPackages();
+        const tempoDeRecarregamento = 3000; //relogio pra atualizar a tabela
+        const intervalId = setInterval(() => {
+            fetchPackages();
+        }, tempoDeRecarregamento);
+
+        return () => {
+            clearInterval(intervalId);//aqui limpa o relógio, importante para não ficar comendo memória
+        };
+    }, []);
+
 
     const [activeTab, setActiveTab] = useState("Todas");
 
@@ -80,7 +104,8 @@ export default function Encomendas() {
     };
 
     // extração dos usuários únicos para popular o filtro de usuários
-    const users = Array.from(new Set(data.map((item) => item.morador))).sort();
+    // const users = Array.from(new Set(data.map((item) => item.morador))).sort();
+    const users = Array.from(new Set((data || []).map((item) => item.morador))).sort();
     const [filters, setFilters] = useState({
         selectedUsers: [],
         startDate: "",
@@ -94,7 +119,7 @@ export default function Encomendas() {
         return new Date(`${year}-${month}-${day}`);
     };
 
-    const filteredData = data
+    const filteredData = (data || [])// sempre garantir que data é um array, mesmo antes do fetch completar, para evitar erros de undefined
         .filter(filtros[activeTab])
         .filter((item) => {
             if (filters.selectedUsers.length && !filters.selectedUsers.includes(item.morador)) {
@@ -139,7 +164,7 @@ export default function Encomendas() {
         setModalTipo(null);
     }
 
-    const moradores = data.map(item => item.morador);
+    const moradores = (data || []).map(item => item.morador);
     return (
         <div className={styles.body}>
             <Sidebar />
@@ -168,6 +193,7 @@ export default function Encomendas() {
                     columns={columns}
                     data={filteredData} // SEMPRE passar filteredData pro componente da tabela, para garantir que os filtros e a busca funcionem corretamente
                     searchValue={debouncedSearch}
+                    isLoading={data === null}  //prop para mostrar um estado de carregamento enquanto os dados estão sendo buscados, já que data começa como null e só é preenchido depois do fetch completar 
                 />
             </div>
 
