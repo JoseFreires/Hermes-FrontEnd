@@ -20,21 +20,21 @@ export default function FormEncomenda({
 }) {
   const moradores = data.map((item) => ({
     id: item.id,
-    nome: item.morador,
-    apartamento: item.apartamento,
-    email: item.email,
+    nome: item.nomeMorador,
+    apartamento: item.numeroApartamento,
+    email: item.emailDestinatario,
   }));
 
-  const [descricao, setDescricao] = useState(packageData?.descricao || "");
+  const [observacao, setDescricao] = useState(packageData?.observacao || "");
   const [moradorId, setMoradorId] = useState("");
   const [andar, setAndar] = useState(packageData?.andar || "");
-  const [apartamento, setApartamento] = useState(packageData?.apartamento || "");
+  const [numeroApartamento, setApartamento] = useState(packageData?.numeroApartamento || "");
 
   useEffect(() => {
-    setDescricao(packageData?.descricao || "");
-    setApartamento(packageData?.apartamento || "");
+    setDescricao(packageData?.observacao || "");
+    setApartamento(packageData?.numeroApartamento || "");
     setAndar(packageData?.andar || "");
-    const found = data.find((d) => d.morador === packageData?.morador);
+    const found = data.find((d) => d.nomeMorador === packageData?.nomeMorador);
     setMoradorId(found ? found.id : "");
   }, [packageData, data]);
 
@@ -42,10 +42,10 @@ export default function FormEncomenda({
     e.preventDefault();
     if (onSaveChanges && modo === "edit") {
       await onSaveChanges({
-        descricao,
+        observacao,
         moradorId,
         andar,
-        apartamento,
+        numeroApartamento,
       });
     }
   };
@@ -95,7 +95,7 @@ export default function FormEncomenda({
                 Label="Descrição"
                 type="text"
                 placeholder="Descrição"
-                defaultValue={descricao}
+                defaultValue={observacao}
                 onChange={(e) => setDescricao(e.target.value)}
               />
             </Form.Group>
@@ -121,7 +121,7 @@ export default function FormEncomenda({
               Label="Apartamento"
               type="text"
               placeholder="Apartamento"
-              defaultValue={apartamento}
+              defaultValue={numeroApartamento}
               onChange={(e) => setApartamento(e.target.value)}
             />
             

@@ -10,6 +10,8 @@ import { useState } from "react";
 import { useAuth } from "@/app/auth.js";
 import { usePackages } from "@/app/services/Packages/GET.js";
 import { updatePackage } from "@/app/services/Packages/PUT.js";
+import { softDeletePackage } from "@/app/services/Packages/DELETE.js";
+import { formatDateTime } from "@/app/hooks/formatar"
 
 export default function Encomendas() {
     const { user } = useAuth();
@@ -25,26 +27,26 @@ export default function Encomendas() {
     const columns = [
         {
             label: "MORADOR",
-            key: "morador",
+            key: "nomeMorador",
             render: (value, row) => (
                 <div className={styles.user}>
                     <span>{value}</span>
-                    <small>{row.email}</small>
+                    <small>{row.emailDestinatario}</small>
                 </div>
             ),
         },
         {
             label: "DESCRIÇÃO",
-            key: "descricao",
+            key: "observacao",
         },
         {
             label: "DATA - HORA",
-            key: "data",
-            render: (value) => <p className={styles.tableLine}>{value}</p>,
+            key: "dataHoraRecebido",
+            render: (value) => <p className={styles.tableLine}>{formatDateTime(value)}</p>,
         },
         {
             label: "APARTAMENTO",
-            key: "apartamento",
+            key: "numeroApartamento",
             render: (value) => <p className={styles.tableLine}>{value}</p>,
         },
     ];
@@ -143,17 +145,31 @@ export default function Encomendas() {
             fecharModal();
             // Recarregar dados da tabela após salvar
             if (data) {
-                // Força atualização dos dados
-                const updatedData = await (await fetch(`${process.env.NEXT_PUBLIC_API_URL}/packages/all`, {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: { "Content-Type": "application/json" },
-                })).json();
-                setdata(updatedData);
+                getPackage()
             }
         } catch (error) {
             console.error("Erro ao salvar alterações:", error);
             alert("Erro ao salvar alterações. Tente novamente.");
+        }
+    }
+
+    // Faz soft delete das encomendas selecionadas usando o modal de exclusão.
+    // Para cada id selecionado envia uma requisição PATCH para marcar como deletado
+    // e remove esses itens do estado local para atualizar imediatamente a tabela.
+    async function handleDeletePackages(ids, reason) {
+        try {
+            await Promise.all(
+                ids.map((id) => softDeletePackage(id, reason))
+            );
+
+            if (data) {
+                setdata((prevData) =>
+                    prevData ? prevData.filter((item) => !ids.includes(item.id)) : prevData
+                );
+            }
+        } catch (error) {
+            console.error("Erro ao excluir encomendas:", error);
+            alert("Erro ao excluir as encomendas. Tente novamente.");
         }
     }
 
@@ -187,6 +203,7 @@ export default function Encomendas() {
                     data={filteredData} // SEMPRE passar filteredData pro componente da tabela, para garantir que os filtros e a busca funcionem corretamente
                     searchValue={debouncedSearch}
                     onRowClick={handleRowClick}
+                    onDeleteConfirm={handleDeletePackages}
                     isLoading={data === null}  //prop para mostrar um estado de carregamento enquanto os dados estão sendo buscados, já que data começa como null e só é preenchido depois do fetch completar 
                 />
             </div>

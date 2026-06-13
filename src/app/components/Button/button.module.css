@@ -29,7 +29,8 @@
     color: #F1F1F1;
 }
 
-.secondary {
+.secondary,
+.secondary:disabled {
     color: #B71C1C;
     background-color: #F1F1F1;
     border-color: #B71C1C;

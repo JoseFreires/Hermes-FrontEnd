@@ -4,6 +4,7 @@ import React from "react";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import Button from "../Button/button";
+import DeleteConfirmationModal from "../Modal/DeleteModal/DeleteModal";
 import styles from "./table.module.css";
 
 export default function CustomTable({
@@ -15,6 +16,7 @@ export default function CustomTable({
     headerAs = "div",
     searchValue = "",
     canRemove = false,
+    onDeleteConfirm = null,
     onRowClick = null,
 }) {
 
@@ -22,6 +24,18 @@ export default function CustomTable({
     const [currentPage, setCurrentPage] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(1);
     const [selectedRows, setSelectedRows] = React.useState([]);
+    const [showDeleteModal, setShowDeleteModal] = React.useState(false);
+
+    const openDeleteModal = () => setShowDeleteModal(true);
+    const closeDeleteModal = () => setShowDeleteModal(false);
+    const handleDeleteConfirm = async (reason) => {
+        if (typeof onDeleteConfirm === "function") {
+            await onDeleteConfirm(selectedRows, reason);
+        }
+
+        setSelectedRows([]);
+        closeDeleteModal();
+    };
 
     // refs para pegar a altura do wrapper da tabela e da linha, 
     // calcular quantas linhas cabem na tela e setar isso no estado de rowsPerPage
@@ -87,10 +101,16 @@ const skeletonRows = [1, 2, 3, 4, 5]; //array para renderizar 5 linhas de skelet
                             <span> Deseja deletar {selectedRows.length} {selectedRows.length === 1 ? "item" : "itens"}?</span>
                         </div>
 
-                        <Button variant="critical"> Excluir</Button>
+                        <Button variant="critical" onClick={openDeleteModal}> Excluir</Button>
                     </div>
                 )}
             </div>
+
+            <DeleteConfirmationModal
+                show={showDeleteModal}
+                onClose={closeDeleteModal}
+                onConfirm={handleDeleteConfirm}
+            />
 
             <div className={styles.container}>
                 <div className={styles.header}>

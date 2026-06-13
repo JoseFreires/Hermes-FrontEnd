@@ -1,46 +1,15 @@
 [
-    {
+ {
         "id": 1,
-        "morador": "Thiago Fritz",
-        "email": "fritz@email.com",
-        "descricao": "Caixa grande de papelão",
-        "data": "11/02/2020 - 12:09",
-        "apartamento": "202",
-        "status": "Pendente"
-    },
-    {
-        "id": 2,
-        "morador": "Cesar Cohen",
-        "email": "cesar@email.com",
-        "descricao": "Mercado Preso",
-        "data": "15/04/2020 - 22:09",
-        "apartamento": "403",
-        "status": "Entregue"
-    },
-    {
-        "id": 3,
-        "morador": "Rafael Camilo",
-        "email": "rafael@email.com",
-        "descricao": "Amazon Prime",
-        "data": "13/06/2021 - 22:09",
-        "apartamento": "603",
-        "status": "Entregue"
-    },{
-        "id": 4,
-        "morador": "Rafael Mota",
-        "email": "rafaelM@email.com",
-        "descricao": "Aliexpress",
-        "data": "11/02/2020 - 12:09",
-        "apartamento": "201",
-        "status": "Pendente"
-    },
-    {
-        "id": 5,
-        "morador": "Zé piriquito",
-        "email": "ze@email.com",
-        "descricao": "sexshop",
-        "data": "15/04/2020 - 22:09",
-        "apartamento": "666",
-        "status": "Entregue"
+        "nomePacote": "Amazon - Obras Completas de Machado de Assis",
+        "observacao": "Coleção com 10 volumes — caixa frágil",
+        "status": "ENTREGUE",
+        "nomeMorador": "Anita Garibaldi",
+        "nomePorteiro": "Joaquim Maria Machado de Assis",
+        "numeroApartamento": "101",
+        "emailDestinatario": "anita.garibaldi@revolucao.com.br",
+        "tokenEncomenda": "TKN-001-2024",
+        "dataHoraRecebido": "2024-11-01T09:15:00",
+        "dataHoraRetirado": "2024-11-01T18:30:00"
     }
 ]
