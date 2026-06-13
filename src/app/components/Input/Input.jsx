@@ -13,6 +13,7 @@ export default function Input({
   defaultValue,
   icon,
   onChange,
+  disabled,
 }) {
   const variants = {
     Default: styles.default,
@@ -47,6 +48,7 @@ export default function Input({
             setCurrentVariant("Active");
           }
         }}
+        disabled={disabled}
       />
         <label htmlFor="floatingInput" className={styles.texto}>
                 {Label}

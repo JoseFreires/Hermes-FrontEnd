@@ -6,12 +6,13 @@ import Header from "@/app/components/Header/header";
 import CustomTable from "@/app/components/Table/table";
 import FormEncomenda from "@/app/components/Modal/FormEncomenda/Form";
 import ModalForm from "@/app/components/Modal/ModalForm/ModalForm";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/app/auth.js";
-import { usePackages } from "@/app/services/Packages/GET.js";
+import { getPackages } from "@/app/services/Packages/GET.js";
 import { updatePackage } from "@/app/services/Packages/PUT.js";
 import { softDeletePackage } from "@/app/services/Packages/DELETE.js";
 import { formatDateTime } from "@/app/hooks/formatar"
+import { createPackage } from "@/app/services/Packages/POST.js";
 
 export default function Encomendas() {
     const { user } = useAuth();
@@ -53,15 +54,36 @@ export default function Encomendas() {
 
 // função para buscar as encomendas do backend, usando a rota que criamos em /api/packeds/all, que tem autenticação via cookie
 
-    const { data, setdata } = usePackages();
+    const[data, setdata] = useState(null);
+
+// função para buscar as encomendas do backend, usando a rota que criamos em /api/packeds/all, que tem autenticação via cookie
+    async function fetchPackages() {
+            const registredData = await getPackages();
+            setdata(registredData);
+    }
+//esse useEffect é responsável por fazer a chamada inicial para buscar as encomendas, e também configurar um intervalo para atualizar a lista a cada 30 segundos.
+    useEffect(() => {
+        fetchPackages();
+
+        // 2. Configuração do Polling (recarregamento)
+        const tempoDeRecarregamento = 30000; // 30 segundos
+        const intervalId = setInterval(() => {
+            fetchPackages();
+        }, tempoDeRecarregamento);
+
+        // 3. Limpeza do relógio
+        return () => {
+            clearInterval(intervalId); // Sempre limpar o intervalo quando o componente for desmontado para evitar vazamento de memória
+        };
+    }, []);
 
     const [activeTab, setActiveTab] = useState("Todas");
     // definição dos filtros, cada chave é o nome da tab, e o valor é a função de filtro que recebe um item
     // retorna true se ele deve ser mostrado e false se deve ser filtrado
     const filtros = {
         Todas: () => true,
-        Pendentes: (item) => item.status === "Pendente",
-        Entregues: (item) => item.status === "Entregue",
+        Pendentes: (item) => item.status === "PENDENTE",
+        Entregues: (item) => item.status === "ENTREGUE",
     };
 
     // extração dos usuários únicos para popular o filtro de usuários
@@ -133,20 +155,30 @@ export default function Encomendas() {
         setModalAberto(true);
     }
 
-    async function handleSaveChanges(formData) {
+    // Recarrega a lista de encomendas chamando a mesma rota usada pelo usePackages
+
+    // Função única chamada no submit do formulário, tanto para criar quanto para editar
+    async function updateTable(formData) {
         try {
-            await updatePackage(
-                modalPackage.id,
-                formData.descricao,
-                formData.moradorId,
-                formData.andar,
-                formData.apartamento
-            );
-            fecharModal();
-            // Recarregar dados da tabela após salvar
-            if (data) {
-                getPackage()
+            if (modalTipo === "edit" && modalPackage) {
+                await updatePackage(
+                    modalPackage.id,
+                    formData.descricao,
+                    formData.moradorId,
+                    formData.andar,
+                    formData.apartamento
+                );
+            } else {
+                await createPackage(
+                    formData.descricao,
+                    formData.moradorId,
+                    formData.andar,
+                    formData.apartamento
+                );
             }
+
+            await fetchPackages();
+            fecharModal();
         } catch (error) {
             console.error("Erro ao salvar alterações:", error);
             alert("Erro ao salvar alterações. Tente novamente.");
@@ -225,7 +257,7 @@ export default function Encomendas() {
                         modo="edit"
                         packageData={modalPackage}
                         onClose={fecharModal}
-                        onSaveChanges={handleSaveChanges}
+                        onSaveChanges={updateTable}
                     />
                 )}
             </ModalForm>
