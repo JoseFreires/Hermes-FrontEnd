@@ -1,0 +1,24 @@
+[
+    {
+        "idUsuario": 1,
+        "nome": "Anita Garibaldi",
+        "email": "anita.garibaldi@revolucao.com.br",
+        "numeroApartamento": "101",
+        "cpf": "44455566600",
+        "dataChegada": "2021-03-01",
+        "nascimento": "1821-08-30",
+        "foto": "fotos/perfil/anita_garibaldi.jpg",
+        "telefone": "48954320004"
+    },
+    {
+        "idUsuario": 2,
+        "nome": "Zumbi dos Palmares",
+        "email": "zumbi@quilombopalmares.com.br",
+        "numeroApartamento": "202",
+        "cpf": "55566677700",
+        "dataChegada": "2020-06-15",
+        "nascimento": "1655-10-12",
+        "foto": "fotos/perfil/zumbi_palmares.jpg",
+        "telefone": "82943210005"
+    }
+]

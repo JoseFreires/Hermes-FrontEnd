@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Form from "react-bootstrap/Form";
 import Input from "../../Input/Input";
-import Dropdown from "../../Input/Dropdonw/Dropdonw";
+import Dropdown from "../../Input/Dropdown/Dropdown";
 import Button from "../../Button/button";
 import Styles from "./Form.module.css";
 import { useState, useEffect } from "react";

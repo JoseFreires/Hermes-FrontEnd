@@ -5,7 +5,7 @@ import { FunnelFill } from "react-bootstrap-icons";
 import Form from "react-bootstrap/Form";
 import Button from "../../Button/button";
 import Input from "../../Input/Input";
-import Dropdown from "../../Input/Dropdonw/Dropdonw";
+import Dropdown from "../../Input/Dropdown/Dropdown";
 import styles from "../header.module.css";
 
 export default function Filtro({ users = [], filters = {}, onFiltersChange }) {

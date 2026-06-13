@@ -1,5 +1,5 @@
 [
- {
+    {
         "id": 1,
         "nomePacote": "Amazon - Obras Completas de Machado de Assis",
         "observacao": "Coleção com 10 volumes — caixa frágil",
@@ -11,6 +11,32 @@
         "tokenEncomenda": "TKN-001-2024",
         "dataHoraRecebido": "2024-11-01T09:15:00",
         "dataHoraRetirado": "2024-11-01T18:30:00"
+    },
+    {
+        "id": 2,
+        "nomePacote": "Correios PAC - Réplica de Aeronave 14-Bis",
+        "observacao": "Embalagem grande — armazenar deitada",
+        "status": "ENTREGUE",
+        "nomeMorador": "Zumbi dos Palmares",
+        "nomePorteiro": "Alberto Santos Dumont",
+        "numeroApartamento": "202",
+        "emailDestinatario": "zumbi@quilombopalmares.com.br",
+        "tokenEncomenda": "TKN-002-2024",
+        "dataHoraRecebido": "2024-11-02T10:45:00",
+        "dataHoraRetirado": "2026-06-12T20:17:13"
+    },
+    {
+        "id": 4,
+        "nomePacote": "Shopee - Partitura Manuscrita (Ó Abre Alas)",
+        "observacao": "Material delicado — não dobrar",
+        "status": "ENTREGUE",
+        "nomeMorador": "Francisca Edwiges Neves Gonzaga",
+        "nomePorteiro": "Alberto Santos Dumont",
+        "numeroApartamento": "102",
+        "emailDestinatario": "chiquinha@compositoras.com.br",
+        "tokenEncomenda": "TKN-004-2024",
+        "dataHoraRecebido": "2024-11-05T08:30:00",
+        "dataHoraRetirado": "2026-06-12T20:45:41"
     }
 ]
 

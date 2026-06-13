@@ -1,0 +1,102 @@
+.default {
+  border: 2px solid var(--auxiliarColor);
+}
+
+.active {
+  width: 100%;
+  background-color: var(--secundaryColor) !important;
+  border: 2px solid var(--auxiliarColor) !important;
+  box-shadow: none !important;
+}
+
+.error {
+  background-color: rgba(var(--alertColor), 0.1) !important;
+  border: 2px solid rgba(var(--alertColor), 1) !important;
+  box-shadow: none !important;
+}
+
+.disabled {
+  background-color: var(--secundaryColor) !important;
+  border: 1px solid var(--auxiliarColor) !important;
+  box-shadow: none !important;
+  opacity: 0.5 !important;
+}
+
+.errorMessage {
+  position: absolute;
+  color: rgb(var(--alertColor));
+}
+
+/* React Select Overrides */
+.reactSelectOverrides :global(.react-select__control) {
+  min-height: 3rem !important;
+  border: 2px solid var(--auxiliarColor) !important;
+  border-radius: 0.375rem !important;
+  background-color: #fff !important;
+  box-shadow: none !important;
+  padding: 0.5rem !important;
+}
+
+.reactSelectOverrides :global(.react-select__control:hover) {
+  border-color: var(--auxiliarColor) !important;
+}
+
+.reactSelectOverrides :global(.react-select__control--is-focused) {
+  background-color: var(--secundaryColor) !important;
+  border: 2px solid var(--auxiliarColor) !important;
+  box-shadow: none !important;
+}
+
+.reactSelectOverrides :global(.react-select__input-container) {
+  color: #000;
+}
+
+.reactSelectOverrides :global(.react-select__placeholder) {
+  color: #6c757d;
+}
+
+.reactSelectOverrides :global(.react-select__single-value) {
+  color: #000;
+}
+
+.reactSelectOverrides :global(.react-select__menu) {
+  border: 1px solid var(--auxiliarColor);
+  border-radius: 0.375rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+}
+
+.reactSelectOverrides :global(.react-select__option) {
+  padding: 0.75rem 1rem !important;
+  background-color: #fff;
+  color: #000;
+  cursor: pointer;
+}
+
+.reactSelectOverrides :global(.react-select__option:hover) {
+  background-color: var(--secundaryColor);
+}
+
+.reactSelectOverrides :global(.react-select__option--is-focused) {
+  background-color: var(--secundaryColor);
+  color: #000;
+}
+
+.reactSelectOverrides :global(.react-select__option--is-selected) {
+  background-color: var(--auxiliarColor);
+  color: #fff;
+}
+
+.reactSelectOverrides :global(.react-select__menu-list) {
+  max-height: 250px;
+}
+
+.reactSelectOverrides :global(.react-select__dropdown-indicator) {
+  color: var(--auxiliarColor);
+}
+
+.dropdownLabel {
+  color: var(--auxiliarColor);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
