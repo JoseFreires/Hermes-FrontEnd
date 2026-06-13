@@ -1,51 +1,77 @@
-'use client';
+"use client";
 
-import Select from 'react-select';
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
 import styles from "./Dropdown.module.css";
+import { listMorador } from "@/app/services/Morador/GET.js";
+
+function mapToReactSelectOptions(items = []) {
+  return items.map((option) => ({
+    value: option.id ?? option.idUsuario ?? option.ID ?? option.Id,
+    label:
+      option.nomeMorador ?? option.nome ?? option.name ?? String(option.value ?? option.id ?? option.idUsuario ?? ""),
+  }));
+}
 
 export default function Dropdown({
-  options = [],
-  label,
+  options = null,
   value,
   onChange,
   inputClassName,
   placeholder = "Selecione uma opção",
-  variant = "Default",
 }) {
-  // Converter formato { id, nome } para { value, label }
-  const reactSelectOptions = options.map((option) => ({
-    value: option.id,
-    label: option.nome,
-  }));
+  const [fetchedOptions, setFetchedOptions] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const selectedValue = reactSelectOptions.find(
-    (option) => String(option.value) === String(value)
-  );
+  useEffect(() => {
+    if (options != null) return;
+
+    let mounted = true;
+
+    async function load() {
+      setLoading(true);
+      try {
+        const data = await listMorador();
+        if (!mounted) return;
+        if (data && Array.isArray(data)) setFetchedOptions(data);
+        else setFetchedOptions([]);
+      } catch (err) {
+        console.error("Erro ao buscar moradores:", err);
+        if (mounted) setFetchedOptions([]);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+
+    load();
+
+    return () => {
+      mounted = false;
+    };
+  }, [options]);
+
+  const sourceOptions = options ?? fetchedOptions;
+  const reactSelectOptions = mapToReactSelectOptions(sourceOptions || []);
+
+  const selectedValue = reactSelectOptions.find((opt) => String(opt.value) === String(value)) || null;
 
   const handleChange = (selectedOption) => {
-    if (selectedOption && typeof onChange === "function") {
-      onChange({ target: { value: selectedOption.value } });
+    if (typeof onChange === "function") {
+      onChange({ target: { value: selectedOption ? selectedOption.value : "" } });
     }
   };
 
-  const variants = {
-    Default: styles.default,
-    Active: styles.active,
-    Error: styles.error,
-    Disabled: styles.disabled,
-  };
-
   return (
-    <div className={`form-floating mb-4 ${styles.reactSelectOverrides} ${inputClassName || ''}`}>
-
+    <div className={`form-floating mb-4 ${styles.reactSelectOverrides} ${inputClassName || ""}`}>
       <Select
         options={reactSelectOptions}
         value={selectedValue}
         onChange={handleChange}
         placeholder={placeholder}
         isClearable={false}
-        isSearchable={true}
-        noOptionsMessage={() => "Nenhuma opção encontrada"}
+        isSearchable
+        isLoading={loading}
+        noOptionsMessage={() => (loading ? "Carregando..." : "Nenhuma opção encontrada")}
         classNamePrefix="react-select"
       />
     </div>

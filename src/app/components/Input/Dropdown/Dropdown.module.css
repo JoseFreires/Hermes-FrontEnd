@@ -4,22 +4,22 @@
 
 .active {
   width: 100%;
-  background-color: var(--secundaryColor) !important;
-  border: 2px solid var(--auxiliarColor) !important;
-  box-shadow: none !important;
+  background-color: var(--secundaryColor);
+  border: 2px solid var(--auxiliarColor);
+  box-shadow: none;
 }
 
 .error {
-  background-color: rgba(var(--alertColor), 0.1) !important;
-  border: 2px solid rgba(var(--alertColor), 1) !important;
-  box-shadow: none !important;
+  background-color: rgba(var(--alertColor), 0.1);
+  border: 2px solid rgba(var(--alertColor), 1);
+  box-shadow: none;
 }
 
 .disabled {
-  background-color: var(--secundaryColor) !important;
-  border: 1px solid var(--auxiliarColor) !important;
-  box-shadow: none !important;
-  opacity: 0.5 !important;
+  background-color: var(--secundaryColor);
+  border: 1px solid var(--auxiliarColor);
+  box-shadow: none;
+  opacity: 0.5;
 }
 
 .errorMessage {
@@ -27,7 +27,7 @@
   color: rgb(var(--alertColor));
 }
 
-/* React Select Overrides */
+/* React Select Overrides, sem isso a estilização não é aplicada*/
 .reactSelectOverrides :global(.react-select__control) {
   min-height: 3rem !important;
   border: 2px solid var(--auxiliarColor) !important;

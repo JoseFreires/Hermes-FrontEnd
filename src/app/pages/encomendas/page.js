@@ -6,206 +6,25 @@ import Header from "@/app/components/Header/header";
 import CustomTable from "@/app/components/Table/table";
 import FormEncomenda from "@/app/components/Modal/FormEncomenda/Form";
 import ModalForm from "@/app/components/Modal/ModalForm/ModalForm";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "@/app/auth.js";
-import { getPackages } from "@/app/services/Packages/GET.js";
-import { updatePackage } from "@/app/services/Packages/PUT.js";
-import { softDeletePackage } from "@/app/services/Packages/DELETE.js";
-import { formatDateTime } from "@/app/hooks/formatar"
-import { createPackage } from "@/app/services/Packages/POST.js";
+import { InjectEncomendasTable } from "@/app/hooks/dataInject";
+import { useEncomendas } from "@/app/hooks/useEncomendas";
+import { useEncomendaModal } from "@/app/hooks/useEncomendaModal";
+import { filterEncomendas, extractFilterUsers, NAV_ITENS } from "@/app/hooks/filterEncomendas";
 
 export default function Encomendas() {
     const { user } = useAuth();
-    const canRemove = user?.roles?.includes("ROLE_ADMIN") || user?.roles?.includes("ROLE_PORTEIRO");
-    const canAdd = user?.roles?.includes("ROLE_ADMIN") || user?.roles?.includes("ROLE_PORTEIRO");
+    const canManage = user?.roles?.some((role) => ["ROLE_ADMIN", "ROLE_PORTEIRO"].includes(role));
 
-  const navItens = [
-    { texto: "Todas" },
-    { texto: "Pendentes" },
-    { texto: "Entregues" },
-  ];
-
-    const columns = [
-        {
-            label: "MORADOR",
-            key: "nomeMorador",
-            render: (value, row) => (
-                <div className={styles.user}>
-                    <span>{value}</span>
-                    <small>{row.emailDestinatario}</small>
-                </div>
-            ),
-        },
-        {
-            label: "DESCRIÇÃO",
-            key: "observacao",
-        },
-        {
-            label: "DATA - HORA",
-            key: "dataHoraRecebido",
-            render: (value) => <p className={styles.tableLine}>{formatDateTime(value)}</p>,
-        },
-        {
-            label: "APARTAMENTO",
-            key: "numeroApartamento",
-            render: (value) => <p className={styles.tableLine}>{value}</p>,
-        },
-    ];
-
-// função para buscar as encomendas do backend, usando a rota que criamos em /api/packeds/all, que tem autenticação via cookie
-
-    const[data, setdata] = useState(null);
-
-// função para buscar as encomendas do backend, usando a rota que criamos em /api/packeds/all, que tem autenticação via cookie
-    async function fetchPackages() {
-            const registredData = await getPackages();
-            setdata(registredData);
-    }
-//esse useEffect é responsável por fazer a chamada inicial para buscar as encomendas, e também configurar um intervalo para atualizar a lista a cada 30 segundos.
-    useEffect(() => {
-        fetchPackages();
-
-        // 2. Configuração do Polling (recarregamento)
-        const tempoDeRecarregamento = 30000; // 30 segundos
-        const intervalId = setInterval(() => {
-            fetchPackages();
-        }, tempoDeRecarregamento);
-
-        // 3. Limpeza do relógio
-        return () => {
-            clearInterval(intervalId); // Sempre limpar o intervalo quando o componente for desmontado para evitar vazamento de memória
-        };
-    }, []);
+    const { data, fetchEncomendas, removeEncomendas, isLoading } = useEncomendas();
+    const modal = useEncomendaModal(fetchEncomendas);
 
     const [activeTab, setActiveTab] = useState("Todas");
-    // definição dos filtros, cada chave é o nome da tab, e o valor é a função de filtro que recebe um item
-    // retorna true se ele deve ser mostrado e false se deve ser filtrado
-    const filtros = {
-        Todas: () => true,
-        Pendentes: (item) => item.status === "PENDENTE",
-        Entregues: (item) => item.status === "ENTREGUE",
-    };
-
-    // extração dos usuários únicos para popular o filtro de usuários
-    // const users = Array.from(new Set(data.map((item) => item.morador))).sort();
-    const users = Array.from(new Set((data || []).map((item) => item.morador))).sort();
-    const [filters, setFilters] = useState({
-        selectedUsers: [],
-        startDate: "",
-        endDate: "",
-    });
-
-    const parseData = (dataString) => {
-        const [datePart] = dataString.split(" - ");
-        const [day, month, year] = datePart.split("/");
-        if (!day || !month || !year) return null;
-        return new Date(`${year}-${month}-${day}`);
-    };
-
-    const filteredData = (data || [])// sempre garantir que data é um array, mesmo antes do fetch completar, para evitar erros de undefined
-        .filter(filtros[activeTab])
-        .filter((item) => {
-            if (filters.selectedUsers.length && !filters.selectedUsers.includes(item.morador)) {
-                return false;
-            }
-
-            if (!filters.startDate && !filters.endDate) {
-                return true;
-            }
-
-            const itemDate = parseData(item.data);
-            if (!itemDate) return false;
-
-            if (filters.startDate) {
-                const start = new Date(filters.startDate);
-                if (itemDate < start) return false;
-            }
-
-            if (filters.endDate) {
-                const end = new Date(filters.endDate);
-                end.setHours(23, 59, 59, 999);
-                if (itemDate > end) return false;
-            }
-
-            return true;
-        });
-
+    const [filters, setFilters] = useState({ selectedUsers: [], startDate: "", endDate: "" });
     const [search, setSearch] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
 
-    //aqui controla a rederização do modal, e o tipo do modal (se é de adicionar ou editar, por exemplo)
-    const [modalAberto, setModalAberto] = useState(false);
-    const [modalTipo, setModalTipo] = useState(null);
-    const [modalPackage, setModalPackage] = useState(null);
-
-    function handleAddClick(tipo) {
-        setModalTipo(tipo);
-        setModalAberto(true);
-    }
-
-    function fecharModal() {
-        setModalAberto(false);
-        setModalTipo(null);
-        setModalPackage(null);
-    }
-
-    function handleRowClick(row) {
-        setModalPackage(row);
-        setModalTipo("edit");
-        setModalAberto(true);
-    }
-
-    // Recarrega a lista de encomendas chamando a mesma rota usada pelo usePackages
-
-    // Função única chamada no submit do formulário, tanto para criar quanto para editar
-    async function updateTable(formData) {
-        try {
-            if (modalTipo === "edit" && modalPackage) {
-                await updatePackage(
-                    modalPackage.id,
-                    formData.descricao,
-                    formData.moradorId,
-                    formData.andar,
-                    formData.apartamento
-                );
-            } else {
-                await createPackage(
-                    formData.descricao,
-                    formData.moradorId,
-                    formData.andar,
-                    formData.apartamento
-                );
-            }
-
-            await fetchPackages();
-            fecharModal();
-        } catch (error) {
-            console.error("Erro ao salvar alterações:", error);
-            alert("Erro ao salvar alterações. Tente novamente.");
-        }
-    }
-
-    // Faz soft delete das encomendas selecionadas usando o modal de exclusão.
-    // Para cada id selecionado envia uma requisição PATCH para marcar como deletado
-    // e remove esses itens do estado local para atualizar imediatamente a tabela.
-    async function handleDeletePackages(ids, reason) {
-        try {
-            await Promise.all(
-                ids.map((id) => softDeletePackage(id, reason))
-            );
-
-            if (data) {
-                setdata((prevData) =>
-                    prevData ? prevData.filter((item) => !ids.includes(item.id)) : prevData
-                );
-            }
-        } catch (error) {
-            console.error("Erro ao excluir encomendas:", error);
-            alert("Erro ao excluir as encomendas. Tente novamente.");
-        }
-    }
-
-    const moradores = (data || []).map(item => item.morador);
     return (
         <div className={styles.body}>
             <Sidebar />
@@ -213,51 +32,49 @@ export default function Encomendas() {
             <div className={styles.main}>
                 <Header
                     titulo="Encomendas registradas"
-                    navItens={navItens}
+                    navItens={NAV_ITENS}
                     activeTab={activeTab}
                     setActiveTab={setActiveTab}
                     search={search}
                     setSearch={setSearch}
                     setDebouncedSearch={setDebouncedSearch}
-                    canAdd={canAdd}
+                    canAdd={canManage}
                     funcionalitie="addEncomenda"
-                    onAddbuttonClick={handleAddClick}
-                    users={users}
+                    onAddbuttonClick={modal.openAdd}
+                    users={extractFilterUsers(data)}
                     filters={filters}
                     onFiltersChange={setFilters}
                 />
 
                 <CustomTable
-                    canRemove={canRemove}
+                    canRemove={canManage}
                     headerAs="span"
                     rowsPerPage={10}
-                    columns={columns}
-                    data={filteredData} // SEMPRE passar filteredData pro componente da tabela, para garantir que os filtros e a busca funcionem corretamente
+                    columns={InjectEncomendasTable()}
+                    data={filterEncomendas(data, activeTab, filters)}
                     searchValue={debouncedSearch}
-                    onRowClick={handleRowClick}
-                    onDeleteConfirm={handleDeletePackages}
-                    isLoading={data === null}  //prop para mostrar um estado de carregamento enquanto os dados estão sendo buscados, já que data começa como null e só é preenchido depois do fetch completar 
+                    onRowClick={modal.openEdit}
+                    onDeleteConfirm={removeEncomendas}
+                    isLoading={isLoading}
                 />
             </div>
 
-            <ModalForm show={modalAberto} onHide={fecharModal} centered>
-
-                {modalTipo === "addEncomenda" && (
+            <ModalForm show={modal.open} onHide={modal.close} centered>
+                {modal.tipo === "addEncomenda" && (
                     <FormEncomenda
-                        data={data}
                         title="Registrar Encomenda"
                         modo="add"
+                        onSaveChanges={modal.save}
                     />
                 )}
 
-                {modalTipo === "edit" && modalPackage && (
+                {modal.tipo === "edit" && modal.encomendaData && (
                     <FormEncomenda
-                        data={data}
                         title="Alterar Encomenda"
                         modo="edit"
-                        packageData={modalPackage}
-                        onClose={fecharModal}
-                        onSaveChanges={updateTable}
+                        encomendaData={modal.encomendaData}
+                        onClose={modal.close}
+                        onSaveChanges={modal.save}
                     />
                 )}
             </ModalForm>

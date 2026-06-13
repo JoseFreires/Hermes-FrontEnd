@@ -1,4 +1,4 @@
-﻿export async function softDeletePackage(id, reason) {
+export async function softDeleteEncomenda(id, reason) {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
     try {
@@ -16,20 +16,16 @@
 
         if (!response.ok) {
             const contentType = response.headers.get("content-type");
-            let errorData;
+            const errorData = contentType?.includes("application/json")
+                ? await response.json()
+                : { message: `Erro ${response.status}: ${response.statusText}` };
 
-            if (contentType && contentType.includes("application/json")) {
-                errorData = await response.json();
-            } else {
-                errorData = { message: `Erro ${response.status}: ${response.statusText}` };
-            }
-
-            throw new Error(errorData.message || "Erro ao excluir a encomenda");
+            throw new Error(errorData.message || "Erro ao excluir encomenda");
         }
 
         return true;
     } catch (error) {
-        console.error("Erro ao excluir a encomenda:", error);
+        console.error("Erro ao excluir encomenda:", error);
         throw error;
     }
 }

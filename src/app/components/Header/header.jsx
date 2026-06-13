@@ -7,7 +7,7 @@ import Button from "../Button/button"
 import Filtro from "./Filtro/filtro";
 import styles from "./header.module.css";
 import Image from "next/image";
-import useDebounce from "../../debounce.js";
+import useDebounce from "../../hooks/debounce.js";
 import { useAuth } from "@/app/auth.js";
 
 export default function Header({ 

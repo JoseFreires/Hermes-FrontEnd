@@ -3,7 +3,7 @@
         "id": 1,
         "nomePacote": "Amazon - Obras Completas de Machado de Assis",
         "observacao": "Coleção com 10 volumes — caixa frágil",
-        "status": "ENTREGUE",
+        "status": "Pendente",
         "nomeMorador": "Anita Garibaldi",
         "nomePorteiro": "Joaquim Maria Machado de Assis",
         "numeroApartamento": "101",
@@ -39,4 +39,3 @@
         "dataHoraRetirado": "2026-06-12T20:45:41"
     }
 ]
-

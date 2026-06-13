@@ -1,14 +1,13 @@
 "use client";
 
-import styles from './page.module.css';
-import Sidebar from '@/app/components/Sidebar/sidebar';
-import Header from '@/app/components/Header/header';
-import Card from '@/app/components/Card/card';
-import { useEffect, useState } from 'react';
-import { useAuth } from '@/app/auth.js';
+import styles from "./page.module.css";
+import Sidebar from "@/app/components/Sidebar/sidebar";
+import Header from "@/app/components/Header/header";
+import Card from "@/app/components/Card/card";
+import { useState } from "react";
+import { useAuth } from "@/app/auth.js";
 
-export default function Moradores() {
-
+export default function MeusPacotes() {
     const { user } = useAuth();
     const canAdd = user?.permissions?.includes("add_moradores");
 
@@ -16,47 +15,40 @@ export default function Moradores() {
         { texto: "Todos" },
         { texto: "A retirar" },
         { texto: "Retirados" },
-    ]
-
-    const [packages, setPackages] = useState([]);
-
-    useEffect(() => {
-        // inserir fetch
-    }, []);
+    ];
 
     const data = [
         {
             id: 1,
-            titulo: "Caixa Mercado Preso",
-            dataRecebimento: "21/02 - 15:20:33",
-            apartamento: "99A",
-            status: "A retirar",
+            nomePacote: "Caixa Mercado Preso",
+            dataHoraRecebido: "2026-02-21T15:20:33",
+            numeroApartamento: "99A",
+            status: "PENDENTE",
         },
         {
             id: 2,
-            titulo: "Pedido Amazon",
-            dataRecebimento: "22/02 - 09:45:12",
-            apartamento: "101B",
-            status: "Retirado",
+            nomePacote: "Pedido Amazon",
+            dataHoraRecebido: "2026-02-22T09:45:12",
+            numeroApartamento: "101B",
+            status: "ENTREGUE",
         },
         {
             id: 3,
-            titulo: "Documentos Correios",
-            dataRecebimento: "22/02 - 14:30:05",
-            apartamento: "203C",
-            status: "A retirar",
-        }
+            nomePacote: "Documentos Correios",
+            dataHoraRecebido: "2026-02-22T14:30:05",
+            numeroApartamento: "203C",
+            status: "PENDENTE",
+        },
     ];
 
     const [activeTab, setActiveTab] = useState("Todos");
     const filtros = {
         Todos: () => true,
-        "A retirar": (item) => item.status === "A retirar",
-        "Retirados": (item) => item.status === "Retirado"
+        "A retirar": (item) => item.status === "PENDENTE",
+        Retirados: (item) => item.status === "ENTREGUE",
     };
 
     const filteredData = data.filter(filtros[activeTab]);
-
     const [search, setSearch] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
 
@@ -64,7 +56,6 @@ export default function Moradores() {
         <div className={styles.body}>
             <Sidebar />
             <div className={styles.main}>
-
                 <Header
                     titulo="Meus Pacotes"
                     navItens={navItens}
@@ -80,8 +71,7 @@ export default function Moradores() {
                     {filteredData.map((item) => (
                         <Card
                             key={item.id}
-                            packageData={item}
-                            data={filteredData} // SEMPRE passar filteredData pro componente da tabela, para garantir que os filtros e a busca funcionem corretamente
+                            encomendaData={item}
                             searchValue={debouncedSearch}
                         />
                     ))}

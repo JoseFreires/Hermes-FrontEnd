@@ -7,64 +7,84 @@ import Dropdown from "../../Input/Dropdown/Dropdown";
 import Button from "../../Button/button";
 import Styles from "./Form.module.css";
 import { useState, useEffect } from "react";
+import { listMorador, getMoradorId } from "@/app/services/Morador/GET.js";
 
 export default function FormEncomenda({
   title,
-  encomendaId = null,
-  data = [],
-  onClose,
-  onSubmit,
   modo,
-  packageData,
+  encomendaData,
+  onClose,
   onSaveChanges,
 }) {
-  const moradores = data.map((item) => ({
-    id: item.id,
-    nome: item.nomeMorador,
-    apartamento: item.numeroApartamento,
-    email: item.emailDestinatario,
-  }));
-
-  const [observacao, setObservacao] = useState(packageData?.observacao || "");
-  const [nomePacote, setnomePacote] = useState(packageData?.nomePacote || "");
+  const [moradores, setMoradores] = useState([]);
+  const [nomePacote, setNomePacote] = useState(encomendaData?.nomePacote || "");
+  const [observacao, setObservacao] = useState(encomendaData?.observacao || "");
   const [moradorId, setMoradorId] = useState("");
-  const [numApartamento, setNumApartamento] = useState(
-    packageData?.numeroApartamento || "",
+  const [numeroApartamento, setNumeroApartamento] = useState(
+    encomendaData?.numeroApartamento || "",
   );
   const [emailDestinatario, setEmailDestinatario] = useState(
-    packageData?.emailDestinatario || "",
+    encomendaData?.emailDestinatario || "",
   );
-  const [foto, setFoto] = useState(packageData?.foto || "");
 
   useEffect(() => {
-    setnomePacote(packageData?.nomePacote || "");
-    setObservacao(packageData?.observacao || "");
-    setNumApartamento(packageData?.numeroApartamento || "");
-    setEmailDestinatario(packageData?.emailDestinatario || "");
-    setFoto(packageData?.foto || "");
-    const found = data.find((d) => d.nomeMorador === packageData?.nomeMorador);
-    setMoradorId(found ? found.id : "");
-  }, [packageData, data]);
+    listMorador().then((data) => {
+      if (Array.isArray(data)) setMoradores(data);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (modo !== "edit" || !encomendaData) return;
+
+    setNomePacote(encomendaData.nomePacote || "");
+    setObservacao(encomendaData.observacao || "");
+
+    const found = moradores.find(
+      (m) =>
+        String(getMoradorId(m)) === String(encomendaData.moradorId) ||
+        m.nome === encomendaData.nomeMorador ||
+        m.nomeMorador === encomendaData.nomeMorador,
+    );
+
+    if (found) {
+      setMoradorId(String(getMoradorId(found)));
+      setEmailDestinatario(found.email || encomendaData.emailDestinatario || "");
+      setNumeroApartamento(found.numeroApartamento || encomendaData.numeroApartamento || "");
+    } else {
+      setMoradorId("");
+      setEmailDestinatario(encomendaData.emailDestinatario || "");
+      setNumeroApartamento(encomendaData.numeroApartamento || "");
+    }
+  }, [encomendaData, moradores, modo]);
+
+  const handleMoradorChange = (e) => {
+    const selectedId = e.target.value;
+    setMoradorId(selectedId);
+
+    const morador = moradores.find(
+      (m) => String(getMoradorId(m)) === String(selectedId),
+    );
+
+    if (morador) {
+      setEmailDestinatario(morador.email || "");
+      setNumeroApartamento(morador.numeroApartamento || "");
+    } else {
+      setEmailDestinatario("");
+      setNumeroApartamento("");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (onSaveChanges && modo === "edit") {
-      await onSaveChanges({
-        nomePacote,
-        idDestinatario,
-        emailDestinatario,
-        foto,
-        observacao
-      });
-    } else if (onSaveChanges && modo === "add") {
-      await onSavePackage({
-        nomePacote,
-        idDestinatario,
-        emailDestinatario,
-        foto,
-        observacao
-      });
-    }
+    if (!onSaveChanges) return;
+
+    await onSaveChanges({
+      nomePacote,
+      observacao,
+      moradorId,
+      numeroApartamento,
+      emailDestinatario,
+    });
   };
 
   return (
@@ -72,7 +92,6 @@ export default function FormEncomenda({
       className="d-flex flex-column"
       style={{ maxHeight: "90vh", minHeight: "70vh" }}
     >
-      {/* HEADER FIXO */}
       <div className="px-4 pt-4 pb-3 flex-shrink-0">
         <div className="d-flex flex-column flex-md-row align-items-md-end gap-2">
           <div>
@@ -82,7 +101,6 @@ export default function FormEncomenda({
         </div>
       </div>
       <Form onSubmit={handleSubmit}>
-        {/* CONTEÚDO SCROLLÁVEL */}
         <div className="px-4 py-3 flex-grow-1 overflow-auto max-height-635">
           <div
             className="d-flex flex-column gap-4"
@@ -111,8 +129,8 @@ export default function FormEncomenda({
                 type="text"
                 placeholder="Nome do pacote"
                 defaultValue={nomePacote}
-                onChange={(e) => setnomePacote(e.target.value)}
-                disabled ={false}
+                onChange={(e) => setNomePacote(e.target.value)}
+                disabled={false}
               />
             </Form.Group>
             <Form.Group>
@@ -122,17 +140,16 @@ export default function FormEncomenda({
                 placeholder="Observação"
                 defaultValue={observacao}
                 onChange={(e) => setObservacao(e.target.value)}
-                disabled ={false}
+                disabled={false}
               />
             </Form.Group>
 
             <Form.Group>
               <Dropdown
                 options={moradores}
-                label="Morador"
                 placeholder="Selecione um morador"
                 value={moradorId}
-                onChange={(e) => setMoradorId(e.target.value)}
+                onChange={handleMoradorChange}
               />
             </Form.Group>
             <Input
@@ -140,25 +157,23 @@ export default function FormEncomenda({
               type="email"
               placeholder=""
               variant="Disabled"
+              key={`email-${moradorId}`}
               defaultValue={emailDestinatario}
-              onChange={(e) => setEmailDestinatario(e.target.value)}
-              disabled ={true}
+              disabled={true}
             />
             <Input
               Label="Número do Apartamento"
               type="text"
               variant="Disabled"
               placeholder=""
-              defaultValue={numApartamento}
-              onChange={(e) => setNumApartamento(e.target.value)}
-              disabled ={true}
+              key={`apt-${moradorId}`}
+              defaultValue={numeroApartamento}
+              disabled={true}
             />
-            
           </div>
         </div>
 
-        {/* FOOTER FIXO */}
-        <div className={`px-4 pb-4 pt-2 flex-shrink-0 `}>
+        <div className="px-4 pb-4 pt-2 flex-shrink-0">
           <Form.Check
             type="checkbox"
             label={
@@ -170,27 +185,20 @@ export default function FormEncomenda({
           />
           <hr className="pb-2" />
           {modo === "edit" && (
-            <>
-              <div className="d-flex flex-column gap-2">
-                <Button type="button" variant="secondary" className="w-100">
-                  Entregar encomenda
-                </Button>
+            <div className="d-flex flex-column gap-2">
+              <Button type="button" variant="secondary" className="w-100">
+                Entregar encomenda
+              </Button>
 
-                <Button type="submit" variant="primary" className="w-100"onclick={handleSubmit}>
-                  Salvar alterações
-                </Button>
-              </div>
-            </>
+              <Button type="submit" variant="primary" className="w-100">
+                Salvar alterações
+              </Button>
+            </div>
           )}
 
           {modo === "add" && (
             <div className="d-flex flex-column gap-2">
-              <Button
-                type="submit"
-                variant="primary"
-                className="w-100"
-                onclick={handleSubmit}
-              >
+              <Button type="submit" variant="primary" className="w-100">
                 Adicionar encomenda
               </Button>
             </div>

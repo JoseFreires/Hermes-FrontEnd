@@ -1,19 +1,16 @@
 import styles from "./card.module.css";
 import Image from "next/image";
+import { formatDateTime } from "@/app/hooks/formatar";
 
-export default function Card({
-    packageData = [],
-    searchValue = "",
-}) {
-
+export default function Card({ encomendaData = {}, searchValue = "" }) {
     const getStatusClass = (status) => {
-        switch (status.toLowerCase()) {
+        switch (String(status || "").toLowerCase()) {
+            case "pendente":
             case "a retirar":
                 return styles.statusPending;
-
+            case "entregue":
             case "retirado":
                 return styles.statusDelivered;
-
             default:
                 return styles.statusDefault;
         }
@@ -29,9 +26,9 @@ export default function Card({
 
     const matchesSearch =
         !search ||
-        normalizeText(packageData.titulo).includes(search) ||
-        normalizeText(packageData.apartamento).includes(search) ||
-        normalizeText(packageData.status).includes(search);
+        normalizeText(encomendaData.nomePacote).includes(search) ||
+        normalizeText(encomendaData.numeroApartamento).includes(search) ||
+        normalizeText(encomendaData.status).includes(search);
 
     if (!matchesSearch) {
         return null;
@@ -41,34 +38,28 @@ export default function Card({
         <div className={styles.card}>
             <div className={styles.cardContent}>
                 <div className={styles.icon}>
-                    <Image src="/img/box.svg" alt="Package Icon" width={70} height={70} />
+                    <Image src="/img/box.svg" alt="Encomenda" width={70} height={70} />
                 </div>
 
                 <div className={styles.info}>
-                    <span className={styles.titulo}>
-                        {packageData.titulo}
-                    </span>
+                    <span className={styles.titulo}>{encomendaData.nomePacote}</span>
 
                     <span className={styles.date}>
-                        {packageData.dataRecebimento}
+                        {formatDateTime(encomendaData.dataHoraRecebido)}
                     </span>
 
                     <p className={styles.apartment}>
-                        Apto. {packageData.apartamento}
+                        Apto. {encomendaData.numeroApartamento}
                     </p>
 
                     <div className={styles.statusContainer}>
-                        <span className={styles.statusLabel}>
-                            STATUS:
-                        </span>
+                        <span className={styles.statusLabel}>STATUS:</span>
 
                         <span
-                            className={`${styles.statusBadge} ${getStatusClass(
-                                packageData.status
-                            )}`}
+                            className={`${styles.statusBadge} ${getStatusClass(encomendaData.status)}`}
                         >
                             <span className={styles.statusDot}></span>
-                            {packageData.status}
+                            {encomendaData.status}
                         </span>
                     </div>
                 </div>
