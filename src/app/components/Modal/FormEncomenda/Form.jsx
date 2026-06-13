@@ -16,6 +16,7 @@ export default function FormEncomenda({
   onSubmit,
   modo,
   packageData,
+  onSaveChanges,
 }) {
   const moradores = data.map((item) => ({
     id: item.id,
@@ -37,6 +38,18 @@ export default function FormEncomenda({
     setMoradorId(found ? found.id : "");
   }, [packageData, data]);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (onSaveChanges && modo === "edit") {
+      await onSaveChanges({
+        descricao,
+        moradorId,
+        andar,
+        apartamento,
+      });
+    }
+  };
+
   return (
     <div
       className="d-flex flex-column"
@@ -52,7 +65,7 @@ export default function FormEncomenda({
 
         </div>
       </div>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         {/* CONTEÚDO SCROLLÁVEL */}
         <div className="px-4 py-3 flex-grow-1 overflow-auto max-height-635">
           <div

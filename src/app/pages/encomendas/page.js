@@ -9,6 +9,7 @@ import ModalForm from "@/app/components/Modal/ModalForm/ModalForm";
 import { useState } from "react";
 import { useAuth } from "@/app/auth.js";
 import { usePackages } from "@/app/services/Packages/GET.js";
+import { updatePackage } from "@/app/services/Packages/PUT.js";
 
 export default function Encomendas() {
     const { user } = useAuth();
@@ -130,6 +131,32 @@ export default function Encomendas() {
         setModalAberto(true);
     }
 
+    async function handleSaveChanges(formData) {
+        try {
+            await updatePackage(
+                modalPackage.id,
+                formData.descricao,
+                formData.moradorId,
+                formData.andar,
+                formData.apartamento
+            );
+            fecharModal();
+            // Recarregar dados da tabela após salvar
+            if (data) {
+                // Força atualização dos dados
+                const updatedData = await (await fetch(`${process.env.NEXT_PUBLIC_API_URL}/packages/all`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: { "Content-Type": "application/json" },
+                })).json();
+                setdata(updatedData);
+            }
+        } catch (error) {
+            console.error("Erro ao salvar alterações:", error);
+            alert("Erro ao salvar alterações. Tente novamente.");
+        }
+    }
+
     const moradores = (data || []).map(item => item.morador);
     return (
         <div className={styles.body}>
@@ -181,6 +208,7 @@ export default function Encomendas() {
                         modo="edit"
                         packageData={modalPackage}
                         onClose={fecharModal}
+                        onSaveChanges={handleSaveChanges}
                     />
                 )}
             </ModalForm>
