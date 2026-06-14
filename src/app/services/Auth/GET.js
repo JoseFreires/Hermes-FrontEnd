@@ -5,7 +5,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 // Usa credentials 'include' para enviar cookies de autenticação automaticamente.
 export async function getCurrentUser() {
     try {
-        const response = await fetch(`${API_URL}/auth/me`, {
+        const response = await fetch(`${API_URL}/login/eu`, {
             method: 'GET',
             credentials: 'include', // autenticação pelo cookie
             headers: {

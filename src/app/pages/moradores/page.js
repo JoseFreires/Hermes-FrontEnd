@@ -11,8 +11,7 @@ import { useAuth } from '@/app/auth.js';
 export default function Moradores() {
 
     const { user } = useAuth();
-    const canRemove = user?.roles?.includes("ROLE_ADMIN") || user?.roles?.includes("ROLE_SINDICO");
-    const canAdd = user?.roles?.includes("ROLE_ADMIN") || user?.roles?.includes("ROLE_SINDICO");
+    const canManage = user?.role.includes("ROLE_PORTEIRO") || user?.role.includes("ROLE_ADMIN");
 
     const columns = [
         {
@@ -84,7 +83,7 @@ export default function Moradores() {
                     search={search}
                     setSearch={setSearch}
                     setDebouncedSearch={setDebouncedSearch}
-                    canAdd={canAdd}
+                    canAdd={canManage}
                     users={users}
                     filters={filters}
                     onFiltersChange={setFilters}
@@ -96,7 +95,7 @@ export default function Moradores() {
                     columns={columns}
                     data={filteredData}
                     searchValue={debouncedSearch}
-                    canRemove={canRemove}
+                    canRemove={canManage}
                 />
             </div>
         </div>

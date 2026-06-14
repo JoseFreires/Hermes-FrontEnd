@@ -19,7 +19,6 @@ const [password, setPassword] = useState("");
 
 async function handleLogin(e) {
   e.preventDefault();
-  console.log("Tentando logar com:", email, password);
   try {
     await signIn(email, password);
     router.push("../pages/encomendas");

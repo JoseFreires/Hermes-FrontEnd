@@ -9,7 +9,6 @@ import { useAuth } from "@/app/auth.js";
 
 export default function MeusPacotes() {
     const { user } = useAuth();
-    const canAdd = user?.permissions?.includes("add_moradores");
 
     const navItens = [
         { texto: "Todos" },
@@ -64,7 +63,7 @@ export default function MeusPacotes() {
                     search={search}
                     setSearch={setSearch}
                     setDebouncedSearch={setDebouncedSearch}
-                    canAdd={canAdd}
+                    canAdd={null}
                 />
 
                 <div className={styles.cardWrapper}>

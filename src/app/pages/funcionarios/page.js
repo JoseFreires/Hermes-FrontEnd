@@ -10,8 +10,7 @@ import { useAuth } from '@/app/auth.js';
 export default function Funcionarios() {
 
     const { user } = useAuth();
-    const canRemove = user?.roles?.includes("ROLE_SINDICO") || user?.roles?.includes("ROLE_ADMIN");
-    const canAdd = user?.roles?.includes("ROLE_SINDICO") || user?.roles?.includes("ROLE_ADMIN");
+    const canManage = user?.role.includes("ROLE_SINDICO") || user?.role.includes("ROLE_ADMIN");
 
     const navItens = [
         { texto: "Sindicos" },
@@ -147,7 +146,7 @@ export default function Funcionarios() {
                     search={search}
                     setSearch={setSearch}
                     setDebouncedSearch={setDebouncedSearch}
-                    canAdd={canAdd}
+                    canAdd={canManage}
                     users={users}
                     filters={filters}
                     onFiltersChange={setFilters}
@@ -159,7 +158,7 @@ export default function Funcionarios() {
                     columns={columns}
                     data={filteredData}
                     searchValue={debouncedSearch}
-                    canRemove={canRemove}
+                    canRemove={canManage}
                 />
             </div>
         </div>

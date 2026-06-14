@@ -5,12 +5,34 @@ import Select from "react-select";
 import styles from "./Dropdown.module.css";
 import { listMorador } from "@/app/services/Morador/GET.js";
 
+function getPessoaId(morador) {
+  return (
+    morador?.idPessoa ??
+    morador?.pessoa?.idPessoa ??
+    morador?.pessoa?.id ??
+    morador?.usuario?.pessoa?.idPessoa ??
+    morador?.usuario?.pessoa?.id ??
+    morador?.usuario?.idPessoa ??
+    null
+  );
+}
+
 function mapToReactSelectOptions(items = []) {
-  return items.map((option) => ({
-    value: option.id ?? option.idUsuario ?? option.ID ?? option.Id,
-    label:
-      option.nomeMorador ?? option.nome ?? option.name ?? String(option.value ?? option.id ?? option.idUsuario ?? ""),
-  }));
+  return items
+    .map((option) => {
+      const idPessoa = getPessoaId(option);
+
+      return {
+        value: idPessoa,
+        label:
+          option.nomeMorador ??
+          option.nome ??
+          option.name ??
+          String(idPessoa ?? ""),
+        data: option,
+      };
+    })
+    .filter((option) => option.value !== null && option.value !== undefined);
 }
 
 export default function Dropdown({
@@ -30,16 +52,27 @@ export default function Dropdown({
 
     async function load() {
       setLoading(true);
+
       try {
         const data = await listMorador();
+
         if (!mounted) return;
-        if (data && Array.isArray(data)) setFetchedOptions(data);
-        else setFetchedOptions([]);
+
+        if (Array.isArray(data)) {
+          setFetchedOptions(data);
+        } else {
+          setFetchedOptions([]);
+        }
       } catch (err) {
         console.error("Erro ao buscar moradores:", err);
-        if (mounted) setFetchedOptions([]);
+
+        if (mounted) {
+          setFetchedOptions([]);
+        }
       } finally {
-        if (mounted) setLoading(false);
+        if (mounted) {
+          setLoading(false);
+        }
       }
     }
 
@@ -51,18 +84,30 @@ export default function Dropdown({
   }, [options]);
 
   const sourceOptions = options ?? fetchedOptions;
+
   const reactSelectOptions = mapToReactSelectOptions(sourceOptions || []);
 
-  const selectedValue = reactSelectOptions.find((opt) => String(opt.value) === String(value)) || null;
+  const selectedValue =
+    reactSelectOptions.find(
+      (opt) => String(opt.value) === String(value),
+    ) || null;
 
   const handleChange = (selectedOption) => {
     if (typeof onChange === "function") {
-      onChange({ target: { value: selectedOption ? selectedOption.value : "" } });
+      onChange({
+        target: {
+          value: selectedOption ? selectedOption.value : "",
+        },
+      });
     }
   };
 
   return (
-    <div className={`form-floating mb-4 ${styles.reactSelectOverrides} ${inputClassName || ""}`}>
+    <div
+      className={`form-floating mb-4 ${styles.reactSelectOverrides} ${
+        inputClassName || ""
+      }`}
+    >
       <Select
         options={reactSelectOptions}
         value={selectedValue}
@@ -71,7 +116,9 @@ export default function Dropdown({
         isClearable={false}
         isSearchable
         isLoading={loading}
-        noOptionsMessage={() => (loading ? "Carregando..." : "Nenhuma opção encontrada")}
+        noOptionsMessage={() =>
+          loading ? "Carregando..." : "Nenhuma opção encontrada"
+        }
         classNamePrefix="react-select"
       />
     </div>

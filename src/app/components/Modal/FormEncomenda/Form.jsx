@@ -7,7 +7,10 @@ import Dropdown from "../../Input/Dropdown/Dropdown";
 import Button from "../../Button/button";
 import Styles from "./Form.module.css";
 import { useState, useEffect } from "react";
-import { listMorador, getMoradorId } from "@/app/services/Morador/GET.js";
+import {
+  listMorador,
+  getPessoaId,
+} from "@/app/services/Morador/GET.js";
 
 export default function FormEncomenda({
   title,
@@ -19,7 +22,8 @@ export default function FormEncomenda({
   const [moradores, setMoradores] = useState([]);
   const [nomePacote, setNomePacote] = useState(encomendaData?.nomePacote || "");
   const [observacao, setObservacao] = useState(encomendaData?.observacao || "");
-  const [moradorId, setMoradorId] = useState("");
+  const [moradorSelectId, setMoradorSelectId] = useState("");
+  const [idDestinatario, setIdDestinatario] = useState("");
   const [numeroApartamento, setNumeroApartamento] = useState(
     encomendaData?.numeroApartamento || "",
   );
@@ -29,9 +33,18 @@ export default function FormEncomenda({
 
   useEffect(() => {
     listMorador().then((data) => {
-      if (Array.isArray(data)) setMoradores(data);
+      console.log(data);
+
+      if (Array.isArray(data)) {
+        setMoradores(data);
+      } else {
+        setMoradores([]);
+      }
     });
   }, []);
+
+
+
 
   useEffect(() => {
     if (modo !== "edit" || !encomendaData) return;
@@ -41,28 +54,38 @@ export default function FormEncomenda({
 
     const found = moradores.find(
       (m) =>
-        String(getMoradorId(m)) === String(encomendaData.moradorId) ||
+        String(getPessoaId(m)) === String(encomendaData.idDestinatario) ||
+        String(getPessoaId(m)) === String(encomendaData.idPessoa) ||
         m.nome === encomendaData.nomeMorador ||
         m.nomeMorador === encomendaData.nomeMorador,
     );
 
     if (found) {
-      setMoradorId(String(getMoradorId(found)));
+      const pessoaId = getPessoaId(found);
+
+      setMoradorSelectId(pessoaId ? String(pessoaId) : "");
+      setIdDestinatario(pessoaId ? String(pessoaId) : "");
       setEmailDestinatario(found.email || encomendaData.emailDestinatario || "");
-      setNumeroApartamento(found.numeroApartamento || encomendaData.numeroApartamento || "");
+      setNumeroApartamento(
+        found.numeroApartamento || encomendaData.numeroApartamento || "",
+      );
     } else {
-      setMoradorId("");
+      setMoradorSelectId("");
+      setIdDestinatario("");
       setEmailDestinatario(encomendaData.emailDestinatario || "");
       setNumeroApartamento(encomendaData.numeroApartamento || "");
     }
   }, [encomendaData, moradores, modo]);
 
+
   const handleMoradorChange = (e) => {
-    const selectedId = e.target.value;
-    setMoradorId(selectedId);
+    const selectedPessoaId = e.target.value;
+
+    setMoradorSelectId(selectedPessoaId);
+    setIdDestinatario(selectedPessoaId);
 
     const morador = moradores.find(
-      (m) => String(getMoradorId(m)) === String(selectedId),
+      (m) => String(getPessoaId(m)) === String(selectedPessoaId),
     );
 
     if (morador) {
@@ -74,6 +97,7 @@ export default function FormEncomenda({
     }
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!onSaveChanges) return;
@@ -81,7 +105,7 @@ export default function FormEncomenda({
     await onSaveChanges({
       nomePacote,
       observacao,
-      moradorId,
+      idDestinatario,
       numeroApartamento,
       emailDestinatario,
     });
@@ -148,7 +172,7 @@ export default function FormEncomenda({
               <Dropdown
                 options={moradores}
                 placeholder="Selecione um morador"
-                value={moradorId}
+                value={moradorSelectId}
                 onChange={handleMoradorChange}
               />
             </Form.Group>
@@ -157,7 +181,7 @@ export default function FormEncomenda({
               type="email"
               placeholder=""
               variant="Disabled"
-              key={`email-${moradorId}`}
+              key={`email-${moradorSelectId}`}
               defaultValue={emailDestinatario}
               disabled={true}
             />
@@ -166,7 +190,7 @@ export default function FormEncomenda({
               type="text"
               variant="Disabled"
               placeholder=""
-              key={`apt-${moradorId}`}
+              key={`apt-${moradorSelectId}`}
               defaultValue={numeroApartamento}
               disabled={true}
             />

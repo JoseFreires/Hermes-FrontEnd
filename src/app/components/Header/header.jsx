@@ -1,7 +1,7 @@
 "use client";
 
 import { Navbar, Container, Nav, Form, InputGroup } from "react-bootstrap";
-import { FunnelFill, Search } from "react-bootstrap-icons";
+import { Search } from "react-bootstrap-icons";
 import React from "react";
 import Button from "../Button/button"
 import Filtro from "./Filtro/filtro";
@@ -42,7 +42,7 @@ export default function Header({
         ROLE_SINDICO: "Síndico"
     };
 
-    const role = user?.roles?.[0];
+    const role = user?.role;
 
     return (
         <div className={styles.componentWrapper}>

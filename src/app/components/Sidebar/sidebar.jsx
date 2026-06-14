@@ -13,10 +13,10 @@ export default function Sidebar() {
     const { user } = useAuth();
     const signOut = useAuth().signOut;
     const router = useRouter();
-    const adminOnly = user?.roles?.includes("ROLE_ADMIN");
-    const sindicoView = user?.roles?.includes("ROLE_ADMIN") || user?.roles?.includes("ROLE_SINDICO");
-    const porteiroView = user?.roles?.includes("ROLE_PORTEIRO") || user?.roles?.includes("ROLE_ADMIN") || user?.roles?.includes("ROLE_SINDICO");
-    const moradorView = user?.roles?.includes("ROLE_MORADOR");
+    const adminOnly = user?.role.includes("ROLE_ADMIN");
+    const sindicoView = user?.role.includes("ROLE_ADMIN") || user?.role.includes("ROLE_SINDICO");
+    const porteiroView = user?.role.includes("ROLE_PORTEIRO") || user?.role.includes("ROLE_ADMIN") || user?.role.includes("ROLE_SINDICO");
+    const moradorView = user?.role.includes("ROLE_MORADOR");
 
     const handleLogout = async () => {
         try {

@@ -15,7 +15,7 @@ import { filterEncomendas, extractFilterUsers, NAV_ITENS } from "@/app/hooks/fil
 
 export default function Encomendas() {
     const { user } = useAuth();
-    const canManage = user?.roles?.some((role) => ["ROLE_ADMIN", "ROLE_PORTEIRO"].includes(role));
+    const canManage = user?.role.includes("ROLE_PORTEIRO") || user?.role.includes("ROLE_ADMIN");
 
     const { data, fetchEncomendas, removeEncomendas, isLoading } = useEncomendas();
     const modal = useEncomendaModal(fetchEncomendas);

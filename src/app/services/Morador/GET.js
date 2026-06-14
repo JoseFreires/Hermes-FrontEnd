@@ -1,6 +1,6 @@
 export async function listMorador() {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
+    
     try {
         const response = await fetch(`${API_URL}/moradores`, {
             method: "GET",
@@ -22,6 +22,18 @@ export async function listMorador() {
     }
 }
 
-export function getMoradorId(morador) {
-    return morador?.idUsuario ?? morador?.id ?? morador?.ID ?? morador?.Id;
+export function getUsuarioId(morador) {
+  return morador?.idUsuario ?? morador?.id ?? null;
+}
+
+export function getPessoaId(morador) {
+  return (
+    morador?.idPessoa ??
+    morador?.pessoa?.idPessoa ??
+    morador?.pessoa?.id ??
+    morador?.usuario?.pessoa?.idPessoa ??
+    morador?.usuario?.pessoa?.id ??
+    morador?.usuario?.idPessoa ??
+    null
+  );
 }
