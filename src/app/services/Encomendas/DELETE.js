@@ -3,7 +3,7 @@ export async function softDeleteEncomenda(id, reason) {
 
     try {
         const response = await fetch(`${API_URL}/encomendas/${id}`, {
-            method: "PATCH",
+            method: "DELETE",
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
