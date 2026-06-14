@@ -46,5 +46,5 @@ export function useEncomendaModal(onRefresh) {
         [tipo, encomendaData, onRefresh, close],
     );
 
-    return { open, tipo, encomendaData, openAdd, openEdit, close, save };
+    return { open, tipo, encomendaData, openAdd, openEdit, close, save, setTipo};
 }

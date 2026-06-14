@@ -16,12 +16,14 @@ export default function FormEncomenda({
   title,
   modo,
   encomendaData,
-  onClose,
   onSaveChanges,
+  onDeliver,
 }) {
+  
   const [moradores, setMoradores] = useState([]);
   const [nomePacote, setNomePacote] = useState(encomendaData?.nomePacote || "");
   const [observacao, setObservacao] = useState(encomendaData?.observacao || "");
+  const [idencomenda, setIdencomenda] = useState(encomendaData?.id || "");
   const [moradorSelectId, setMoradorSelectId] = useState("");
   const [idDestinatario, setIdDestinatario] = useState("");
   const [numeroApartamento, setNumeroApartamento] = useState(
@@ -51,6 +53,7 @@ export default function FormEncomenda({
 
     setNomePacote(encomendaData.nomePacote || "");
     setObservacao(encomendaData.observacao || "");
+    setIdencomenda(encomendaData.id|| "");
 
     const found = moradores.find(
       (m) =>
@@ -114,13 +117,17 @@ export default function FormEncomenda({
   return (
     <div
       className="d-flex flex-column"
-      style={{ maxHeight: "90vh", minHeight: "70vh" }}
+      style={{ maxHeight: "95vh", minHeight: "70vh" }}
     >
       <div className="px-4 pt-4 pb-3 flex-shrink-0">
-        <div className="d-flex flex-column flex-md-row align-items-md-end gap-2">
-          <div>
+        <div>
+          <div className="d-flex flex-row flex-md-row align-items-center gap-2">
             <h1 className="h4 text-primary-custom mb-1">{title}</h1>
-            <div className="title-divider" />
+            {modo === "edit" && (
+              <p className="h5 text-primary-custom mb-1 ">
+                ID: #{idencomenda} 
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -210,7 +217,7 @@ export default function FormEncomenda({
           <hr className="pb-2" />
           {modo === "edit" && (
             <div className="d-flex flex-column gap-2">
-              <Button type="button" variant="secondary" className="w-100">
+              <Button type="button" variant="secondary" className="w-100" onClick={onDeliver}>
                 Entregar encomenda
               </Button>
 

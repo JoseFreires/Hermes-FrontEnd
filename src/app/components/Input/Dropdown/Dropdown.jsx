@@ -18,6 +18,10 @@ function getPessoaId(morador) {
 }
 
 function mapToReactSelectOptions(items = []) {
+  if (!Array.isArray(items)) {
+    console.warn("Dropdown: A prop 'options' precisa ser um Array.");
+    return []; 
+  }
   return items
     .map((option) => {
       const idPessoa = getPessoaId(option);

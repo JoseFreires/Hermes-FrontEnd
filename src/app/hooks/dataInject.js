@@ -14,8 +14,8 @@ export function InjectEncomendasTable() {
       ),
     },
     {
-      label: "DESCRIÇÃO",
-      key: "observacao",
+      label: "Nome do Pacote",
+      key: "nomePacote",
     },
     {
       label: "DATA - HORA",
