@@ -68,56 +68,12 @@ export default function DeleteConfirmationModal({
                     </div>
                 </div>
 
-                <Form>
-                    <div className={styles.radioGroup}>
-                        <Form.Check
-                            type="radio"
-                            id="contract"
-                            name="deleteReason"
-                            label="Encerramento de contrato"
-                            value="Encerramento de contrato"
-                            checked={reason === "Encerramento de contrato"}
-                            onChange={(e) => setReason(e.target.value)}
-                        />
-
-                        <Form.Check
-                            type="radio"
-                            id="duplicate"
-                            name="deleteReason"
-                            label="Duplicidade de cadastro"
-                            value="Duplicidade de cadastro"
-                            checked={reason === "Duplicidade de cadastro"}
-                            onChange={(e) => setReason(e.target.value)}
-                        />
-
-                        <Form.Check
-                            type="radio"
-                            id="other"
-                            name="deleteReason"
-                            label="Outro"
-                            value="other"
-                            checked={reason === "other"}
-                            onChange={(e) => setReason(e.target.value)}
-                        />
-                    </div>
-
-                    <Form.Control
-                        as="textarea"
-                        rows={5}
-                        placeholder="Descreva o motivo"
-                        className={styles.textarea}
-                        value={customReason}
-                        onChange={(e) => setCustomReason(e.target.value)}
-                        disabled={reason !== "other"}
-                    />
-                </Form>
-
                 <div className={styles.actions}>
                     <Button variant="primary" onClick={onClose} >
                         Cancelar
                     </Button>
 
-                    <Button variant="secondary" onClick={handleConfirm} disabled={!reason || (reason === "other" && !customReason.trim())}>
+                    <Button variant="secondary" onClick={handleConfirm}>
                         Excluir
                     </Button>
 
