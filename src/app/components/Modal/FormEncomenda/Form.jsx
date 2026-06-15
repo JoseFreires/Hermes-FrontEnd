@@ -7,10 +7,7 @@ import Dropdown from "../../Input/Dropdown/Dropdown";
 import Button from "../../Button/button";
 import Styles from "./Form.module.css";
 import { useState, useEffect } from "react";
-import {
-  listMorador,
-  getPessoaId,
-} from "@/app/services/Morador/GET.js";
+import { listMorador, getPessoaId } from "@/app/services/Morador/GET.js";
 
 export default function FormEncomenda({
   title,
@@ -23,7 +20,7 @@ export default function FormEncomenda({
   const [moradores, setMoradores] = useState([]);
   const [nomePacote, setNomePacote] = useState(encomendaData?.nomePacote || "");
   const [observacao, setObservacao] = useState(encomendaData?.observacao || "");
-  const [idencomenda, setIdencomenda] = useState(encomendaData?.id || "");
+  const [idencomenda, setIdencomenda] = useState(encomendaData?.idEncomenda || "");
   const [moradorSelectId, setMoradorSelectId] = useState("");
   const [idDestinatario, setIdDestinatario] = useState("");
   const [numeroApartamento, setNumeroApartamento] = useState(
@@ -45,15 +42,12 @@ export default function FormEncomenda({
     });
   }, []);
 
-
-
-
   useEffect(() => {
     if (modo !== "edit" || !encomendaData) return;
 
     setNomePacote(encomendaData.nomePacote || "");
     setObservacao(encomendaData.observacao || "");
-    setIdencomenda(encomendaData.id|| "");
+    setIdencomenda(encomendaData.idEncomenda|| "");
 
     const found = moradores.find(
       (m) =>
@@ -105,14 +99,17 @@ export default function FormEncomenda({
     e.preventDefault();
     if (!onSaveChanges) return;
 
-    await onSaveChanges({
+    const dados = {
+      idEncomenda: idencomenda,
       nomePacote,
       observacao,
       idDestinatario,
       numeroApartamento,
       emailDestinatario,
-    });
+    }
+    await onSaveChanges(dados);
   };
+
 
   return (
     <div
@@ -124,8 +121,8 @@ export default function FormEncomenda({
           <div className="d-flex flex-row flex-md-row align-items-center gap-2">
             <h1 className="h4 text-primary-custom mb-1">{title}</h1>
             {modo === "edit" && (
-              <p className="h5 text-primary-custom mb-1 ">
-                ID: #{idencomenda} 
+              <p className="h5 text-primary-custom mb-1" style={{ color: "#003366" }}>
+                (ID: #{encomendaData.idEncomenda})
               </p>
             )}
           </div>

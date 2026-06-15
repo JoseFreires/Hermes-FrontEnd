@@ -22,10 +22,6 @@ export async function listMorador() {
     }
 }
 
-export function getUsuarioId(morador) {
-  return morador?.idUsuario ?? morador?.id ?? null;
-}
-
 export function getPessoaId(morador) {
   return (
     morador?.idPessoa ??

@@ -79,6 +79,10 @@ export default function CustomTable({
 
     const HeaderTag = headerAs;
 
+    const rowIndex = (index) => {
+        return index + 1;
+    }
+
     // mantém estado (selected) da checkbox da encomenda pelo ID mesmo se mudar de página
     const toggleRow = (id) => {
         setSelectedRows((prev) =>
@@ -154,7 +158,7 @@ const skeletonRows = [1, 2, 3, 4, 5]; //array para renderizar 5 linhas de skelet
 
                                     return (
                                         <tr
-                                            key={row.id}
+                                            key={`${rowIndex}-${row.id}`}
                                             ref={rowIndex === 0 ? rowRef : null}
                                             onClick={handleRowClick}
                                             style={onRowClick ? { cursor: 'pointer' } : {}}

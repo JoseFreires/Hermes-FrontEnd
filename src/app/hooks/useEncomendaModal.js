@@ -28,9 +28,11 @@ export function useEncomendaModal(onRefresh) {
         async (formData) => {
             try {
                 if (tipo === "edit" && encomendaData) {
-                    await updateEncomenda(encomendaData.id, {
-                        ...encomendaData,
-                        ...formData,
+                    // o DTO de atualizarEncomenda só espera esses 3 dados
+                    await updateEncomenda(encomendaData.idEncomenda, {
+                        nomePacote: formData.nomePacote,
+                        observacao: formData.observacao,
+                        idDestinatario: Number(formData.idDestinatario),
                     });
                 } else {
                     await createEncomenda(formData);

@@ -14,7 +14,7 @@ export function InjectEncomendasTable() {
       ),
     },
     {
-      label: "Nome do Pacote",
+      label: "NOME DO PACOTE",
       key: "nomePacote",
     },
     {

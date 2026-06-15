@@ -1,19 +1,5 @@
-export async function updateEncomenda(id, encomenda) {
+export async function updateEncomenda(id, dados) {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
-    const {
-        nomePacote,
-        observacao,
-        status,
-        nomeMorador,
-        nomePorteiro,
-        numeroApartamento,
-        emailDestinatario,
-        tokenEncomenda,
-        dataHoraRecebido,
-        dataHoraRetirado,
-        moradorId,
-    } = encomenda;
 
     try {
         const response = await fetch(`${API_URL}/encomendas/${id}`, {
@@ -22,19 +8,7 @@ export async function updateEncomenda(id, encomenda) {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                nomePacote,
-                observacao,
-                status,
-                nomeMorador,
-                nomePorteiro,
-                numeroApartamento,
-                emailDestinatario,
-                tokenEncomenda,
-                dataHoraRecebido,
-                dataHoraRetirado,
-                moradorId,
-            }),
+            body: JSON.stringify(dados),
         });
 
         if (!response.ok) {
