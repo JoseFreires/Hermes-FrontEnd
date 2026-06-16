@@ -50,12 +50,14 @@ export default function FormEntrega({ encomenda, onClose, onSuccess, onVoltar })
                 encomenda.idEncomenda,
                 tiporetirada,
             );
-            onSuccess?.();
+            await onSuccess?.(); // busca as encomendas novamente
+            onClose?.();  
+            
             } catch (err) {
                 setErro(err.message || "Erro ao registrar entrega. Tente novamente.");
             } finally {
                 setLoading(false);
-                onClose;
+                onClose();
             }
         
     }   

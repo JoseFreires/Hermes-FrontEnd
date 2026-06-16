@@ -1,8 +1,7 @@
-export const NAV_ITENS = [{ texto: "Todas" }, { texto: "Pendentes" }, { texto: "Entregues" }];
+export const NAV_ITENS = [{ texto: "Recebidas" }, { texto: "Entregues" }];
 
 const TAB_FILTERS = {
-    Todas: () => true,
-    Pendentes: (item) => item.status === "Pendente" || item.status === "PENDENTE" || item.status === "Pendentes" || item.status === "PENDENTES",
+    Recebidas: (item) => item.status === "Recebida" || item.status === "RECEBIDA" || item.status === "Recebidas" || item.status === "RECEBIDAS",
     Entregues: (item) => item.status === "Entregue" || item.status === "ENTREGUE" || item.status === "Entregues" || item.status === "ENTREGUES",
 };
 
@@ -34,7 +33,7 @@ export function extractFilterUsers(data) {
 }
 
 export function filterEncomendas(data, activeTab, filters) {
-    const tabFilter = TAB_FILTERS[activeTab] ?? TAB_FILTERS.Todas;
+    const tabFilter = TAB_FILTERS[activeTab] ?? TAB_FILTERS.Recebidas;
 
     return (data || [])
         .filter(tabFilter)

@@ -79,10 +79,6 @@ export default function CustomTable({
 
     const HeaderTag = headerAs;
 
-    const rowIndex = (index) => {
-        return index + 1;
-    }
-
     // mantém estado (selected) da checkbox da encomenda pelo ID mesmo se mudar de página
     const toggleRow = (id) => {
         setSelectedRows((prev) =>
@@ -138,8 +134,8 @@ const skeletonRows = [1, 2, 3, 4, 5]; //array para renderizar 5 linhas de skelet
                     <Table hover className={styles.table}>
                         <tbody>
                             {isLoading ? (
-                                skeletonRows.map((index) => (// renderiza linhas de skeleton enquanto os dados estão carregando
-                                    <tr key={index}>
+                                skeletonRows.map((rowIndex) => (// renderiza linhas de skeleton enquanto os dados estão carregando
+                                    <tr key={rowIndex}>
                                         {columns.map((col, colIndex) => (
                                             <td key={colIndex}> 
                                                 <div className={styles.skeleton}></div> 
@@ -158,17 +154,17 @@ const skeletonRows = [1, 2, 3, 4, 5]; //array para renderizar 5 linhas de skelet
 
                                     return (
                                         <tr
-                                            key={`${rowIndex}-${row.id}`}
+                                        key={row.idEncomenda}
                                             ref={rowIndex === 0 ? rowRef : null}
                                             onClick={handleRowClick}
                                             style={onRowClick ? { cursor: 'pointer' } : {}}
-                                        >
+                                            >
                                             <td className={styles.checkbox}>
                                                 {canRemove ? (
-                                                    <Form.Check type="checkbox" checked={selectedRows.includes(row.id)} onChange={() => toggleRow(row.id)} />
+                                                    <Form.Check type="checkbox" checked={selectedRows.includes(row.idEncomenda)} onChange={() => toggleRow(row.idEncomenda)} />
                                                 ) : (
-                                                <div style={{ width: "16px", height: "16px" }} />
-                                            )}
+                                                    <div style={{ width: "16px", height: "16px" }} />
+                                                )}
                                         </td>
 
                                         {/* esse render é para fazer o inject dos dados que vem do backend, p customizar a renderização de alguma coluna, 

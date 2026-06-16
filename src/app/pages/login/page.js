@@ -6,6 +6,7 @@ import  Input  from "../../components/Input/Input";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {useAuth} from "../../auth";
+import { getCurrentUser } from "@/app/services/Auth/GET";
 import Image from "next/image";
 
 export default function Login() {
@@ -15,17 +16,23 @@ const { signIn } = useAuth();
 const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
 
-
-
 async function handleLogin(e) {
   e.preventDefault();
+
   try {
-    await signIn(email, password);
-    router.push("../pages/encomendas");
+      await signIn(email, password);
+
+      const user = await getCurrentUser();
+
+      if (user.role === "ROLE_MORADOR") {
+          router.push("/pages/meus-pacotes");
+      } else {
+          router.push("/pages/encomendas");
+      } 
+
   } catch (error) {
-    alert("Erro ao fazer login: " + error.message);
+      alert("Erro ao fazer login: " + error.message);
   }
-  
 }
 
   return (

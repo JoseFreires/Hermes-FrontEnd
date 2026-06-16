@@ -1,59 +1,54 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import styles from "./page.module.css";
 import Sidebar from "@/app/components/Sidebar/sidebar";
 import Header from "@/app/components/Header/header";
 import Card from "@/app/components/Card/card";
-import { useState } from "react";
-import { useAuth } from "@/app/auth.js";
+import { listEncomendas } from "@/app/services/Encomendas/GET";
+import { useAuth } from "@/app/auth";
 
 export default function MeusPacotes() {
-    const { user } = useAuth();
-
     const navItens = [
         { texto: "Todos" },
         { texto: "A retirar" },
         { texto: "Retirados" },
     ];
 
-    const data = [
-        {
-            id: 1,
-            nomePacote: "Caixa Mercado Preso",
-            dataHoraRecebido: "2026-02-21T15:20:33",
-            numeroApartamento: "99A",
-            status: "PENDENTE",
-        },
-        {
-            id: 2,
-            nomePacote: "Pedido Amazon",
-            dataHoraRecebido: "2026-02-22T09:45:12",
-            numeroApartamento: "101B",
-            status: "ENTREGUE",
-        },
-        {
-            id: 3,
-            nomePacote: "Documentos Correios",
-            dataHoraRecebido: "2026-02-22T14:30:05",
-            numeroApartamento: "203C",
-            status: "PENDENTE",
-        },
-    ];
-
+    const [data, setData] = useState([]);
     const [activeTab, setActiveTab] = useState("Todos");
+    const [search, setSearch] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+
+    const { user } = useAuth();
+
+
+    useEffect(() => {
+        async function carregarEncomendas() {
+            const response = await listEncomendas();
+
+            console.log("Encomendas recebidas:", response);
+
+            if (response) {
+                setData(response);
+            }
+        }
+
+        carregarEncomendas();
+    }, []);
+
     const filtros = {
         Todos: () => true,
-        "A retirar": (item) => item.status === "PENDENTE",
+        "A retirar": (item) => item.status === "RECEBIDA",
         Retirados: (item) => item.status === "ENTREGUE",
     };
 
-    const filteredData = data.filter(filtros[activeTab]);
-    const [search, setSearch] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
+    const filteredData = data.filter(filtros[activeTab]).filter((item) => item.emailDestinatario === user.username);
 
     return (
         <div className={styles.body}>
             <Sidebar />
+
             <div className={styles.main}>
                 <Header
                     titulo="Meus Pacotes"
@@ -69,7 +64,7 @@ export default function MeusPacotes() {
                 <div className={styles.cardWrapper}>
                     {filteredData.map((item) => (
                         <Card
-                            key={item.id}
+                            key={item.idEncomenda}
                             encomendaData={item}
                             searchValue={debouncedSearch}
                         />

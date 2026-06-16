@@ -29,3 +29,30 @@ export function InjectEncomendasTable() {
     },
   ];
 }
+
+export function InjectMoradoresTable() {
+  return [
+    {
+    label: "NOME",
+    key: "nome",
+    render: (value, row) => (
+      <div className={styles.user}>
+        <span>{value}</span>
+        <small>{row.email}</small>
+      </div>
+    ),
+  },
+  {
+    label: "TELEFONE",
+    key: "telefone",
+  },
+  {
+    label: "APARTAMENTO",
+    key: "numeroApartamento",
+  },
+  {
+    label: "BLOCO",
+    key: "bloco"
+  },
+]
+}
