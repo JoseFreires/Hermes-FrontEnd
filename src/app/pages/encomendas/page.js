@@ -83,7 +83,7 @@ export default function Encomendas() {
                 {modal.tipo === "entregarEncomenda" && modal.encomendaData && (
                     <FormEntrega
                         encomenda={modal.encomendaData} // Os dados da encomenda atual
-                        porteiroAtual={user} // O usuário logado que vem do useAuth()
+                        onclose={modal.close} // Fecha o modal após a entrega
                         onSuccess={() => {
                             modal.close();
                             // Aqui você pode forçar a tabela a recarregar, 

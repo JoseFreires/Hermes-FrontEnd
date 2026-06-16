@@ -6,45 +6,66 @@ import Dropdown from "../../Input/Dropdown/Dropdown";
 import Button from "../../Button/button";
 import Styles from "./FormEntrega.module.css";
 import {deliverEncomenda} from "@/app/services/Encomendas/Entrega/PUT.js";
+import TokenInline from "../tokenRetirada/TokenInline";
 
-export default function FormEntrega({ encomenda, porteiroAtual, onSuccess, onVoltar }) {
+export default function FormEntrega({ encomenda, onClose, onSuccess, onVoltar }) {
     // Estados do formulário
-    const [tiporetirada, setTiporetirada] = useState(false);
+    const [tiporetirada, setTiporetirada] = useState("MORADOR"); // "morador" | "terceiro"
     const [loading, setLoading] = useState(false);
     const [erro, setErro] = useState("");
+    const [tokenDigitado, setTokenDigitado] = useState("");
 
-// Mota não consegui fazer o dropdown funcionar, to tentando passar o nome do morador como value, depois fala comigo como a logica dele funciona pra pegar o nome do morador da encomenda, achei que era só encomenda?.nomemorador
+    const opcoesReceptor = encomenda
+        ? [
+              {
+                  idPessoa: encomenda.idDestinatario,
+                  nomeMorador: encomenda.nomeMorador,
+              },
+              // TODO: adicionar pessoasConfiaveis aqui quando a feature for criada
+              // ...(encomenda.pessoasConfiaveis ?? [])
+          ]
+        : [];
 
-
-    // Simulação de pessoas autorizadas (isso deve vir do banco de dados na prop 'encomenda')
-
-    async function handleConfirmarEntrega(e) {
+        async function handleConfirmarEntrega(e) {
         e.preventDefault();
-        setLoading(true);
         setErro("");
 
-        // Validação básica
-        if (tiporetirada === "terceiro" && !token) {
-            setErro("O token de validação é obrigatório para retirada por terceiros.");
-            setLoading(false);
-            return;
+        if (tiporetirada === "TERCEIRO") {
+            if (tokenDigitado.length < 4) {
+                setErro("Preencha todos os 4 dígitos do token.");
+                return;
+            }
+ 
+            // Compara o que o usuário digitou com o token recebido do banco
+            if (tokenDigitado !== String(encomenda?.tokenEncomenda)) {
+                setErro("Token inválido. Verifique o código e tente novamente.");
+                return;
+            }
         }
 
-        if (!receptor) {
-            setErro("Por favor, informe quem está retirando a encomenda.");
-            setLoading(false);
-            return;
-        }
+        setLoading(true);
 
-        deliverEncomenda(encomenda.id, tiporetirada, receptor)
-    }
-
+            try {
+            await deliverEncomenda(
+                encomenda.idEncomenda,
+                tiporetirada,
+            );
+            onSuccess?.();
+            } catch (err) {
+                setErro(err.message || "Erro ao registrar entrega. Tente novamente.");
+            } finally {
+                setLoading(false);
+                onClose;
+            }
+        
+    }   
     return (
+
         <form onSubmit={handleConfirmarEntrega} className="p-3">
             {/* Cabeçalho */}
             <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
                 <h4 className="text-primary mb-0">Registrar Entrega</h4>
-                <span className="badge bg-secondary fs-6">ID: {encomenda?.id}</span>
+                <span className="badge bg-secondary fs-6">ID: {encomenda?.idEncomenda}</span>
             </div>
 
             {/* Checkbox Terceiro */}
@@ -56,26 +77,29 @@ export default function FormEntrega({ encomenda, porteiroAtual, onSuccess, onVol
                 </span>
                 }
                 className={Styles.CheckboxInput}
-                onChange={(e) => setTiporetirada(e.target.checked ? "terceiro" : "morador")}
+                onChange={(e)=> {
+                        setTiporetirada(e.target.checked ? "TERCEIRO" : "MORADOR");
+                        setErro("");
+                    }}
             />
 
             {/* Renderização Condicional: Terceiro vs Morador */}
-            {tiporetirada === "terceiro" ? (
-               <Input
-                    Label="Nome do Receptor"
-                    type="text"
-                    variant="default"
-                    placeholder=""
-                    onChange={(e) => setReceptor(e.target.value)}
-                    disabled={false}
-                />
+            {tiporetirada === "TERCEIRO" ? (
+                    <TokenInline
+                        value={tokenDigitado}
+                        onChange={setTokenDigitado}
+                        onReenviar={() => {
+                            // TODO: endpoint de reenvio de token
+                            console.log("Reenviar para:", encomenda?.emailDestinatario);
+                        }}
+                    />
             ) : (
                 <Dropdown
-                    options={null}
+                    options={opcoesReceptor}
                     placeholder="Selecione o receptor"
-                    Value={encomenda?.nomeMorador}
-                    defaultValue={encomenda?.nomeMorador}
-                    onChange={(e) => setReceptor(e.target.value)}
+                    value={encomenda?.idDestinatario}
+                    defaultValue={encomenda?.idDestinatario}
+                    onChange={() => setTiporetirada("MORADOR")}
                 />
                
             )}
@@ -97,5 +121,6 @@ export default function FormEntrega({ encomenda, porteiroAtual, onSuccess, onVol
                 </Button>
             </div>
         </form>
+
     );
 }

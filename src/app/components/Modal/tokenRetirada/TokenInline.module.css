@@ -1,0 +1,69 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 0 8px;
+}
+
+.label {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: #1a1a1a;
+    margin: 0;
+    align-self: flex-start;
+}
+
+.hint {
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    color: #757575;
+    margin: 0;
+    align-self: flex-start;
+}
+
+.digitRow {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin: 8px 0 4px;
+}
+
+.digitInput {
+    width: 56px;
+    height: 72px;
+    border-radius: 8px;
+    border: 2px solid #757575;
+    background-color: #f1f1f1;
+    font-size: 40px;
+    font-family: "Inter", sans-serif;
+    color: #003366;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.digitInput:focus {
+    border-color: #003366;
+    box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.12);
+}
+
+.digitFilled {
+    border-color: #003366;
+}
+
+.reenviarLink {
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    color: #757575;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.reenviarLink:hover {
+    color: #003366;
+}
