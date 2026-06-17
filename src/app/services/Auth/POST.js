@@ -2,13 +2,13 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function login(username, senha) {
     try {
-        const response = await fetch(`${API_URL}/login`, {
+        const response = await fetch(`${API_URL}/auth/entrar`, {
             method: 'POST',
             credentials: 'include',
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ username, senha }),
+            body: JSON.stringify({ senha,username }),
         });
 
         if (!response.ok) {
@@ -23,20 +23,3 @@ export async function login(username, senha) {
     }
 }
 
-export async function logout() {
-    try {
-        const response = await fetch(`${API_URL}/logout`, {
-            method: 'POST',
-            credentials: 'include',
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Erro ao fazer logout");
-        }
-        return true; // logout bem-sucedido
-    } catch (error) {
-        console.error("Erro ao fazer logout:", error);
-        throw error;
-    }
-}

@@ -108,11 +108,14 @@ export default function FormEncomenda({
     await onSaveChanges(dados);
   };
 
+  let maxHeigthScrollingArea="";
+  modo === "edit" && encomendaData?.status== "ENTREGUE" ?  maxHeigthScrollingArea= "70vh": maxHeigthScrollingArea="60vh";
+  modo === "edit" && encomendaData?.status== "ENTREGUE" ?  title= "Visualizar Encomenda": title= "Alterar Encomenda";
 
   return (
     <div
       className="d-flex flex-column"
-      style={{ maxHeight: "95vh", minHeight: "70vh" }}
+      style={{ maxHeight: "95vh", minHeight: "90vh" }}
     >
       <div className="px-4 pt-4 pb-3 flex-shrink-0">
         <div>
@@ -127,17 +130,17 @@ export default function FormEncomenda({
         </div>
       </div>
       <Form onSubmit={handleSubmit}>
-        <div className="px-4 py-3 flex-grow-1 overflow-auto max-height-635">
+        <div className="px-4 py-3 flex-grow-1 overflow-auto max-height-835">
           <div
             className="d-flex flex-column gap-4"
             style={{
-              maxHeight: "60vh",
+              maxHeight: maxHeigthScrollingArea,
               overflowY: "auto",
               scrollbarColor: " #8a8a8a transparent",
               scrollbarwidth: "thin",
             }}
           >
-            <Form.Group>
+            <Form.Group>  
               <p>Foto da encomenda</p>
 
               <div className={Styles.photo}>
@@ -154,9 +157,10 @@ export default function FormEncomenda({
                 Label="Nome do pacote"
                 type="text"
                 placeholder="Nome do pacote"
+                variant={modo === "edit" && encomendaData?.status== "ENTREGUE" ?  "Disabled" : "Default"}
                 defaultValue={nomePacote}
                 onChange={(e) => setNomePacote(e.target.value)}
-                disabled={false}
+                disabled={modo === "edit" && encomendaData?.status== "ENTREGUE" ?  true : false }
               />
             </Form.Group>
             <Form.Group>
@@ -164,9 +168,10 @@ export default function FormEncomenda({
                 Label="Observação"
                 type="text"
                 placeholder="Observação"
+                variant={modo === "edit" && encomendaData?.status== "ENTREGUE" ?  "Disabled" : "Default"}
                 defaultValue={observacao}
                 onChange={(e) => setObservacao(e.target.value)}
-                disabled={false}
+                disabled={modo === "edit" && encomendaData?.status== "ENTREGUE" ?  true : false}
               />
             </Form.Group>
 
@@ -198,7 +203,7 @@ export default function FormEncomenda({
             />
           </div>
         </div>
-
+    {modo === "edit" && encomendaData?.status!= "ENTREGUE" &&(
         <div className="px-4 pb-4 pt-2 flex-shrink-0">
           <Form.Check
             type="checkbox"
@@ -230,6 +235,7 @@ export default function FormEncomenda({
             </div>
           )}
         </div>
+        )}
       </Form>
     </div>
   );

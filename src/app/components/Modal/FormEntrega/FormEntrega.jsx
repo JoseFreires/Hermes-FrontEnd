@@ -1,11 +1,12 @@
 'use client';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Input from "../../Input/Input";
 import Dropdown from "../../Input/Dropdown/Dropdown";
 import Button from "../../Button/button";
 import Styles from "./FormEntrega.module.css";
 import {deliverEncomenda} from "@/app/services/Encomendas/Entrega/PUT.js";
+import { listPessoasAutorizadas } from "@/app/services/pessoasAutorizadas/GET.js";
 import TokenInline from "../tokenRetirada/TokenInline";
 
 export default function FormEntrega({ encomenda, onClose, onSuccess, onVoltar }) {
@@ -15,14 +16,35 @@ export default function FormEntrega({ encomenda, onClose, onSuccess, onVoltar })
     const [erro, setErro] = useState("");
     const [tokenDigitado, setTokenDigitado] = useState("");
 
+    const [pessoasAutorizadas, setPessoasAutorizadas] = useState([]);
+    const [loadingPessoas, setLoadingPessoas] = useState(false);
+ 
+    // Busca as pessoas autorizadas assim que a encomenda estiver disponível
+    useEffect(() => {
+        if (!encomenda?.idDestinatario) return;
+ 
+        setLoadingPessoas(true);
+        listPessoasAutorizadas(encomenda.idDestinatario)
+            .then((data) => {
+                setPessoasAutorizadas(data ?? []);
+            })
+            .finally(() => setLoadingPessoas(false));
+    }, [encomenda?.idDestinatario]);
+ 
+    // Monta opções do Dropdown:
+    // 1º o morador dono da encomenda
+    // 2º as pessoas autorizadas — mapeadas para o formato que o Dropdown espera
+    //    (idPessoa + nomeMorador), já que a API retorna idPessoaAutorizada + nome
     const opcoesReceptor = encomenda
         ? [
               {
                   idPessoa: encomenda.idDestinatario,
                   nomeMorador: encomenda.nomeMorador,
               },
-              // TODO: adicionar pessoasConfiaveis aqui quando a feature for criada
-              // ...(encomenda.pessoasConfiaveis ?? [])
+              ...pessoasAutorizadas.map((p) => ({
+                  idPessoa: p.idPessoaAutorizada,
+                  nomeMorador: p.nome,
+              })),
           ]
         : [];
 
@@ -63,11 +85,11 @@ export default function FormEntrega({ encomenda, onClose, onSuccess, onVoltar })
     }   
     return (
 
-        <form onSubmit={handleConfirmarEntrega} className="p-3">
+        <form onSubmit={handleConfirmarEntrega} className="p-3 gap-4">
             {/* Cabeçalho */}
-            <div className="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
-                <h4 className="text-primary mb-0">Registrar Entrega</h4>
-                <span className="badge bg-secondary fs-6">ID: {encomenda?.idEncomenda}</span>
+            <div className="d-flex justify-content-start align-items-center mb-4 border-bottom pb-2 gap-2 w-100">
+                <h1 className="h4 text-primary-custom mb-1">Registrar Entrega</h1>
+                <span className="h5 text-primary-custom mb-1">ID: {encomenda?.idEncomenda}#</span>
             </div>
 
             {/* Checkbox Terceiro */}
@@ -101,7 +123,7 @@ export default function FormEntrega({ encomenda, onClose, onSuccess, onVoltar })
                     placeholder="Selecione o receptor"
                     value={encomenda?.idDestinatario}
                     defaultValue={encomenda?.idDestinatario}
-                    onChange={() => setTiporetirada("MORADOR")}
+                    onChange={()=>setTiporetirada("MORADOR")}
                 />
                
             )}

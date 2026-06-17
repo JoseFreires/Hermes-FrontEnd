@@ -87,6 +87,11 @@ export default function CustomTable({
     }
 const skeletonRows = [1, 2, 3, 4, 5]; //array para renderizar 5 linhas de skeleton enquanto os dados estão carregando
 
+  const getRowKey = (row, index) => {
+        const idField = Object.keys(row).find((key) => key.toLowerCase().startsWith("id"));
+        return idField ? row[idField] : index;
+    };
+
     return (
         <div className={styles.componentWrapper}>
             <div style={{ minHeight: "70px" }}>
@@ -154,14 +159,14 @@ const skeletonRows = [1, 2, 3, 4, 5]; //array para renderizar 5 linhas de skelet
 
                                     return (
                                         <tr
-                                        key={row.idEncomenda}
+                                        key={getRowKey(row, rowIndex)}
                                             ref={rowIndex === 0 ? rowRef : null}
                                             onClick={handleRowClick}
                                             style={onRowClick ? { cursor: 'pointer' } : {}}
                                             >
                                             <td className={styles.checkbox}>
                                                 {canRemove ? (
-                                                    <Form.Check type="checkbox" checked={selectedRows.includes(row.idEncomenda)} onChange={() => toggleRow(row.idEncomenda)} />
+                                                    <Form.Check type="checkbox" checked={selectedRows.includes(getRowKey(row, -1))} onChange={() => toggleRow(getRowKey(row, -1))} />
                                                 ) : (
                                                     <div style={{ width: "16px", height: "16px" }} />
                                                 )}

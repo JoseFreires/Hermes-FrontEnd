@@ -3,10 +3,10 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 // Busca o usuário autenticado atual através de chamada à API de autenticação.
 // Retorna os dados do usuário se autenticado, ou null se não autenticado ou em caso de erro.
 // Usa credentials 'include' para enviar cookies de autenticação automaticamente.
-export async function getCurrentUser() {
+export async function logout() {
     try {
-        const response = await fetch(`${API_URL}/auth/eu`, {
-            method: 'GET',
+        const response = await fetch(`${API_URL}/auth/sair`, {
+            method: 'POST',
             credentials: 'include', // autenticação pelo cookie
             headers: {
                 "Content-Type": "application/json",
@@ -16,9 +16,7 @@ export async function getCurrentUser() {
         if (!response.ok) {
             return null;  // não autenticado ou erro
         }
-
-        const user = await response.json();
-        return user;
+        return ;
     } catch (error) {
         console.error("Erro ao buscar usuário:", error);
         return null;
