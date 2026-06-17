@@ -1,40 +1,49 @@
 "use client";
-
-import {createContext, useContext, useState, useEffect} from "react";
-import { jwtDecode } from "jwt-decode";
-
-const AuthContext = createContext();
+import { createContext, useState, useEffect, useContext } from "react";
+import { getCurrentUser } from "@/app/services/Auth/GET";
+import { login } from "@/app/services/Auth/POST";
+import {logout} from "@/app/services/Auth/Logout/POST"
+export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-
-        if (token) {
-            const decoded = jwtDecode(token);
-            setUser(decoded);
-        }
+        loadUser();
     }, []);
 
-    function login(token) {
-        localStorage.setItem("token", token);
-        const decoded = jwtDecode(token);
-        setUser(decoded);
+    async function loadUser() {
+        const currentUser = await getCurrentUser();
+        setUser(currentUser);
+        setLoading(false);
+       
+        return;
     }
 
-    function logout() {
-        localStorage.removeItem("token");
+    async function signIn(username, senha) {
+        await login(username, senha);
+
+        const currentUser = await getCurrentUser();
+        setUser(currentUser);
+    }
+
+    async function signOut() {
+        await logout();
         setUser(null);
     }
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, loading, signIn, signOut, isAuthenticated: !!user }}>
             {children}
         </AuthContext.Provider>
     );
 }
 
 export function useAuth() {
-    return useContext(AuthContext);
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error("useAuth deve ser usado dentro de um AuthProvider");
+    };
+    return context;
 }

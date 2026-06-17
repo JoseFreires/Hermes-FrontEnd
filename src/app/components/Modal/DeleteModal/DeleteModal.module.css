@@ -1,0 +1,85 @@
+.modalDialog {
+  max-width: 640px;
+}
+
+.modalBody {
+  position: relative;
+  padding: 32px;
+}
+
+.closeButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: none;
+  background: transparent;
+  font-size: 28px;
+  line-height: 1;
+  color: #757575;
+  cursor: pointer;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.iconContainer {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  background: #f6b2b2;
+  color: #B71C1C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.description {
+  margin-top: 8px;
+  color: #757575;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-left: 68px;
+  margin-bottom: 24px;
+}
+
+.radioGroup :global(.form-check-label) {
+  font-size: 1rem;
+  color: #333;
+}
+
+.textarea {
+  min-height: 140px;
+  resize: none;
+  border: 2px solid #8c8c8c;
+  border-radius: 8px;
+}
+
+.textarea:focus {
+  box-shadow: none;
+  border-color: #666;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+}

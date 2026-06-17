@@ -1,0 +1,24 @@
+.CheckboxInput input:focus {
+    box-shadow: none;
+    border-color: rgb(var(--alertColor));
+}
+.CheckboxInput input {
+    background-color: var(--secundaryColor); 
+    border-color:rgb(var(--alertColor)); ;
+}
+
+.CheckboxInput input:checked {
+    background-color: rgb(var(--alertColor)); 
+    border-color: rgb(var(--alertColor));
+}
+
+.photo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+    height: 250px;
+    border: 1px solid black;
+    border-radius: 50%;
+    margin: 0 auto;
+}

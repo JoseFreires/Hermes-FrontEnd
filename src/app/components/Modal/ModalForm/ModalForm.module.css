@@ -1,0 +1,7 @@
+.modal-encomenda .modal-content {
+  border: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  max-height: 95vh;
+  max-width: 636px;
+}

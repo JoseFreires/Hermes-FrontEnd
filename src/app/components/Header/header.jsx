@@ -1,63 +1,130 @@
-"use client"
-import { Navbar, Container, Nav, Form, InputGroup, Button } from "react-bootstrap";
-import { FunnelFill, Search } from "react-bootstrap-icons";
+"use client";
+
+import { Navbar, Container, Nav, Form, InputGroup } from "react-bootstrap";
+import { Search } from "react-bootstrap-icons";
 import React from "react";
-import { useAuth } from "@/app/auth";
+import Button from "../Button/button"
+import Filtro from "./Filtro/filtro";
+import styles from "./header.module.css";
+import Image from "next/image";
+import useDebounce from "../../hooks/debounce.js";
+import { useAuth } from "@/app/auth.js";
 
-export default function NavbarEncomendas({ titulo, navItems }) {
-    const [activeTab, setActiveTab] = React.useState(navItems[0].label);
-    
+export default function Header({ 
+    titulo, 
+    navItens = [], 
+    activeTab, 
+    setActiveTab, 
+    search, 
+    setSearch, 
+    setDebouncedSearch,
+    canAdd = false,
+    funcionalitie,
+    onAddbuttonClick,
+    users = [],
+    filters = {},
+    onFiltersChange
+}) {
+
+    // pesquisa com debounce (delay) para reduzir numero de requisições
+    const debounceSearch = useDebounce(search, 500)
+
+    React.useEffect(() => {
+        setDebouncedSearch(debounceSearch);
+    }, [debounceSearch]);
+
     const { user } = useAuth();
-    const permissaoAdicionar = 
-    user?.permissions?.includes("add_encomendas"); // Verifica se o usuário tem permissão para adicionar encomendas
-    
+
+    const roleLabels = {
+        ROLE_ADMIN: "Admin",
+        ROLE_PORTEIRO: "Porteiro",
+        ROLE_MORADOR: "Morador",
+        ROLE_SINDICO: "Síndico"
+    };
+
+    const role = user?.role;
+
     return (
-        <Navbar>
-            <Container fluid className="d-flex align-items-center justify-content-between">
+        <div className={styles.componentWrapper}>
 
-                <div className="d-flex flex-column">
-                    <h2 className="fw-bold m-0" style={{ color: "#003366", fontSize: "28px" }}>
-                        {titulo}
-                    </h2>
+            <header className={styles.header}>
 
-                    <Nav className="mt-3 gap-4 align-items-center">
-                        {navItems.map((item, i) => (
-                            <Nav.Link key={i} onClick={() => setActiveTab(item.label)} className="nav-link"
-                                style={{
-                                    color:
-                                        activeTab == item.label ? "#003366" : "#6c757d",
-                                    borderBottom:
-                                        activeTab == item.label ? "3px solid #003366" : "none",
-                                    fontWeight:
-                                        activeTab == item.label ? "600" : "400",
-                                }}>
-                                {item.label}
-                            </Nav.Link>
-                        ))}
+                <h1>
+                    <span style={{ color: "#757575" }}>Olá,</span> {roleLabels[role] || "Usuário"}!
+                </h1>
 
-                        <Button variant="light" className="d-flex align-items-center gap-2 border" style={{ borderRadius: "10px", color: "#003366", fontWeight: 500, backgroundColor: "transparent" }}>
-                            <FunnelFill />
-                            Filtro
-                        </Button>
-                    </Nav>
+                <div className={styles.user}>
+                    <h3>{user?.nome}</h3>
+                    <Image
+                        src={user?.imagem || "/img/defaultAvatar.svg"}
+                        alt="avatar"
+                        width={44}
+                        height={44}
+                        className={styles.avatar}
+                    />
                 </div>
+            </header>
 
-                <div className="d-flex align-items-center gap-3">
+            <Navbar className={styles.navbar}>
+                <Container fluid className={styles.navContainer}>
 
-                    <InputGroup style={{ width: "300px", }}>
-                        <InputGroup.Text className="bg-white border-end-0" style={{ borderRadius: "12px 0 0 12px", }}>
-                            <Search />
-                        </InputGroup.Text>
-                        <Form.Control placeholder="Pesquisar..." className="border-start-0" style={{ borderRadius: "0 10px 10px 0", boxShadow: "none", padding: "8px 10px" }} />
-                    </InputGroup>
+                    <div className={styles.navGroup}>
 
-                    {permissaoAdicionar && (
-                        <Button style={{ backgroundColor: "#003366", border: "none", borderRadius: "10px", padding: "8px 10px", fontWeight: 600, }} >
-                            Adicionar
-                        </Button>
-                    )}
-                </div>
-            </Container>
-        </Navbar>
+                        <h2 className={styles.titulo}>
+                            {titulo}
+                        </h2>
+
+                        <Nav className="mt-3 gap-4 align-items-center">
+                            {navItens?.map((item, i) => (
+                                <Nav.Link
+                                    key={i}
+                                    onClick={() => {
+                                        setActiveTab?.(item.texto);
+                                    }}
+                                    className={styles.navLink}
+                                    style={{
+                                        color: activeTab === item.texto ? "#003366" : "#6c757d",
+                                        borderBottom: activeTab === item.texto ? "3px solid #003366" : "none",
+                                        fontWeight: activeTab === item.texto ? "600" : "400",
+                                    }}
+                                >
+                                    {item.texto}
+                                </Nav.Link>
+                            ))}
+                            <Filtro 
+                                users={users} 
+                                filters={filters} 
+                                onFiltersChange={onFiltersChange} 
+                            />
+                        </Nav>
+                    </div>
+
+                    <div className={styles.searchGroup}>
+
+                        <InputGroup >
+
+                            <InputGroup.Text className={styles.searchIcon}>
+                                <Search />
+                            </InputGroup.Text>
+
+                            <Form.Control
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                placeholder="Pesquisar..."
+                                className={styles.searchInput}
+                            />
+
+                        </InputGroup>
+
+                        {canAdd && (
+                            <Button variant="primary" onClick={() => onAddbuttonClick(funcionalitie)}>
+                                Adicionar
+                            </Button>
+                        )}
+                    </div>
+
+                </Container>
+            </Navbar>
+        </div>
     );
 }

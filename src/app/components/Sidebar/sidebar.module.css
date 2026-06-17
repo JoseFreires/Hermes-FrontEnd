@@ -1,11 +1,12 @@
+
 .sidebar {
+  position: relative;
   width: 272px;
-  height: 100vh;
+  min-height: 100vh;
   background: #f1f1f1;
   padding: 20px;
-  border-right: 3px solid #1b2443;
-  transition: all 0.3s ease;
-  overflow: hidden;
+  border-right: 3px solid #1a1a1a;
+  transition: transform 0.3s ease;
 }
 
 .logo {
@@ -15,9 +16,10 @@
 }
 
 .logo h1 {
-  color: #003366;
+  color: var(--primaryColor);
   font-size: 32px;
   font-weight: 700;
+  margin-bottom: 0;
 }
 
 .item {
@@ -33,11 +35,103 @@
 }
 
 .item:hover {
-  background: #ECD69A;
+  background: rgba(3, 129, 255, 0.3);
   border-radius: 6px;
 }
 
 .link {
+  background: none;
+  box-shadow: none;
+  border: none;
   text-decoration: none;
   color: inherit;
+}
+
+.exitbutton {
+  position: absolute;
+  width: auto;
+  height: auto;
+  bottom: 24px;
+  border: none;
+}
+
+.menuToggle {
+  display: none;
+}
+
+.closeButton {
+  display: none;
+}
+
+.backdrop {
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .menuToggle {
+    display: flex;
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 12px;
+    background: #f1f1f1;
+    color: #003366;
+    font-size: 24px;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    cursor: pointer;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 272px;
+    min-height: 100vh;
+    padding: 20px;
+    border-right: none;
+    z-index: 2100;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.18);
+    transform: translateX(-100%);
+    background: #f1f1f1;
+    overflow-y: auto;
+  }
+
+  .open {
+    transform: translateX(0);
+  }
+
+  .closed {
+    transform: translateX(-100%);
+  }
+
+  .closeButton {
+    display: flex;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: #003366;
+    color: #ffffff;
+    font-size: 24px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2101;
+  }
+
+  .backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.42);
+    z-index: 2050;
+  }
 }

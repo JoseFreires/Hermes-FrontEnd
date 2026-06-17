@@ -1,0 +1,36 @@
+.body {
+    display: flex;
+    background-color: #f1f1f1;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 20px 30px;
+    gap: 5px;
+}
+
+.user {
+    display: flex;
+    flex-direction: column;
+}
+
+.user small {
+    font-size: 12px;
+    color: #757575;
+}
+
+.user span,
+.tableLine {
+    font-size: 14px;
+    color: #003366;
+    font-weight: 600;
+    margin: 0;
+}
+
+.cardWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
