@@ -11,7 +11,7 @@ import { useAuth } from '@/app/auth.js';
 export default function Moradores() {
 
     const { user } = useAuth();
-    const canManage = user?.role.includes("ROLE_PORTEIRO") || user?.role.includes("ROLE_ADMIN");
+    const canManage =  user?.role.includes("ROLE_ADMIN") || user?.role.includes("ROLE_SINDICO");
 
     const columns = [
         {

@@ -16,11 +16,12 @@ export default function FormEncomenda({
   onSaveChanges,
   onDeliver,
 }) {
-  
   const [moradores, setMoradores] = useState([]);
   const [nomePacote, setNomePacote] = useState(encomendaData?.nomePacote || "");
   const [observacao, setObservacao] = useState(encomendaData?.observacao || "");
-  const [idencomenda, setIdencomenda] = useState(encomendaData?.idEncomenda || "");
+  const [idencomenda, setIdencomenda] = useState(
+    encomendaData?.idEncomenda || "",
+  );
   const [moradorSelectId, setMoradorSelectId] = useState("");
   const [idDestinatario, setIdDestinatario] = useState("");
   const [numeroApartamento, setNumeroApartamento] = useState(
@@ -45,7 +46,7 @@ export default function FormEncomenda({
 
     setNomePacote(encomendaData.nomePacote || "");
     setObservacao(encomendaData.observacao || "");
-    setIdencomenda(encomendaData.idEncomenda|| "");
+    setIdencomenda(encomendaData.idEncomenda || "");
 
     const found = moradores.find(
       (m) =>
@@ -60,7 +61,9 @@ export default function FormEncomenda({
 
       setMoradorSelectId(pessoaId ? String(pessoaId) : "");
       setIdDestinatario(pessoaId ? String(pessoaId) : "");
-      setEmailDestinatario(found.email || encomendaData.emailDestinatario || "");
+      setEmailDestinatario(
+        found.email || encomendaData.emailDestinatario || "",
+      );
       setNumeroApartamento(
         found.numeroApartamento || encomendaData.numeroApartamento || "",
       );
@@ -71,7 +74,6 @@ export default function FormEncomenda({
       setNumeroApartamento(encomendaData.numeroApartamento || "");
     }
   }, [encomendaData, moradores, modo]);
-
 
   const handleMoradorChange = (e) => {
     const selectedPessoaId = e.target.value;
@@ -92,7 +94,6 @@ export default function FormEncomenda({
     }
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!onSaveChanges) return;
@@ -104,13 +105,26 @@ export default function FormEncomenda({
       idDestinatario,
       numeroApartamento,
       emailDestinatario,
-    }
+    };
     await onSaveChanges(dados);
   };
 
-  let maxHeigthScrollingArea="";
-  modo === "edit" && encomendaData?.status== "ENTREGUE" ?  maxHeigthScrollingArea= "70vh": maxHeigthScrollingArea="60vh";
-  modo === "edit" && encomendaData?.status== "ENTREGUE" ?  title= "Visualizar Encomenda": title= "Alterar Encomenda";
+  let maxHeigthScrollingArea = "";
+  let showButton = true;
+
+  if (modo === "add") {
+    maxHeigthScrollingArea = "60vh";
+    title = "Adicionar Encomenda";
+    showButton = true;
+  } else if (modo === "edit") {
+    encomendaData?.status == "ENTREGUE"
+      ? ((maxHeigthScrollingArea = "70vh"),
+        (title = "Visualizar Encomenda"),
+        (showButton = false))
+      : ((maxHeigthScrollingArea = "60vh"),
+        (title = "Alterar Encomenda"),
+        (showButton = true));
+  }
 
   return (
     <div
@@ -122,7 +136,10 @@ export default function FormEncomenda({
           <div className="d-flex flex-row flex-md-row align-items-center gap-2">
             <h1 className="h4 text-primary-custom mb-1">{title}</h1>
             {modo === "edit" && (
-              <p className="h5 text-primary-custom mb-1" style={{ color: "#003366" }}>
+              <p
+                className="h5 text-primary-custom mb-1"
+                style={{ color: "#003366" }}
+              >
                 (ID: #{encomendaData.idEncomenda})
               </p>
             )}
@@ -140,7 +157,7 @@ export default function FormEncomenda({
               scrollbarwidth: "thin",
             }}
           >
-            <Form.Group>  
+            <Form.Group>
               <p>Foto da encomenda</p>
 
               <div className={Styles.photo}>
@@ -157,10 +174,18 @@ export default function FormEncomenda({
                 Label="Nome do pacote"
                 type="text"
                 placeholder="Nome do pacote"
-                variant={modo === "edit" && encomendaData?.status== "ENTREGUE" ?  "Disabled" : "Default"}
+                variant={
+                  modo === "edit" && encomendaData?.status == "ENTREGUE"
+                    ? "Disabled"
+                    : "Default"
+                }
                 defaultValue={nomePacote}
                 onChange={(e) => setNomePacote(e.target.value)}
-                disabled={modo === "edit" && encomendaData?.status== "ENTREGUE" ?  true : false }
+                disabled={
+                  modo === "edit" && encomendaData?.status == "ENTREGUE"
+                    ? true
+                    : false
+                }
               />
             </Form.Group>
             <Form.Group>
@@ -168,10 +193,18 @@ export default function FormEncomenda({
                 Label="Observação"
                 type="text"
                 placeholder="Observação"
-                variant={modo === "edit" && encomendaData?.status== "ENTREGUE" ?  "Disabled" : "Default"}
+                variant={
+                  modo === "edit" && encomendaData?.status == "ENTREGUE"
+                    ? "Disabled"
+                    : "Default"
+                }
                 defaultValue={observacao}
                 onChange={(e) => setObservacao(e.target.value)}
-                disabled={modo === "edit" && encomendaData?.status== "ENTREGUE" ?  true : false}
+                disabled={
+                  modo === "edit" && encomendaData?.status == "ENTREGUE"
+                    ? true
+                    : false
+                }
               />
             </Form.Group>
 
@@ -203,38 +236,44 @@ export default function FormEncomenda({
             />
           </div>
         </div>
-    {modo === "edit" && encomendaData?.status!= "ENTREGUE" &&(
-        <div className="px-4 pb-4 pt-2 flex-shrink-0">
-          <Form.Check
-            type="checkbox"
-            label={
-              <span style={{ color: "rgba(var(--alertColor), 1)" }}>
-                Foram detectadas avarias no pacote?
-              </span>
-            }
-            className={Styles.CheckboxInput}
-          />
-          <hr className="pb-2" />
-          {modo === "edit" && (
-            <div className="d-flex flex-column gap-2">
-              <Button type="button" variant="secondary" className="w-100" onClick={onDeliver}>
-                Entregar encomenda
-              </Button>
+        {showButton && (
+          <div className="px-4 pb-4 pt-2 flex-shrink-0">
+            <Form.Check
+              type="checkbox"
+              label={
+                <span style={{ color: "rgba(var(--alertColor), 1)" }}>
+                  Foram detectadas avarias no pacote?
+                </span>
+              }
+              className={Styles.CheckboxInput}
+            />
+            <hr className="pb-2" />
+            {modo === "edit" && (
+              <div className="d-flex flex-column gap-2">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  className="w-100"
+                  onClick={onDeliver}
+                >
+                  Entregar encomenda
+                </Button>
 
-              <Button type="submit" variant="primary" className="w-100">
-                Salvar alterações
-              </Button>
-            </div>
-          )}
+                <Button type="submit" variant="primary" className="w-100">
+                  Salvar alterações
+                </Button>
+              </div>
+            )}
 
-          {modo === "add" && (
-            <div className="d-flex flex-column gap-2">
-              <Button type="submit" variant="primary" className="w-100">
-                Adicionar encomenda
-              </Button>
-            </div>
-          )}
-        </div>
+            {modo === "add" && (
+              
+                <div className="d-flex flex-column gap-2">
+                  <Button type="submit" variant="primary" className="w-100">
+                    Adicionar encomenda
+                  </Button>
+                </div>
+            )}
+          </div>
         )}
       </Form>
     </div>

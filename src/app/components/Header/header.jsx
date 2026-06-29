@@ -19,7 +19,6 @@ export default function Header({
     setSearch, 
     setDebouncedSearch,
     canAdd = false,
-    funcionalitie,
     onAddbuttonClick,
     users = [],
     filters = {},
@@ -117,7 +116,7 @@ export default function Header({
                         </InputGroup>
 
                         {canAdd && (
-                            <Button variant="primary" onClick={() => onAddbuttonClick(funcionalitie)}>
+                            <Button variant="primary" onClick={() => onAddbuttonClick()}>
                                 Adicionar
                             </Button>
                         )}
