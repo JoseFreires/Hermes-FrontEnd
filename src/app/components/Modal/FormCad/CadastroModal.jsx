@@ -1,24 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Offcanvas, Form, Button, Image } from "react-bootstrap";
+import { Offcanvas, Form, Image } from "react-bootstrap";
 import styles from "./CadastroModal.module.css";
-
-/**
- * Modal lateral reutilizável — puramente de UI.
- * Não sabe nada sobre roles, hooks ou serviços.
- * Quem decide o que fazer com os dados é a página via useEntityModal.
- *
- * Props:
- * - show: boolean
- * - onHide(): fecha o modal
- * - title: string
- * - fields: array de { name, label, placeholder, type, options? } ← formConfigs.js
- * - initialData: objeto preenchido no modo edição, {} no modo criação
- * - showPhoto: boolean (default true)
- * - onSaveChanges(formData): chamado ao submeter — quem trata é useEntityModal.save
- * - submitLabel: string (default "Finalizar")
- */
+import Button from "@/app/components/Button/button";
+import Input from "@/app/components/Input/Input";
+import Dropdown from "@/app/components/Input/Dropdown/Dropdown";
 export default function CadastroModal({
   show,
   onHide,
@@ -34,7 +21,6 @@ export default function CadastroModal({
   const [loading,      setLoading]      = useState(false);
   const [erro,         setErro]         = useState("");
 
-  // Preenche o form ao abrir
   useEffect(() => {
     if (show) {
       setFormData(initialData || {});
@@ -55,13 +41,11 @@ export default function CadastroModal({
     setFormData((prev) => ({ ...prev, fotoFile: file }));
   };
 
-  // Delega tudo para onSaveChanges — que vem de useEntityModal.save
   const handleSubmit = async () => {
     setErro("");
     setLoading(true);
     try {
       await onSaveChanges?.(formData);
-      // onHide é chamado dentro do useEntityModal.save após sucesso
     } catch (err) {
       setErro(err.message || "Erro ao salvar. Tente novamente.");
     } finally {
@@ -70,45 +54,52 @@ export default function CadastroModal({
   };
 
   return (
-    <Offcanvas show={show} onHide={onHide} placement="end" className={styles.offcanvas}>
+    <Offcanvas
+      show={show}
+      onHide={onHide}
+      placement="end"
+      scroll={false}
+      backdrop={false}        /* remove o overlay escuro */
+      className={styles.offcanvas}
+    >
       <Offcanvas.Header closeButton className={styles.header}>
-        <div>
+        <div style={{ width: "100%" }}>
           <Offcanvas.Title className={styles.title}>{title}</Offcanvas.Title>
           <div className={styles.titleUnderline} />
         </div>
       </Offcanvas.Header>
 
-      <Offcanvas.Body>
+      <Offcanvas.Body className={styles.body}>
         <div className={styles.content}>
 
-          {/* Campos dinâmicos — gerados pelo formConfigs.js */}
+          {/* ── Coluna esquerda: inputs ── */}
           <Form className={styles.form}>
             {fields.map((field) => (
               <Form.Group key={field.name} className="mb-3">
-                <Form.Label className={styles.label}>{field.label}</Form.Label>
+               
 
-                {field.type === "select" ? (
-                  <Form.Select
+                {field.type === "select" ? ( 
+                  <>
+                  {/* <Form.Label className={styles.label}>{field.label}</Form.Label> */}
+                  <Dropdown
                     name={field.name}
                     value={formData[field.name] ?? ""}
                     onChange={handleChange}
                     className={styles.input}
+                    options={field.options || []}
+                    Label={field.label}
                   >
-                    <option value="">{field.placeholder}</option>
-                    {field.options?.map((opt) =>
-                      typeof opt === "string" ? (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ) : (
-                        <option key={opt.value} value={opt.value}>{opt.label}</option>
-                      )
-                    )}
-                  </Form.Select>
+                    
+                  </Dropdown>
+                  </>
                 ) : (
-                  <Form.Control
+                  <Input
                     type={field.type || "text"}
                     name={field.name}
+                    Label={field.label}
                     placeholder={field.placeholder}
                     value={formData[field.name] ?? ""}
+                    defaultValue={initialData[field.name] ?? ""}
                     onChange={handleChange}
                     className={styles.input}
                   />
@@ -117,36 +108,62 @@ export default function CadastroModal({
             ))}
 
             {erro && <p className="text-danger small mt-1">{erro}</p>}
+
+            {/* Botão no rodapé dos inputs quando não tem foto */}
+            {!showPhoto && (
+              <Button
+                variant="outline-danger"
+                className={styles.submitButton}
+                style={{ width: "100%", marginTop: "16px" }}
+                onClick={handleSubmit}
+                disabled={loading}
+              >
+                {loading ? "Salvando..." : submitLabel}
+              </Button>
+            )}
           </Form>
 
-          {/* Área de foto */}
+          {/* ── Divisor vertical ── */}
+          {showPhoto && <div className={styles.dividerVertical} />}
+
+          {/* ── Coluna direita: foto + botão ── */}
           {showPhoto && (
             <div className={styles.photoSection}>
               <span className={styles.label}>Foto</span>
 
               <label htmlFor="cadastro-foto" className={styles.photoCircle}>
                 {photoPreview ? (
-                  <Image src={photoPreview} alt="Foto" roundedCircle className={styles.photoPreview} />
+                  <Image
+                    src={photoPreview}
+                    alt="Foto"
+                    roundedCircle
+                    className={styles.photoPreview}
+                  />
                 ) : (
                   <PersonPlaceholderIcon />
                 )}
               </label>
-              <input id="cadastro-foto" type="file" accept="image/*" onChange={handlePhotoChange} hidden />
+              <input
+                id="cadastro-foto"
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange}
+                hidden
+              />
 
               <hr className={styles.divider} />
 
-              <Button variant="outline-danger" className={styles.submitButton} onClick={handleSubmit} disabled={loading}>
+              <Button
+                variant="critical"
+                className={styles.submitButton}
+                onClick={handleSubmit}
+                disabled={loading}
+              >
                 {loading ? "Salvando..." : submitLabel}
               </Button>
             </div>
           )}
         </div>
-
-        {!showPhoto && (
-          <Button variant="outline-danger" className={styles.submitButton} onClick={handleSubmit} disabled={loading}>
-            {loading ? "Salvando..." : submitLabel}
-          </Button>
-        )}
       </Offcanvas.Body>
     </Offcanvas>
   );

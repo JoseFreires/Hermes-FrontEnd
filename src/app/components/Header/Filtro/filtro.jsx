@@ -75,8 +75,8 @@ export default function Filtro({ users = [], filters = {}, onFiltersChange }) {
     });
   };
 
-  const userOptions = users.map((user) => ({ id: user, nome: user }));
-
+  const userOptions = users.map((user) => ({ value: user, label : user }));
+console.log("userOptions", userOptions);
   return (
     <div className={styles.filterWrapper} ref={wrapperRef}>
       <Button
@@ -113,10 +113,10 @@ export default function Filtro({ users = [], filters = {}, onFiltersChange }) {
               key={`end-${filters.endDate}`}
             />
 
-            <Form.Label>Selecionar usuários</Form.Label>
             <Dropdown
-              options={userOptions}
+              options={[ ...userOptions ]}
               value=""
+              Label="Selecionar usuários"
               onChange={handleUsersChange}
               placeholder="Adicionar usuário"
               inputClassName=""

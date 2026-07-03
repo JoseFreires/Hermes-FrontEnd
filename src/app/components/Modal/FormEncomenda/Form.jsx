@@ -8,7 +8,7 @@ import Button from "../../Button/button";
 import Styles from "./Form.module.css";
 import { useState, useEffect } from "react";
 import { listMorador, getPessoaId } from "@/app/services/Morador/GET.js";
-
+import { useMoradorOptions } from "@/app/hooks/GetOptions/useMoradorOptions";
 export default function FormEncomenda({
   title,
   modo,
@@ -30,6 +30,8 @@ export default function FormEncomenda({
   const [emailDestinatario, setEmailDestinatario] = useState(
     encomendaData?.emailDestinatario || "",
   );
+
+const { options: moradorOptions, isLoading } = useMoradorOptions();
 
   useEffect(() => {
     listMorador().then((data) => {
@@ -210,9 +212,11 @@ export default function FormEncomenda({
 
             <Form.Group>
               <Dropdown
-                options={moradores}
+                Label="Destinatário"
+                options={moradorOptions}
                 placeholder="Selecione um morador"
                 value={moradorSelectId}
+                isLoading={isLoading}
                 onChange={handleMoradorChange}
               />
             </Form.Group>

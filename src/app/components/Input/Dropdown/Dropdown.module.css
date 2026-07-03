@@ -1,102 +1,124 @@
-.default {
+/* === Wrapper — mesmo que form-floating do Bootstrap === */
+.wrapper {
+  position: relative;
+  margin-bottom: 1.5rem; /* mb-4 equivalente */
+}
+
+/* === Label — idêntico ao comportamento do form-floating Bootstrap === */
+.label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  padding: 1rem 0.75rem;
+  font-size: 1rem;
+  color: #212529;
+  pointer-events: none;
+  border: 1px solid transparent;
+  transform-origin: 0 0;
+  transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
+  /* Estado padrão: label no centro (igual ao placeholder do input nativo) */
+  opacity: 0.65;
+  transform: scale(1) translateY(0);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  z-index: 2;
+}
+
+/* Label flutuando — idêntico ao :not(:placeholder-shown) do Bootstrap */
+.labelFloat {
+  opacity: 0.65;
+  transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+}
+
+/* === react-select control — mesmo visual do form-control Bootstrap === */
+.select :global(.react-select__control) {
+  border-radius: 0.5rem;               /* rounded-3 */
   border: 2px solid var(--auxiliarColor);
-}
-
-.active {
-  width: 100%;
-  background-color: var(--secundaryColor);
-  border: 2px solid var(--auxiliarColor);
+  background-color: var(--secundaryColor, #fff);
+  min-height: calc(3.5rem + 2px);      /* mesma altura do form-floating */
   box-shadow: none;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  cursor: pointer;
 }
 
-.error {
-  background-color: rgba(var(--alertColor), 0.1);
-  border: 2px solid rgba(var(--alertColor), 1);
-  box-shadow: none;
+/* Focado — igual ao .active do Input */
+.select :global(.react-select__control--is-focused) {
+  background-color: var(--secundaryColor, #fff) !important;
+  border: 2px solid var(--auxiliarColor) !important;
+  box-shadow: none !important;
 }
 
-.disabled {
-  background-color: var(--secundaryColor);
+/* Desabilitado — igual ao .disabled do Input */
+.select :global(.react-select__control--is-disabled) {
+  background-color: var(--secundaryColor) !important;
+  border: 1px solid var(--auxiliarColor) !important;
+  box-shadow: none !important;
+  opacity: 0.5 !important;
+}
+
+/* value-container: padding-top empurra o valor para baixo 
+   quando o label sobe (mesmo efeito do form-floating nativo) */
+.select :global(.react-select__value-container) {
+  padding: 1rem 0.75rem 0.25rem;
+}
+
+.select :global(.react-select__single-value) {
+  font-size: 1rem;
+  color: #212529;
+  margin: 0;
+}
+
+.select :global(.react-select__placeholder) {
+  font-size: 1rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+/* Remove separador da seta */
+.select :global(.react-select__indicator-separator) {
+  display: none;
+}
+
+.select :global(.react-select__dropdown-indicator) {
+  color: #6c757d;
+  padding-right: 0.75rem;
+}
+
+/* Menu dropdown */
+.select :global(.react-select__menu) {
+  border-radius: 0.5rem;
   border: 1px solid var(--auxiliarColor);
-  box-shadow: none;
-  opacity: 0.5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+.select :global(.react-select__option) {
+  font-size: 1rem;
+  color: #212529;
+}
+
+.select :global(.react-select__option--is-focused) {
+  background-color: rgba(0, 51, 102, 0.08);
+}
+
+.select :global(.react-select__option--is-selected) {
+  background-color: #003366;
+  color: #ffffff;
+}
+
+/* === Estado de erro — igual ao .error do Input === */
+.wrapperError .select :global(.react-select__control) {
+  background-color: rgba(var(--alertColor), 0.1) !important;
+  border: 2px solid rgba(var(--alertColor), 1) !important;
+  box-shadow: none !important;
 }
 
 .errorMessage {
   position: absolute;
   color: rgb(var(--alertColor));
-}
-
-/* React Select Overrides, sem isso a estilização não é aplicada*/
-.reactSelectOverrides :global(.react-select__control) {
-  min-height: 3rem !important;
-  border: 2px solid var(--auxiliarColor) !important;
-  border-radius: 0.375rem !important;
-  background-color: #fff !important;
-  box-shadow: none !important;
-  padding: 0.5rem !important;
-}
-
-.reactSelectOverrides :global(.react-select__control:hover) {
-  border-color: var(--auxiliarColor) !important;
-}
-
-.reactSelectOverrides :global(.react-select__control--is-focused) {
-  background-color: var(--secundaryColor) !important;
-  border: 2px solid var(--auxiliarColor) !important;
-  box-shadow: none !important;
-}
-
-.reactSelectOverrides :global(.react-select__input-container) {
-  color: #000;
-}
-
-.reactSelectOverrides :global(.react-select__placeholder) {
-  color: #6c757d;
-}
-
-.reactSelectOverrides :global(.react-select__single-value) {
-  color: #000;
-}
-
-.reactSelectOverrides :global(.react-select__menu) {
-  border: 1px solid var(--auxiliarColor);
-  border-radius: 0.375rem;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-}
-
-.reactSelectOverrides :global(.react-select__option) {
-  padding: 0.75rem 1rem !important;
-  background-color: #fff;
-  color: #000;
-  cursor: pointer;
-}
-
-.reactSelectOverrides :global(.react-select__option:hover) {
-  background-color: var(--secundaryColor);
-}
-
-.reactSelectOverrides :global(.react-select__option--is-focused) {
-  background-color: var(--secundaryColor);
-  color: #000;
-}
-
-.reactSelectOverrides :global(.react-select__option--is-selected) {
-  background-color: var(--auxiliarColor);
-  color: #fff;
-}
-
-.reactSelectOverrides :global(.react-select__menu-list) {
-  max-height: 250px;
-}
-
-.reactSelectOverrides :global(.react-select__dropdown-indicator) {
-  color: var(--auxiliarColor);
-}
-
-.dropdownLabel {
-  color: var(--auxiliarColor);
   font-size: 0.875rem;
-  margin-top: 0.5rem;
+  margin-top: 2px;
 }
