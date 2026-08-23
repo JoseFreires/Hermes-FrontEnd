@@ -76,7 +76,6 @@ export default function Filtro({ users = [], filters = {}, onFiltersChange }) {
   };
 
   const userOptions = users.map((user) => ({ value: user, label : user }));
-console.log("userOptions", userOptions);
   return (
     <div className={styles.filterWrapper} ref={wrapperRef}>
       <Button

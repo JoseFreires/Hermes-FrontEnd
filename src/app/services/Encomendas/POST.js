@@ -13,6 +13,7 @@ export async function createEncomenda({
         emailDestinatario: emailDestinatario,
         idDestinatario: Number(idDestinatario),
         observacao: observacao,
+        idUsuarioPorteiro: Number(localStorage.getItem("idUsuario")),
     }
     try {
         const response = await fetch(`${API_URL}/encomendas`, {

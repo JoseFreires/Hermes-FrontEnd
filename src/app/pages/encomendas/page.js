@@ -19,7 +19,7 @@ import { updateEncomenda } from "@/app/services/Encomendas/PUT";
 
 export default function Encomendas() {
     const { user } = useAuth();
-    const canManage = user?.role.includes("ROLE_PORTEIRO") || user?.role.includes("ROLE_ADMIN")|| user?.role.includes("ROLE_SINDICO");
+    const canManage = user?.role.includes("ROLE_PORTEIRO") || user?.role.includes("ROLE_SINDICO");
 
     const { data, fetchEncomendas, removeEncomendas, isLoading } = useEncomendas();
     const modal = useEntityModal({

@@ -7,6 +7,7 @@ export const porteiroFields = [
   { name: "cpf",               label: "CPF",                  placeholder: "00000000000",              type: "text"  },
   { name: "email",             label: "E-mail",               placeholder: "email@exemplo.com",        type: "email" },
   { name: "telefone",          label: "Telefone",             placeholder: "11999999999",              type: "tel"   },
+  { name: "dataNascimento",        label: "Data de nascimento",    placeholder: "",                      type: "date"  },
   {
     name: "turno",
     label: "Turno",
@@ -31,12 +32,11 @@ export const sindicoFields = [
 ];
 
 export const moradorFields = [
-  { name: "nome",              label: "Nome completo",         placeholder: "Ex: Mariana Silva",     type: "text"  },
-  { name: "cpf",               label: "CPF",                   placeholder: "00000000000",           type: "text"  },
+  { name: "nomeCompleto",              label: "Nome completo",         placeholder: "Ex: Mariana Silva",     type: "text"  },
+  { name: "cpf",               label: "CPF",                   placeholder: "000.000.000-00",           type: "text"  },
   { name: "email",             label: "E-mail",                placeholder: "email@exemplo.com",     type: "email" },
-  { name: "telefone",          label: "Telefone",              placeholder: "11999999999",           type: "tel"   },
-  { name: "numeroApartamento", label: "Número do Apartamento", placeholder: "Ex: 101",               type: "text"  },
-  { name: "bloco",             label: "Bloco / Torre",         placeholder: "Ex: Torre Alpha",       type: "text"  },
+  { name: "telefone",          label: "Telefone",              placeholder: "(11)99999-9999",           type: "tel"   },
+  { name: "idMoradia",         label: "Id moradia",            placeholder: "Ex: 1",               type: "text"  },
   { name: "dataChegada",       label: "Data de chegada",       placeholder: "",                      type: "date"  },
-  { name: "nascimento",        label: "Data de nascimento",    placeholder: "",                      type: "date"  },
+  { name: "dataNascimento",        label: "Data de nascimento",    placeholder: "",                      type: "date"  },
 ];

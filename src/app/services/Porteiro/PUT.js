@@ -2,7 +2,7 @@ export async function updatePorteiro(id, dados) {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
     try {
-        const response = await fetch(`${API_URL}/sindicos/${id}`, {
+        const response = await fetch(`${API_URL}/porteiros/${id}`, {
             method: "PUT",
             credentials: "include",
             headers: { "Content-Type": "application/json" },

@@ -29,10 +29,10 @@ export default function CadastroModal({
     }
   }, [show, initialData]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const handleChange = (fieldName) => (e) => {
+  const value = e.target.value;              // só usa o value, ignora e.target.name
+  setFormData(prev => ({ ...prev, [fieldName]: value }));
+};
 
   const handlePhotoChange = (e) => {
     const file = e.target.files?.[0];
@@ -100,13 +100,12 @@ export default function CadastroModal({
                     placeholder={field.placeholder}
                     value={formData[field.name] ?? ""}
                     defaultValue={initialData[field.name] ?? ""}
-                    onChange={handleChange}
+                    onChange={handleChange(field.name)}
                     className={styles.input}
                   />
                 )}
               </Form.Group>
             ))}
-
             {erro && <p className="text-danger small mt-1">{erro}</p>}
 
             {/* Botão no rodapé dos inputs quando não tem foto */}

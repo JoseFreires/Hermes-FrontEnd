@@ -1,34 +1,35 @@
 export async function createMorador({
-    nome,
-    email,
+    // pessoa
+    nomeCompleto,
     cpf,
+    email,
     telefone,
-    numeroApartamento,
-    bloco,
+    dataNascimento,
+    // usuario
+    username = email,
+    senha = "123456",
+    // morador
+    idMoradia,
+    fotoPerfil="meucaminho",
     dataChegada,
-    nascimento,
-    foto,
 }) {
+
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
  
-    const morador = {
-        nome,
-        email,
-        cpf,
-        telefone,
-        numeroApartamento,
-        bloco,
-        dataChegada,
-        nascimento,
-        foto: foto ?? null,
-    };
- 
+   const body = {
+    pessoa: { nomeCompleto, cpf, email, telefone, dataNascimento },
+    usuario: { username, senha },
+    idMoradia: Number(idMoradia),
+    fotoPerfil:fotoPerfil,
+    dataChegada,
+};
+
     try {
         const response = await fetch(`${API_URL}/moradores`, {
             method: "POST",
             credentials: "include",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(morador),
+            body: JSON.stringify(body),
         });
  
         if (!response.ok) {
