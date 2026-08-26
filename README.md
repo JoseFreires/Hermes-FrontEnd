@@ -248,24 +248,27 @@ Hermes-FrontEnd/src/
 <p>Feito por: </p>
 
 <table>
-  <tr>
+  <tr>   
+  
+  <td align="center">
+      <a href="https://github.com/RafaelCamilo1306">
+        <img src="https://github.com/RafaelCamilo1306.png" width="80" style="border-radius:50%;" /><br />
+        <sub><b>Rafel Camilo</b></sub>
+      </a>
+    </td>
+  <td align="center">
+      <a href="https://github.com/aikovlr">
+        <img src="https://github.com/aikovlr.png" width="80" style="border-radius:50%;" /><br />
+        <sub><b>Rafael Mota</b></sub>
+      </a>
+    </td>
     <td align="center">
       <a href="https://github.com/JoseFreires">
         <img src="https://github.com/JoseFreires.png" width="80" style="border-radius:50%;" /><br />
         <sub><b>José Freires</b></sub>
       </a>
     </td>
-    <td align="center">
-      <a href="https://github.com/Caiopolis">
-        <img src="https://github.com/Caiopolis.png" width="80" style="border-radius:50%;" /><br />
-        <sub><b>Caio Henrique</b></sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/SilvaEng7">
-        <img src="https://github.com/SilvaEng7.png" width="80" style="border-radius:50%;" /><br />
-        <sub><b>Rian Silva</b></sub>
-      </a>
-    </td>
+   
+  
   </tr>
 </table>
