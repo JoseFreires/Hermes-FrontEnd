@@ -74,7 +74,7 @@ import { InjectMoradoresTable } from '@/app/hooks/dataInject';
                     fields={moradorFields}
                     initialData={modal.itemData ?? {}}
                     onSaveChanges={modal.save}
-                    showPhoto={false}
+                    showPhoto={true}
                 />
 
         </div>

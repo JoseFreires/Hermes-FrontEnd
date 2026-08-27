@@ -22,6 +22,7 @@ export default function FormEncomenda({
   const [idencomenda, setIdencomenda] = useState(
     encomendaData?.idEncomenda || "",
   );
+  const[foto, setfoto] = useState(encomendaData?.foto)
   const [moradorSelectId, setMoradorSelectId] = useState("");
   const [idDestinatario, setIdDestinatario] = useState("");
   const [numeroApartamento, setNumeroApartamento] = useState(
@@ -30,8 +31,8 @@ export default function FormEncomenda({
   const [emailDestinatario, setEmailDestinatario] = useState(
     encomendaData?.emailDestinatario || "",
   );
-
-const { options: moradorOptions, isLoading } = useMoradorOptions();
+  const [photoPreview, setPhotoPreview] = useState("/img/box.svg"); // preview padrão
+  const { options: moradorOptions, isLoading } = useMoradorOptions();
 
   useEffect(() => {
     listMorador().then((data) => {
@@ -102,6 +103,7 @@ const { options: moradorOptions, isLoading } = useMoradorOptions();
 
     const dados = {
       idEncomenda: idencomenda,
+      foto,
       nomePacote,
       observacao,
       idDestinatario,
@@ -127,6 +129,13 @@ const { options: moradorOptions, isLoading } = useMoradorOptions();
         (title = "Alterar Encomenda"),
         (showButton = true));
   }
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPhotoPreview(URL.createObjectURL(file));
+    setfoto((prev) => ({ ...prev, fotoFile: file }));
+  };
 
   return (
     <div
@@ -162,14 +171,21 @@ const { options: moradorOptions, isLoading } = useMoradorOptions();
             <Form.Group>
               <p>Foto da encomenda</p>
 
-              <div className={Styles.photo}>
+              <label htmlFor="encomenda-foto" className={Styles.photo}>
                 <Image
-                  src="/img/box.svg"
+                  src={photoPreview}
                   alt="Encomenda"
                   width={200}
                   height={200}
                 />
-              </div>
+              </label>
+              <input
+                id="encomenda-foto"
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange}
+                hidden
+              />
             </Form.Group>
             <Form.Group>
               <Input
@@ -270,12 +286,11 @@ const { options: moradorOptions, isLoading } = useMoradorOptions();
             )}
 
             {modo === "add" && (
-              
-                <div className="d-flex flex-column gap-2">
-                  <Button type="submit" variant="primary" className="w-100">
-                    Adicionar encomenda
-                  </Button>
-                </div>
+              <div className="d-flex flex-column gap-2">
+                <Button type="submit" variant="primary" className="w-100">
+                  Adicionar encomenda
+                </Button>
+              </div>
             )}
           </div>
         )}

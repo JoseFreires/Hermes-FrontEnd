@@ -14,7 +14,7 @@ export default function CadastroModal({
   initialData = {},
   showPhoto = true,
   onSaveChanges,
-  submitLabel = "Finalizar",
+  submitLabel = "Cadastrar",
 }) {
   const [formData,     setFormData]     = useState({});
   const [photoPreview, setPhotoPreview] = useState(null);
@@ -27,7 +27,7 @@ export default function CadastroModal({
       setPhotoPreview(initialData?.foto || null);
       setErro("");
     }
-  }, [show, initialData]);
+  }, [show, initialData]);  
 
   const handleChange = (fieldName) => (e) => {
   const value = e.target.value;              // só usa o value, ignora e.target.name
@@ -84,7 +84,7 @@ export default function CadastroModal({
                   <Dropdown
                     name={field.name}
                     value={formData[field.name] ?? ""}
-                    onChange={handleChange}
+                    onChange={handleChange(field.name)}
                     className={styles.input}
                     options={field.options || []}
                     Label={field.label}

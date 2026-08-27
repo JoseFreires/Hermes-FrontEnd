@@ -8,7 +8,7 @@ export async function createEncomenda({
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const encomenda = {
         nomePacote: nomePacote,
-        foto: "O rian colocou como NotNull",
+        foto: foto,
         status: "RECEBIDA",
         emailDestinatario: emailDestinatario,
         idDestinatario: Number(idDestinatario),
