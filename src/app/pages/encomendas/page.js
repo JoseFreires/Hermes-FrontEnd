@@ -24,7 +24,7 @@ export default function Encomendas() {
     const { data, fetchEncomendas, removeEncomendas, isLoading } = useEncomendas();
     const modal = useEntityModal({
         onCreate:  createEncomenda,
-        onUpdate:  (id, data) => updateEncomenda(id, { nomePacote: data.nomePacote, observacao: data.observacao, idDestinatario: data.idDestinatario, emailDestinatario:data.emailDestinatario}),
+        onUpdate:  (id, data) => updateEncomenda(id, { nomePacote: data.nomePacote, observacao: data.observacao, idDestinatario: data.idDestinatario, emailDestinatario:data.emailDestinatario, foto: data.foto}),
         getId:     (item) => item.idEncomenda,
         onRefresh: fetchEncomendas,
     });
