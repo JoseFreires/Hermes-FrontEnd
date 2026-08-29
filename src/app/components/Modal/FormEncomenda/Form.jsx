@@ -22,7 +22,7 @@ export default function FormEncomenda({
   const [idencomenda, setIdencomenda] = useState(
     encomendaData?.idEncomenda || "",
   );
-  const[foto, setfoto] = useState(encomendaData?.foto)
+  const [foto, setFoto] = useState(encomendaData?.foto || null);
   const [moradorSelectId, setMoradorSelectId] = useState("");
   const [idDestinatario, setIdDestinatario] = useState("");
   const [numeroApartamento, setNumeroApartamento] = useState(
@@ -134,7 +134,7 @@ export default function FormEncomenda({
     const file = e.target.files?.[0];
     if (!file) return;
     setPhotoPreview(URL.createObjectURL(file));
-    setfoto((prev) => ({ ...prev, fotoFile: file }));
+    setFoto(file);
   };
 
   return (
