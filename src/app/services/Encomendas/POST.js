@@ -6,25 +6,27 @@ export async function createEncomenda({
     foto
 }) {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
-    const encomenda = {
-        nomePacote: nomePacote,
-        foto: foto,
-        status: "RECEBIDA",
-        emailDestinatario: emailDestinatario,
-        idDestinatario: Number(idDestinatario),
-        observacao: observacao,
-        idUsuarioPorteiro: Number(localStorage.getItem("idUsuario")),
+    const formData = new FormData();
+
+    formData.append("nomePacote", nomePacote);
+    formData.append("status", "RECEBIDA");
+    formData.append("emailDestinatario", emailDestinatario);
+    formData.append("idDestinatario", String(Number(idDestinatario)));
+    formData.append("observacao", observacao);
+    formData.append(
+        "idUsuarioPorteiro",
+        String(Number(localStorage.getItem("idUsuario"))),
+    );
+
+    if (foto instanceof Blob) {
+        formData.append("foto", foto, foto.name || `foto-${Date.now()}.jpg`);
     }
+
     try {
         const response = await fetch(`${API_URL}/encomendas`, {
             method: "POST",
             credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(
-                encomenda
-            ),
+            body: formData,
         });
 
 
