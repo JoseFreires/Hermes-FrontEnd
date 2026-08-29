@@ -184,6 +184,11 @@ export default function FormEncomenda({
                 type="file"
                 accept="image/*"
                 onChange={handlePhotoChange}
+                disabled={
+                  modo === "edit" && encomendaData?.status == "ENTREGUE"
+                    ? true
+                    : false
+                }
                 hidden
               />
             </Form.Group>
@@ -234,6 +239,11 @@ export default function FormEncomenda({
                 value={moradorSelectId}
                 isLoading={isLoading}
                 onChange={handleMoradorChange}
+                isDisabled={
+                  modo === "edit" && encomendaData?.status == "ENTREGUE"
+                    ? true
+                    : false
+                }
               />
             </Form.Group>
             <Input

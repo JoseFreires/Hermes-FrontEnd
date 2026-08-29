@@ -13,7 +13,7 @@ export default function Dropdown({
   isDisabled = false,
   inputClassName,
   Label,
-  name,  
+  name,
 }) {
   const [isFocused, setIsFocused] = useState(false);
   const [showError, setShowError] = useState(false);
