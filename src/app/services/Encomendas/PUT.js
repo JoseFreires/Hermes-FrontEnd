@@ -1,14 +1,29 @@
-export async function updateEncomenda(id, dados) {
+export async function updateEncomenda(id, {
+    nomePacote,
+    status,
+    observacao,
+    idDestinatario,
+    emailDestinatario,
+    foto
+}) {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
+    const formData = new FormData();
+
+    formData.append("nomePacote", nomePacote);
+    formData.append("status", status);
+    formData.append("emailDestinatario", emailDestinatario);
+    formData.append("idDestinatario", String(Number(idDestinatario)));
+    formData.append("observacao", observacao);
+
+    if (foto instanceof Blob) {
+        formData.append("foto", foto, foto.name || `foto-${Date.now()}.jpg`);
+    }
 
     try {
         const response = await fetch(`${API_URL}/encomendas/${id}`, {
             method: "PUT",
             credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(dados),
+            body: formData,
         });
 
         if (!response.ok) {

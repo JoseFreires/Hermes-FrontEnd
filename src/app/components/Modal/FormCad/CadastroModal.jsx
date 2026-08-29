@@ -38,7 +38,7 @@ export default function CadastroModal({
     const file = e.target.files?.[0];
     if (!file) return;
     setPhotoPreview(URL.createObjectURL(file));
-    setFormData((prev) => ({ ...prev, fotoFile: file }));
+    setFormData((prev) => ({ ...prev, foto: file }));
   };
 
   const handleSubmit = async () => {
