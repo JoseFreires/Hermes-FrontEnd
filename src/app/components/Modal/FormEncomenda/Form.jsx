@@ -173,13 +173,15 @@ export default function FormEncomenda({
 
               <label htmlFor="encomenda-foto" className={Styles.photo}>
                 <Image
+                  className={Styles.image}
                   src={photoPreview}
                   alt="Encomenda"
-                  width={200}
-                  height={200}
+                  width={50}
+                  height={50}
                 />
               </label>
               <input
+                className={Styles.photoInput}
                 id="encomenda-foto"
                 type="file"
                 accept="image/*"
