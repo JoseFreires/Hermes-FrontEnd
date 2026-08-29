@@ -44,3 +44,42 @@ export function filterEncomendas(data, activeTab, filters) {
             return matchesDateRange(item, filters);
         });
 }
+
+// ─── Porteiros ────────────────────────────────────────────────────────────────
+ 
+export const NAV_ITENS_FUNCIONARIOS = [
+    { texto: "Porteiros" },
+    { texto: "Sindicos" },
+];
+ 
+export function extractFilterFuncionarios(data) {
+    return Array.from(new Set((data ?? []).map((item) => item.nomeCompleto))).sort();
+}
+ 
+export function filterPorteiros(data) {
+    return (data ?? []);   // lista já vem filtrada do backend — todos são porteiros
+}
+
+// ─── Síndicos ─────────────────────────────────────────────────────────────────
+ 
+export function extractFilterSindicos(data) {
+    return Array.from(new Set((data ?? []).map((item) => item.nomeCompleto))).sort();
+}
+ 
+export function filterSindicos(data) {
+    return (data ?? []);   // lista já vem filtrada do backend — todos são síndicos
+}
+ 
+// ─── Moradores ────────────────────────────────────────────────────────────────
+ 
+export const NAV_ITENS_MORADORES = [
+    { texto: "Todos" },
+];
+ 
+export function extractFilterMoradores(data) {
+    return Array.from(new Set((data ?? []).map((item) => item.nome))).sort();
+}
+ 
+export function filterMoradores(data) {
+    return (data ?? []);
+}

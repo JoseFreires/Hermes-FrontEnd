@@ -22,3 +22,7 @@
     border-radius: 50%;
     margin: 0 auto;
 }
+
+.photoCircle:hover {
+  border-color: #003366;
+}

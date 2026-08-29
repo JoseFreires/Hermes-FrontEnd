@@ -1,130 +1,79 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Select from "react-select";
 import styles from "./Dropdown.module.css";
-import { listMorador } from "@/app/services/Morador/GET.js";
-
-function getPessoaId(morador) {
-  return (
-    morador?.idPessoa ??
-    morador?.pessoa?.idPessoa ??
-    morador?.pessoa?.id ??
-    morador?.usuario?.pessoa?.idPessoa ??
-    morador?.usuario?.pessoa?.id ??
-    morador?.usuario?.idPessoa ??
-    null
-  );
-}
-
-function mapToReactSelectOptions(items = []) {
-  if (!Array.isArray(items)) {
-    console.warn("Dropdown: A prop 'options' precisa ser um Array.");
-    return []; 
-  }
-  return items
-    .map((option) => {
-      const idPessoa = getPessoaId(option);
-
-      return {
-        value: idPessoa,
-        label:
-          option.nomeMorador ??
-          option.nome ??
-          option.name ??
-          String(idPessoa ?? ""),
-        data: option,
-      };
-    })
-    .filter((option) => option.value !== null && option.value !== undefined);
-}
 
 export default function Dropdown({
-  options = null,
+  options = [],
   value,
   onChange,
+  placeholder = "",
+  isLoading = false,
+  isDisabled = false,
   inputClassName,
-  placeholder = "Selecione uma opção",
+  Label,
+  name,  
 }) {
-  const [fetchedOptions, setFetchedOptions] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (options != null) return;
-
-    let mounted = true;
-
-    async function load() {
-      setLoading(true);
-
-      try {
-        const data = await listMorador();
-
-        if (!mounted) return;
-
-        if (Array.isArray(data)) {
-          setFetchedOptions(data);
-        } else {
-          setFetchedOptions([]);
-        }
-      } catch (err) {
-        console.error("Erro ao buscar moradores:", err);
-
-        if (mounted) {
-          setFetchedOptions([]);
-        }
-      } finally {
-        if (mounted) {
-          setLoading(false);
-        }
-      }
-    }
-
-    load();
-
-    return () => {
-      mounted = false;
-    };
-  }, [options]);
-
-  const sourceOptions = options ?? fetchedOptions;
-
-  const reactSelectOptions = mapToReactSelectOptions(sourceOptions || []);
+  const [isFocused, setIsFocused] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   const selectedValue =
-    reactSelectOptions.find(
-      (opt) => String(opt.value) === String(value),
-    ) || null;
+    options.find((opt) => String(opt.value) === String(value)) || null;
+
+
+  const labelFloating = isFocused || !!selectedValue;
 
   const handleChange = (selectedOption) => {
+    setShowError(false);
     if (typeof onChange === "function") {
       onChange({
         target: {
+          name,
           value: selectedOption ? selectedOption.value : "",
         },
       });
     }
   };
 
+  const handleBlur = () => {
+    setIsFocused(false);
+    // Mostra erro se não tiver valor selecionado — igual ao onBlur do Input
+    if (!selectedValue) setShowError(true);
+  };
+
   return (
     <div
-      className={`form-floating mb-4 ${styles.reactSelectOverrides} ${
-        inputClassName || ""
-      }`}
+      className={`${styles.wrapper} ${showError ? styles.wrapperError : ""} ${inputClassName || ""}`}
     >
       <Select
-        options={reactSelectOptions}
+        options={options}
         value={selectedValue}
         onChange={handleChange}
-        placeholder={placeholder}
+        // Placeholder vazio quando o label está no lugar (mesmo comportamento do input nativo)
+        placeholder={labelFloating ? placeholder : ""}
         isClearable={false}
         isSearchable
-        isLoading={loading}
+        isLoading={isLoading}
+        isDisabled={isDisabled}
+        onFocus={() => { setIsFocused(true); setShowError(false); }}
+        onBlur={handleBlur}
         noOptionsMessage={() =>
-          loading ? "Carregando..." : "Nenhuma opção encontrada"
+          isLoading ? "Carregando..." : "Nenhuma opção encontrada"
         }
         classNamePrefix="react-select"
+        className={styles.select}
       />
+
+      {Label && (
+        <label className={`${styles.label} ${labelFloating ? styles.labelFloat : ""}`}>
+          {Label}
+        </label>
+      )}
+
+      {showError && (
+        <div className={styles.errorMessage}>Este campo é obrigatório.</div>
+      )}
     </div>
   );
 }
