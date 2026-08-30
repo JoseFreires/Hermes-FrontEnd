@@ -17,11 +17,11 @@ export async function updatePorteiro(id, {
     const formData = new FormData();
 
     // Objeto pessoa
-    formData.append("pessoa.nomeCompleto", nomeCompleto);
-    formData.append("pessoa.cpf", cpf);
-    formData.append("pessoa.email", email);
-    formData.append("pessoa.telefone", telefone);
-    formData.append("pessoa.dataNascimento", dataNascimento);
+    formData.append("nomeCompleto", nomeCompleto);
+    formData.append("cpf", cpf);
+    formData.append("email", email);
+    formData.append("telefone", telefone);
+    formData.append("dataNascimento", dataNascimento);
 
     
     if (username) {

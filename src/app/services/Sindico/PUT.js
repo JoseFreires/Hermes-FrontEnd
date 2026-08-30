@@ -1,12 +1,43 @@
-export async function updateSindico(id, dados) {
+export async function updateSindico(id, {
+    // pessoa
+    nomeCompleto,
+    cpf,
+    email,
+    telefone,
+    dataNascimento,
+    // login (opcionais na edição)
+    username,
+    senha,
+    // foto
+    foto,
+}) {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
+    const formData = new FormData();
+
+    // Objeto pessoa
+    formData.append("nomeCompleto", nomeCompleto);
+    formData.append("cpf", cpf);
+    formData.append("email", email);
+    formData.append("telefone", telefone);
+    formData.append("dataNascimento", dataNascimento);
+
+    // Objeto login (só envia se preenchido)
+    if (username) {
+        formData.append("login.username", username);
+    }
+    if (senha) {
+        formData.append("login.senha", senha);
+    }
+
+    if (foto instanceof Blob) {
+        formData.append("foto", foto, foto.name || `foto-${Date.now()}.jpg`);
+    }
 
     try {
         const response = await fetch(`${API_URL}/sindicos/${id}`, {
             method: "PUT",
             credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(dados),
+            body: formData,
         });
 
         if (!response.ok) {
